@@ -11,7 +11,7 @@
     <artifactId>module-appointment-resource</artifactId>
     <packaging>lutece-plugin</packaging>
     <version>1.0.0-SNAPSHOT</version>
-    <name>Lutece Appointment MyDashboard module</name>
+    <name>Lutece Appointment Resource module</name>
 
     <repositories>
         <repository>
