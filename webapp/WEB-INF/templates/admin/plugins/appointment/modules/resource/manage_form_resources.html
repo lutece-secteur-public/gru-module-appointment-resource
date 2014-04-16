@@ -1,0 +1,72 @@
+<#include "/admin/plugins/appointment/appointmentform/modify_appointmentform_tabs.html" />
+<div class="row-fluid" >
+	<@modifyAppointmentFormLeftColumn appointmentform=appointmentform />
+    <div class="span8">
+    	<@tabs tab="resources" appointmentform=appointmentform />
+    	<fieldset>
+			<@messages infos=infos errors=errors />
+
+    		<legend>
+    			<div class="pull-right">
+	    			<a class="btn btn-small btn-primary" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=createFormResourceType&id_form=${appointmentform.idForm}" title="#i18n{module.appointment.resource.manageAppointmentFormResources.labelAddResourceType}" >
+	    				<i class="icon-plus icon-white">&nbsp;</i>&nbsp;#i18n{module.appointment.resource.manageAppointmentFormResources.labelAddResourceType}
+	    			</a>
+	    		</div>
+    			#i18n{module.appointment.resource.manageAppointmentFormResources.pageTitle}
+    		</legend>
+
+    		<div>
+    			<#if listFormResourceTypes?? && listFormResourceTypes?has_content>
+    				<table class="table table-stripped">
+    					<thead>
+    						<tr>
+    							<th>
+    								#i18n{module.appointment.resource.manageAppointmentFormResources.labelResourceType}
+    							</th>
+    							<th>
+    								#i18n{module.appointment.resource.manageAppointmentFormResources.labelDescription}
+    							</th>
+    							<th>
+    								#i18n{portal.util.labelAction}
+    							</th>
+    						</tr>
+    					</thead>
+    					<tbody>
+    						<#list listFormResourceTypes as formResourceType>
+    							<tr>
+    								<td>
+    									<#assign resourceTypeDescription = "" >
+										<#if listResourceTypes?? && listResourceTypes?has_content>
+											<#list listResourceTypes as resourceType>
+												<#if resourceType.resourceTypeName == formResourceType.resourceTypeName>
+													<#assign resourceTypeDescription = resourceType.resourceTypeDescription>
+													<#break>
+												</#if>
+											</#list>
+										</#if>
+										<#if resourceTypeDescription == "">
+											${formResourceType.resourceTypeName}
+										<#else>
+											${resourceTypeDescription}
+										</#if>
+    								</td>
+    								<td>
+    									${formResourceType.description}
+    								</td>
+    								<td>
+    									<a class="btn btn-small btn-primary" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=modifyFormResourceType&idFormResourceType=${formResourceType.id}" title="#i18n{portal.util.labelModify}" >
+    										<i class="icon-edit icon-white">&nbsp;</i>
+    									</a>
+    									<a class="btn btn-small btn-danger" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=confirmRemoveFormResourceType&idFormResourceType=${formResourceType.id}" title="#i18n{portal.util.labelRemove}" >
+    										<i class="icon-trash icon-white">&nbsp;</i>
+    									</a>
+    								</td>
+    							</tr>
+    						</#list>
+    					</tbody>
+    				</table>
+    			</#if>
+    		</div>
+    	</fieldset>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+<div class="row-fluid">
+	<div class="span12">
+		<@messages errors=errors />
+		
+		<form class="form-horizontal" action="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp">
+			<fieldset>
+				<legend>#i18n{module.appointment.resource.modifyAppointmentFormResources.pageTitle}</legend>
+
+				<@fieldInputText i18nLabelKey='module.appointment.resource.createAppointmentFormResources.labelDescription' inputName='description' mandatory=true value=(formResourceType.description)!'' maxlength=255 />
+				
+				<div class="control-group">
+					<label class="control-label">#i18n{module.appointment.resource.createAppointmentFormResources.labelResourceType}</label>
+					<div class="controls">
+						<p>
+							<#assign resourceTypeDescription = "" >
+							<#if listResourceTypes?? && listResourceTypes?has_content>
+								<#list listResourceTypes as resourceType>
+									<#if resourceType.resourceTypeName == formResourceType.resourceTypeName>
+										<#assign resourceTypeDescription = resourceType.resourceTypeDescription>
+										<#break>
+									</#if>
+								</#list>
+							</#if>
+							<#if resourceTypeDescription == "">
+								${formResourceType.resourceTypeName}
+							<#else>
+								${resourceTypeDescription}
+							</#if>
+						</p>
+					</div>
+				</div>
+				
+				<div class="form-actions">
+					<input type="hidden" name="id_form" value="${formResourceType.idAppointmentForm}" />
+					<input type="hidden" name="idFormResourceType" value="${formResourceType.id}" />
+					<button class="btn btn-small btn-primary" name="action" value="doModifyFormResourceType">
+						<i class="icon-ok icon-white">&nbsp;</i>&nbsp;#i18n{portal.util.labelValidate}
+					</button>
+					<a class="btn btn-small" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=manageFormResources&id_form=${formResourceType.idAppointmentForm}">
+						<i class="icon-remove-circle">&nbsp;</i>&nbsp;#i18n{portal.util.labelBack}
+					</a>
+				</div>
+			</fieldset>
+		</form>
+		
+	</div>
+</div>
