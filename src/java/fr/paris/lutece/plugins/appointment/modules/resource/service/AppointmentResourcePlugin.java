@@ -50,9 +50,8 @@ public class AppointmentResourcePlugin extends Plugin
      * {@inheritDoc}
      */
     @Override
-    public void init( )
+    public void init(  )
     {
         // Nothing to do
     }
-
 }

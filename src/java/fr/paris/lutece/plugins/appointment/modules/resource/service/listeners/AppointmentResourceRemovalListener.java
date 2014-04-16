@@ -41,7 +41,6 @@ import fr.paris.lutece.plugins.appointment.service.listeners.IAppointmentRemoval
  */
 public class AppointmentResourceRemovalListener implements IAppointmentRemovalListener
 {
-
     /**
      * {@inheritDoc}
      */
@@ -50,5 +49,4 @@ public class AppointmentResourceRemovalListener implements IAppointmentRemovalLi
     {
         // TODO implement me ! Remove resources association with the removed appointment
     }
-
 }

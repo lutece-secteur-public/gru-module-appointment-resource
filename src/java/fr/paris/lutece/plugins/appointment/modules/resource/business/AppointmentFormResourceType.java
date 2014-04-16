@@ -57,7 +57,7 @@ public class AppointmentFormResourceType
      * Get the id of the appointment form resource type
      * @return The id of the appointment form resource type
      */
-    public int getId( )
+    public int getId(  )
     {
         return _nId;
     }
@@ -75,7 +75,7 @@ public class AppointmentFormResourceType
      * Get the id of the appointment form
      * @return The id of the appointment form
      */
-    public int getIdAppointmentForm( )
+    public int getIdAppointmentForm(  )
     {
         return _nIdAppointmentForm;
     }
@@ -93,7 +93,7 @@ public class AppointmentFormResourceType
      * Get the description of the the appointment form resource type
      * @return The description of the the appointment form resource type
      */
-    public String getDescription( )
+    public String getDescription(  )
     {
         return _strDescription;
     }
@@ -112,7 +112,7 @@ public class AppointmentFormResourceType
      * Get the resource type name
      * @return The resource type name
      */
-    public String getResourceTypeName( )
+    public String getResourceTypeName(  )
     {
         return _strResourceTypeName;
     }

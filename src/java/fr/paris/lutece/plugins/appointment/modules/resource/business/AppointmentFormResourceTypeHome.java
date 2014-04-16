@@ -47,9 +47,7 @@ import java.util.List;
 public class AppointmentFormResourceTypeHome
 {
     private static Plugin _plugin = PluginService.getPlugin( AppointmentResourcePlugin.PLUGIN_NAME );
-
-    private static final IAppointmentFormResourceTypeDAO _dao = SpringContextService
-            .getBean( IAppointmentFormResourceTypeDAO.BEAN_NAME );
+    private static final IAppointmentFormResourceTypeDAO _dao = SpringContextService.getBean( IAppointmentFormResourceTypeDAO.BEAN_NAME );
 
     /**
      * Create an association between an appointment form and a resource type

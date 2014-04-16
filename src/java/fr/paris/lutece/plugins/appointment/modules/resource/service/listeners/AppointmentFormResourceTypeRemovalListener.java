@@ -42,7 +42,6 @@ import fr.paris.lutece.plugins.appointment.service.listeners.IAppointmentFormRem
  */
 public class AppointmentFormResourceTypeRemovalListener implements IAppointmentFormRemovalListener
 {
-
     /**
      * {@inheritDoc}
      */
@@ -51,5 +50,4 @@ public class AppointmentFormResourceTypeRemovalListener implements IAppointmentF
     {
         AppointmentFormResourceTypeHome.removeFromIdAppointmentForm( nIdAppointmentForm );
     }
-
 }
