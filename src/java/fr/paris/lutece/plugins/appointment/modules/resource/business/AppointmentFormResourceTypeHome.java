@@ -44,10 +44,15 @@ import java.util.List;
 /**
  * Home for appointment form resources
  */
-public class AppointmentFormResourceTypeHome
+public final class AppointmentFormResourceTypeHome
 {
     private static Plugin _plugin = PluginService.getPlugin( AppointmentResourcePlugin.PLUGIN_NAME );
     private static final IAppointmentFormResourceTypeDAO _dao = SpringContextService.getBean( IAppointmentFormResourceTypeDAO.BEAN_NAME );
+
+    private AppointmentFormResourceTypeHome(  )
+    {
+        // Private constructor
+    }
 
     /**
      * Create an association between an appointment form and a resource type

@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.appointment.modules.resource.business;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -42,8 +44,9 @@ import javax.validation.constraints.Size;
  * Class to describe an association between an appointment form and a resource
  * type
  */
-public class AppointmentFormResourceType
+public class AppointmentFormResourceType implements Serializable
 {
+    private static final long serialVersionUID = -6423365056677937203L;
     private int _nId;
     @Min( value = 1, message = "#i18n{module.appointment.resource.model.entity.appointmentFormResourceType.attribute.idAppointmentForm.min}" )
     private int _nIdAppointmentForm;

@@ -105,7 +105,7 @@ public class AppointmentFormResourceTypeDAO implements IAppointmentFormResourceT
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
         int nIndex = 1;
         daoUtil.setString( nIndex++, formResourceType.getDescription(  ) );
-        daoUtil.setInt( nIndex++, formResourceType.getId(  ) );
+        daoUtil.setInt( nIndex, formResourceType.getId(  ) );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
@@ -131,7 +131,7 @@ public class AppointmentFormResourceTypeDAO implements IAppointmentFormResourceT
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_FROM_ID_FORM, plugin );
         int nIndex = 1;
-        daoUtil.setInt( nIndex++, nIdAppointmentForm );
+        daoUtil.setInt( nIndex, nIdAppointmentForm );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
