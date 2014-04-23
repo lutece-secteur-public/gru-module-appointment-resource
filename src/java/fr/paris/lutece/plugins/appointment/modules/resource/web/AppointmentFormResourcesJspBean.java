@@ -41,6 +41,7 @@ import fr.paris.lutece.plugins.appointment.service.AppointmentResourceIdService;
 import fr.paris.lutece.plugins.appointment.web.AppointmentFormJspBean;
 import fr.paris.lutece.plugins.resource.business.IResourceType;
 import fr.paris.lutece.plugins.resource.service.ResourceService;
+import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -82,8 +83,8 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
      * Url of the JSP of this controller, with its full path (without the base
      * URL)
      */
-    public static final String JSP_URL_MANAGE_APPOINTMENT_FORM_RESOURCE_TYPE = PATH_MANAGE_APPOINTMENT_FORM_RESOURCE_TYPE +
-        JSP_MANAGE_APPOINTMENT_FORM_RESOURCE_TYPE;
+    public static final String JSP_URL_MANAGE_APPOINTMENT_FORM_RESOURCE_TYPE = PATH_MANAGE_APPOINTMENT_FORM_RESOURCE_TYPE
+            + JSP_MANAGE_APPOINTMENT_FORM_RESOURCE_TYPE;
     private static final long serialVersionUID = -7228498724499752562L;
 
     // Views
@@ -96,11 +97,13 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
     private static final String ACTION_DO_CREATE_FORM_RESOURCE_TYPE = "doCreateFormResourceType";
     private static final String ACTION_DO_MODIFY_FORM_RESOURCE_TYPE = "doModifyFormResourceType";
     private static final String ACTION_DO_REMOVE_FORM_RESOURCE_TYPE = "doRemoveFormResourceType";
+    private static final String ACTION_DO_SET_ADMIN_DEFAULT_RESOURCE_TYPE = "doSetAdminDefaultResourceType";
 
     // Marks
     private static final String MARK_LIST_RESOURCE_TYPES = "listResourceTypes";
     private static final String MARK_LIST_FORM_RESOURCE_TYPES = "listFormResourceTypes";
     private static final String MARK_FORM_RESOURCE_TYPE = "formResourceType";
+    private static final String MARK_ADMIN_USER_RESOURCE_TYPE = "adminUserResourceType";
 
     // Parameters
     private static final String PARAMETER_ID_FORM = "id_form";
@@ -129,8 +132,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
      *             this feature
      */
     @View( value = VIEW_MANAGE_FORM_RESOURCES )
-    public String getManageFormResources( HttpServletRequest request )
-        throws AccessDeniedException
+    public String getManageFormResources( HttpServletRequest request ) throws AccessDeniedException
     {
         _formResourceType = null;
 
@@ -144,7 +146,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         int nIdForm = Integer.parseInt( strIdForm );
 
         if ( !RBACService.isAuthorized( AppointmentForm.RESOURCE_TYPE, strIdForm,
-                    AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser(  ) ) )
+                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser( ) ) )
         {
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
@@ -156,16 +158,17 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
             return redirect( request, AppointmentFormJspBean.getURLManageAppointmentForms( request ) );
         }
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
 
-        List<IResourceType> listResourceTypes = ResourceService.getInstance(  ).getResourceTypesList(  );
+        List<IResourceType> listResourceTypes = ResourceService.getInstance( ).getResourceTypesList( );
 
         model.put( MARK_LIST_RESOURCE_TYPES, listResourceTypes );
         model.put( MARK_LIST_FORM_RESOURCE_TYPES,
-            AppointmentFormResourceTypeHome.findResourceTypesListFromIdForm( nIdForm ) );
+                AppointmentFormResourceTypeHome.findResourceTypesListFromIdForm( nIdForm ) );
+        model.put( MARK_ADMIN_USER_RESOURCE_TYPE, AdminUser.RESOURCE_TYPE );
 
-        AppointmentFormJspBean.addElementsToModelForLeftColumn( request, appointmentForm, getUser(  ), getLocale(  ),
-            model );
+        AppointmentFormJspBean.addElementsToModelForLeftColumn( request, appointmentForm, getUser( ), getLocale( ),
+                model );
 
         return getPage( MESSAGE_MANAGE_FORM_RESOURCES_PAGE_TITLE, TEMPLATE_MANAGE_FORM_RESOURCES, model );
     }
@@ -178,8 +181,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
      *             this feature
      */
     @View( value = VIEW_CREATE_RESOURCE_TYPE )
-    public String getCreateFormResourceType( HttpServletRequest request )
-        throws AccessDeniedException
+    public String getCreateFormResourceType( HttpServletRequest request ) throws AccessDeniedException
     {
         AppointmentFormResourceType formResourceType;
         int nIdForm;
@@ -188,7 +190,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         {
             formResourceType = _formResourceType;
             _formResourceType = null;
-            nIdForm = formResourceType.getIdAppointmentForm(  );
+            nIdForm = formResourceType.getIdAppointmentForm( );
         }
         else
         {
@@ -204,20 +206,20 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         }
 
         if ( !RBACService.isAuthorized( AppointmentForm.RESOURCE_TYPE, Integer.toString( nIdForm ),
-                    AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser(  ) ) )
+                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser( ) ) )
         {
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
 
-        ReferenceList refListResourceTypes = new ReferenceList(  );
+        ReferenceList refListResourceTypes = new ReferenceList( );
 
-        for ( IResourceType resourceType : ResourceService.getInstance(  ).getResourceTypesList(  ) )
+        for ( IResourceType resourceType : ResourceService.getInstance( ).getResourceTypesList( ) )
         {
-            refListResourceTypes.addItem( resourceType.getResourceTypeName(  ),
-                resourceType.getResourceTypeDescription(  ) );
+            refListResourceTypes.addItem( resourceType.getResourceTypeName( ),
+                    resourceType.getResourceTypeDescription( ) );
         }
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
         model.put( MARK_FORM_RESOURCE_TYPE, formResourceType );
         model.put( MARK_LIST_RESOURCE_TYPES, refListResourceTypes );
         model.put( PARAMETER_ID_FORM, nIdForm );
@@ -233,16 +235,15 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
      *             this feature
      */
     @Action( value = ACTION_DO_CREATE_FORM_RESOURCE_TYPE )
-    public String doCreateFormResourceType( HttpServletRequest request )
-        throws AccessDeniedException
+    public String doCreateFormResourceType( HttpServletRequest request ) throws AccessDeniedException
     {
-        AppointmentFormResourceType formResourceType = new AppointmentFormResourceType(  );
+        AppointmentFormResourceType formResourceType = new AppointmentFormResourceType( );
 
         populate( formResourceType, request );
 
         if ( !RBACService.isAuthorized( AppointmentForm.RESOURCE_TYPE,
-                    Integer.toString( formResourceType.getIdAppointmentForm(  ) ),
-                    AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser(  ) ) )
+                Integer.toString( formResourceType.getIdAppointmentForm( ) ),
+                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser( ) ) )
         {
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
@@ -256,10 +257,10 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
 
         AppointmentFormResourceTypeHome.insert( formResourceType );
 
-        addInfo( MESSAGE_APPOINTMENT_FORM_RESOURCE_TYPE_CREATED, getLocale(  ) );
+        addInfo( MESSAGE_APPOINTMENT_FORM_RESOURCE_TYPE_CREATED, getLocale( ) );
 
         return redirect( request,
-            getUrlManageAppointmentFormResourceType( formResourceType.getIdAppointmentForm(  ), request ) );
+                getUrlManageAppointmentFormResourceType( formResourceType.getIdAppointmentForm( ), request ) );
     }
 
     /**
@@ -270,8 +271,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
      *             this feature
      */
     @View( value = VIEW_MODIFY_RESOURCE_TYPE )
-    public String getModifyFormResourceType( HttpServletRequest request )
-        throws AccessDeniedException
+    public String getModifyFormResourceType( HttpServletRequest request ) throws AccessDeniedException
     {
         AppointmentFormResourceType formResourceType;
 
@@ -294,15 +294,15 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         }
 
         if ( !RBACService.isAuthorized( AppointmentForm.RESOURCE_TYPE,
-                    Integer.toString( formResourceType.getIdAppointmentForm(  ) ),
-                    AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser(  ) ) )
+                Integer.toString( formResourceType.getIdAppointmentForm( ) ),
+                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser( ) ) )
         {
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
 
-        List<IResourceType> listResourceTypes = ResourceService.getInstance(  ).getResourceTypesList(  );
+        List<IResourceType> listResourceTypes = ResourceService.getInstance( ).getResourceTypesList( );
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
         model.put( MARK_FORM_RESOURCE_TYPE, formResourceType );
         model.put( MARK_LIST_RESOURCE_TYPES, listResourceTypes );
 
@@ -317,8 +317,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
      *             this feature
      */
     @Action( value = ACTION_DO_MODIFY_FORM_RESOURCE_TYPE )
-    public String doModifyFormResourceType( HttpServletRequest request )
-        throws AccessDeniedException
+    public String doModifyFormResourceType( HttpServletRequest request ) throws AccessDeniedException
     {
         String strIdFormResourceType = request.getParameter( PARAMETER_ID_FORM_RESOURCE_TYPE );
 
@@ -329,7 +328,8 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
 
         int nIdFormResourceType = Integer.parseInt( strIdFormResourceType );
 
-        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( nIdFormResourceType );
+        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome
+                .findByPrimaryKey( nIdFormResourceType );
 
         if ( formResourceType == null )
         {
@@ -337,8 +337,8 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         }
 
         if ( !RBACService.isAuthorized( AppointmentForm.RESOURCE_TYPE,
-                    Integer.toString( formResourceType.getIdAppointmentForm(  ) ),
-                    AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser(  ) ) )
+                Integer.toString( formResourceType.getIdAppointmentForm( ) ),
+                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser( ) ) )
         {
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
@@ -354,10 +354,10 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
 
         AppointmentFormResourceTypeHome.update( formResourceType );
 
-        addInfo( MESSAGE_APPOINTMENT_FORM_RESOURCE_TYPE_MODIFIED, getLocale(  ) );
+        addInfo( MESSAGE_APPOINTMENT_FORM_RESOURCE_TYPE_MODIFIED, getLocale( ) );
 
         return redirect( request,
-            getUrlManageAppointmentFormResourceType( formResourceType.getIdAppointmentForm(  ), request ) );
+                getUrlManageAppointmentFormResourceType( formResourceType.getIdAppointmentForm( ), request ) );
     }
 
     /**
@@ -368,8 +368,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
      *             this feature
      */
     @View( value = VIEW_CONFIRM_REMOVE_RESOURCE_TYPE )
-    public String getConfirmRemoveFormResourceType( HttpServletRequest request )
-        throws AccessDeniedException
+    public String getConfirmRemoveFormResourceType( HttpServletRequest request ) throws AccessDeniedException
     {
         String strIdFormResourceType = request.getParameter( PARAMETER_ID_FORM_RESOURCE_TYPE );
 
@@ -379,7 +378,8 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         }
 
         int nIdFormResourceType = Integer.parseInt( strIdFormResourceType );
-        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( nIdFormResourceType );
+        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome
+                .findByPrimaryKey( nIdFormResourceType );
 
         if ( formResourceType == null )
         {
@@ -387,8 +387,8 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         }
 
         if ( !RBACService.isAuthorized( AppointmentForm.RESOURCE_TYPE,
-                    Integer.toString( formResourceType.getIdAppointmentForm(  ) ),
-                    AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser(  ) ) )
+                Integer.toString( formResourceType.getIdAppointmentForm( ) ),
+                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser( ) ) )
         {
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
@@ -397,9 +397,8 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         urlItem.addParameter( MVCUtils.PARAMETER_ACTION, ACTION_DO_REMOVE_FORM_RESOURCE_TYPE );
         urlItem.addParameter( PARAMETER_ID_FORM_RESOURCE_TYPE, strIdFormResourceType );
 
-        return redirect( request,
-            AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_FORM_RESOURCE_TYPE, urlItem.getUrl(  ),
-                AdminMessage.TYPE_CONFIRMATION ) );
+        return redirect( request, AdminMessageService.getMessageUrl( request,
+                MESSAGE_CONFIRM_REMOVE_FORM_RESOURCE_TYPE, urlItem.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
     }
 
     /**
@@ -410,8 +409,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
      *             this feature
      */
     @Action( value = ACTION_DO_REMOVE_FORM_RESOURCE_TYPE )
-    public String doRemoveFormResourceType( HttpServletRequest request )
-        throws AccessDeniedException
+    public String doRemoveFormResourceType( HttpServletRequest request ) throws AccessDeniedException
     {
         String strIdFormResourceType = request.getParameter( PARAMETER_ID_FORM_RESOURCE_TYPE );
 
@@ -421,7 +419,8 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         }
 
         int nIdFormResourceType = Integer.parseInt( strIdFormResourceType );
-        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( nIdFormResourceType );
+        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome
+                .findByPrimaryKey( nIdFormResourceType );
 
         if ( formResourceType == null )
         {
@@ -429,8 +428,8 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         }
 
         if ( !RBACService.isAuthorized( AppointmentForm.RESOURCE_TYPE,
-                    Integer.toString( formResourceType.getIdAppointmentForm(  ) ),
-                    AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser(  ) ) )
+                Integer.toString( formResourceType.getIdAppointmentForm( ) ),
+                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser( ) ) )
         {
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
@@ -438,7 +437,30 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         AppointmentFormResourceTypeHome.remove( nIdFormResourceType );
 
         return redirect( request,
-            getUrlManageAppointmentFormResourceType( formResourceType.getIdAppointmentForm(  ), request ) );
+                getUrlManageAppointmentFormResourceType( formResourceType.getIdAppointmentForm( ), request ) );
+    }
+
+    /**
+     * Do set a form resource type as the attribute containing the admin user
+     * associated with an appointment, so that when the attribute is modified,
+     * the admin user associated with the appointment is also modified
+     * @param request The request
+     * @return The next URL to redirect to
+     */
+    @Action( ACTION_DO_SET_ADMIN_DEFAULT_RESOURCE_TYPE )
+    public String doSetAdminDefaultResourceType( HttpServletRequest request )
+    {
+        String strIdFormResourceType = request.getParameter( PARAMETER_ID_FORM_RESOURCE_TYPE );
+        int nIdFormResourceType = Integer.parseInt( strIdFormResourceType );
+        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome
+                .findByPrimaryKey( nIdFormResourceType );
+
+        AppointmentFormResourceTypeHome.resetAppAdminUser( formResourceType.getIdAppointmentForm( ) );
+        formResourceType.setIsAppointmentAdminUser( true );
+        AppointmentFormResourceTypeHome.update( formResourceType );
+
+        return redirect( request, VIEW_MANAGE_FORM_RESOURCES, PARAMETER_ID_FORM,
+                formResourceType.getIdAppointmentForm( ) );
     }
 
     /**
@@ -449,11 +471,11 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
      */
     public static final String getUrlManageAppointmentFormResourceType( int nIdForm, HttpServletRequest request )
     {
-        UrlItem urlItem = new UrlItem( AppPathService.getBaseUrl( request ) +
-                JSP_URL_MANAGE_APPOINTMENT_FORM_RESOURCE_TYPE );
+        UrlItem urlItem = new UrlItem( AppPathService.getBaseUrl( request )
+                + JSP_URL_MANAGE_APPOINTMENT_FORM_RESOURCE_TYPE );
         urlItem.addParameter( MVCUtils.PARAMETER_VIEW, VIEW_MANAGE_FORM_RESOURCES );
         urlItem.addParameter( PARAMETER_ID_FORM, nIdForm );
 
-        return urlItem.getUrl(  );
+        return urlItem.getUrl( );
     }
 }

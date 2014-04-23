@@ -1,0 +1,18 @@
+<fieldset>
+	<legend>#i18n{module.appointment.resource.task_set_appointment_resource_config.title}</legend>
+	
+	<div class="control-group">
+		<label class="control-label">#i18n{module.appointment.resource.task_set_appointment_resource_config.labelAppointmentForm}</label>
+		<div class="controls">
+			<@combo items=refListAppointmentForm default_value=idAppointmentForm!'' name="idAppointmentForm" />
+			<button class="btn btn-small btn-primary" name="refreshAppointmentForm" value="true">
+				<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;#i18n{portal.util.labelRefresh}
+			</button>
+		</div>
+	</div>
+	
+	<@fieldInputCombo i18nLabelKey='module.appointment.resource.task_set_appointment_resource_config.labelFormResourceType'
+		inputName='idFormResourceType' value=(idFormResourceType)!''
+		items=refListFormResourceTypes />
+	
+</fieldset>

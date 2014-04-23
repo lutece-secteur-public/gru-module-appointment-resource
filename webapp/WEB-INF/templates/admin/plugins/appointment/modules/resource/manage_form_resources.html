@@ -5,7 +5,6 @@
     	<@tabs tab="resources" appointmentform=appointmentform />
     	<fieldset>
 			<@messages infos=infos errors=errors />
-
     		<legend>
     			<div class="pull-right">
 	    			<a class="btn btn-small btn-primary" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=createFormResourceType&id_form=${appointmentform.idForm}" title="#i18n{module.appointment.resource.manageAppointmentFormResources.labelAddResourceType}" >
@@ -14,8 +13,10 @@
 	    		</div>
     			#i18n{module.appointment.resource.manageAppointmentFormResources.pageTitle}
     		</legend>
-
     		<div>
+    			<div class="alert alert-info">
+					#i18n{module.appointment.resource.manageAppointmentFormResources.labelHelp}
+    			</div>
     			<#if listFormResourceTypes?? && listFormResourceTypes?has_content>
     				<table class="table table-stripped">
     					<thead>
@@ -27,7 +28,9 @@
     								#i18n{module.appointment.resource.manageAppointmentFormResources.labelDescription}
     							</th>
     							<th>
-    								#i18n{portal.util.labelAction}
+    							</th>
+    							<th>
+    								#i18n{portal.util.labelActions}
     							</th>
     						</tr>
     					</thead>
@@ -54,10 +57,22 @@
     									${formResourceType.description}
     								</td>
     								<td>
+    									<#if formResourceType.resourceTypeName == adminUserResourceType && formResourceType.isAppointmentAdminUser>
+    										<span class="badge badge-success">
+    											#i18n{module.appointment.resource.manageAppointmentFormResources.labelAdminUser}
+    										</span>
+    									</#if>
+    								</td>
+    								<td>
     									<a class="btn btn-small btn-primary" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=modifyFormResourceType&idFormResourceType=${formResourceType.id}" title="#i18n{portal.util.labelModify}" >
     										<i class="icon-edit icon-white">&nbsp;</i>
     									</a>
-    									<a class="btn btn-small btn-danger" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=confirmRemoveFormResourceType&idFormResourceType=${formResourceType.id}" title="#i18n{portal.util.labelRemove}" >
+    									<#if formResourceType.resourceTypeName == adminUserResourceType && !formResourceType.isAppointmentAdminUser>
+    										<a class="btn btn-small btn-success" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?action=doSetAdminDefaultResourceType&idFormResourceType=${formResourceType.id}" title="#i18n{module.appointment.resource.manageAppointmentFormResources.labelSetResourceAsAdmin}">
+    											<i class="fa fa-male"></i>
+    										</a>
+    									</#if>
+    									<a class="btn btn-small btn-danger" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=confirmRemoveFormResourceType&idFormResourceType=${formResourceType.id}" title="#i18n{portal.util.labelDelete}" >
     										<i class="icon-trash icon-white">&nbsp;</i>
     									</a>
     								</td>

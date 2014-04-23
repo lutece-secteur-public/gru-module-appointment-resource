@@ -1,0 +1,12 @@
+<#if listAppResources?? && listAppResources?size &gt; 0>
+	<#list listAppResources as appResource>
+		<div class="control-group">
+			<label class="control-label">
+				${(appResource.formResourceType.description)!}
+			</label>
+			<div class="controls">
+				${(appResource.resource.resourceName)!}
+			</div>
+		</div>
+	</#list>
+</#if>
