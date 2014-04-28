@@ -46,14 +46,13 @@ import java.util.List;
  */
 public final class SetAppointmentResourceHistoryHome
 {
-    private static ISetAppointmentResourceHistoryDAO _dao = SpringContextService
-            .getBean( ISetAppointmentResourceHistoryDAO.BEAN_NAME );
+    private static ISetAppointmentResourceHistoryDAO _dao = SpringContextService.getBean( ISetAppointmentResourceHistoryDAO.BEAN_NAME );
     private static Plugin _plugin = PluginService.getPlugin( WorkflowAppointmentPlugin.PLUGIN_NAME );
 
     /**
      * Private default constructor
      */
-    private SetAppointmentResourceHistoryHome( )
+    private SetAppointmentResourceHistoryHome(  )
     {
         // Nothing to do
     }

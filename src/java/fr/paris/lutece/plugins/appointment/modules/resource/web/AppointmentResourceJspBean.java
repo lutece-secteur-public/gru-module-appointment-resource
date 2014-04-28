@@ -82,16 +82,17 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
     {
         String strIdResource = request.getParameter( PARAMETER_ID_RESOURCE );
         String strResourceType = request.getParameter( PARAMETER_RESOURCE_TYPE );
+
         if ( StringUtils.isEmpty( strIdResource ) || StringUtils.isEmpty( strResourceType ) )
         {
             return redirect( request, AppointmentFormJspBean.getURLManageAppointmentForms( request ) );
         }
 
-        IResourceProvider provider = ResourceService.getInstance( ).getResourceProvider( strResourceType );
+        IResourceProvider provider = ResourceService.getInstance(  ).getResourceProvider( strResourceType );
 
         IResource resource = provider.getResource( strIdResource, strResourceType );
 
-        Map<String, Object> model = getModel( );
+        Map<String, Object> model = getModel(  );
         model.put( MARK_RESOURCE, resource );
 
         return getPage( MESSAGE_RESOURCE_CALENDAR_PAGE_TITLE, TEMPLATE_RESOURCE_CALENDAR, model );

@@ -42,7 +42,6 @@ import fr.paris.lutece.plugins.resource.business.IResource;
 public class AppointmentResourceDTO extends AppointmentResource
 {
     private static final long serialVersionUID = 7297751790666569071L;
-
     private IResource _resource;
     private AppointmentFormResourceType _formResourceType;
 
@@ -53,16 +52,16 @@ public class AppointmentResourceDTO extends AppointmentResource
      */
     public AppointmentResourceDTO( AppointmentResource appResource )
     {
-        setIdAppointment( appResource.getIdAppointment( ) );
-        setIdAppointmentFormResourceType( appResource.getIdAppointmentFormResourceType( ) );
-        setIdResource( appResource.getIdResource( ) );
+        setIdAppointment( appResource.getIdAppointment(  ) );
+        setIdAppointmentFormResourceType( appResource.getIdAppointmentFormResourceType(  ) );
+        setIdResource( appResource.getIdResource(  ) );
     }
 
     /**
      * Get the resource associated with this appointment resource
      * @return The resource associated with this appointment resource
      */
-    public IResource getResource( )
+    public IResource getResource(  )
     {
         return _resource;
     }
@@ -80,7 +79,7 @@ public class AppointmentResourceDTO extends AppointmentResource
      * Get the form resource type associated with this appointment resource
      * @return The form resource type associated with this appointment resource
      */
-    public AppointmentFormResourceType getFormResourceType( )
+    public AppointmentFormResourceType getFormResourceType(  )
     {
         return _formResourceType;
     }
@@ -94,5 +93,4 @@ public class AppointmentResourceDTO extends AppointmentResource
     {
         this._formResourceType = formResourceType;
     }
-
 }

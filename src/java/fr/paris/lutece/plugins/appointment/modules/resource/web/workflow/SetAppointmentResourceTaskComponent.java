@@ -67,6 +67,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -98,7 +99,6 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     // MESSAGES
     private static final String MESSAGE_ERROR_MANDATORY_FIELDS = "module.appointment.resource.task_set_appointment_resource_config.mandatoryFields";
     private static final String MESSAGE_APPOINTMENT_RESOURCE_SET = "module.appointment.resource.task_set_appointment_resource_config.history.appointmentResourceSet";
-
     @Inject
     @Named( TaskSetAppointmentResource.CONFIG_SERVICE_BEAN_NAME )
     private ITaskConfigService _taskSetAppointmentResourceConfigService;
@@ -109,63 +109,63 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     @Override
     public String getDisplayConfigForm( HttpServletRequest request, Locale locale, ITask task )
     {
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<String, Object>(  );
 
-        TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task
-                .getId( ) );
+        TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task.getId(  ) );
 
-        List<AppointmentForm> listAppointmentform = AppointmentFormHome.getAppointmentFormsList( );
-        ReferenceList refListAppointmentForm = new ReferenceList( );
+        List<AppointmentForm> listAppointmentform = AppointmentFormHome.getAppointmentFormsList(  );
+        ReferenceList refListAppointmentForm = new ReferenceList(  );
 
         for ( AppointmentForm form : listAppointmentform )
         {
-            refListAppointmentForm.addItem( form.getIdForm( ), form.getTitle( ) );
+            refListAppointmentForm.addItem( form.getIdForm(  ), form.getTitle(  ) );
         }
 
         String strIdAppointmentForm;
+
         // We get the only possible id appointment form if there is only one appointment form
-        if ( refListAppointmentForm.size( ) == 1 )
+        if ( refListAppointmentForm.size(  ) == 1 )
         {
-            strIdAppointmentForm = refListAppointmentForm.get( 0 ).getCode( );
+            strIdAppointmentForm = refListAppointmentForm.get( 0 ).getCode(  );
         }
         else
         {
             strIdAppointmentForm = request.getParameter( PARAMETER_ID_APPOINTMENT_FORM );
-            if ( config != null
-                    && ( StringUtils.isEmpty( strIdAppointmentForm ) || !StringUtils.isNumeric( strIdAppointmentForm ) ) )
+
+            if ( ( config != null ) &&
+                    ( StringUtils.isEmpty( strIdAppointmentForm ) || !StringUtils.isNumeric( strIdAppointmentForm ) ) )
             {
-                AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config
-                        .getIdFormResourceType( ) );
-                strIdAppointmentForm = Integer.toString( formResourceType.getIdAppointmentForm( ) );
+                AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config.getIdFormResourceType(  ) );
+                strIdAppointmentForm = Integer.toString( formResourceType.getIdAppointmentForm(  ) );
             }
         }
 
         if ( config != null )
         {
-            model.put( PARAMETER_ID_FORM_RESOURCE_TYPE, Integer.toString( config.getIdFormResourceType( ) ) );
+            model.put( PARAMETER_ID_FORM_RESOURCE_TYPE, Integer.toString( config.getIdFormResourceType(  ) ) );
         }
 
-        ReferenceList refListFormTypes = new ReferenceList( );
+        ReferenceList refListFormTypes = new ReferenceList(  );
 
         if ( StringUtils.isNotEmpty( strIdAppointmentForm ) && StringUtils.isNumeric( strIdAppointmentForm ) )
         {
             model.put( PARAMETER_ID_APPOINTMENT_FORM, strIdAppointmentForm );
 
-            List<AppointmentFormResourceType> listFormResourceType = AppointmentFormResourceTypeHome
-                    .findResourceTypesListFromIdForm( Integer.parseInt( strIdAppointmentForm ) );
+            List<AppointmentFormResourceType> listFormResourceType = AppointmentFormResourceTypeHome.findResourceTypesListFromIdForm( Integer.parseInt( 
+                        strIdAppointmentForm ) );
 
             for ( AppointmentFormResourceType formType : listFormResourceType )
             {
-                refListFormTypes.addItem( formType.getId( ), formType.getDescription( ) );
+                refListFormTypes.addItem( formType.getId(  ), formType.getDescription(  ) );
             }
         }
+
         model.put( MARK_REF_LIST_FORM_RESOURCE_TYPES, refListFormTypes );
         model.put( MARK_REF_LIST_APPOINTMENT_FORM, refListAppointmentForm );
 
-        HtmlTemplate template = AppTemplateService
-                .getTemplate( TEMPLATE_CONFIG_SET_APPOINTMENT_RESOURCE, locale, model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CONFIG_SET_APPOINTMENT_RESOURCE, locale, model );
 
-        return template.getHtml( );
+        return template.getHtml(  );
     }
 
     /**
@@ -175,27 +175,29 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     public String doSaveConfig( HttpServletRequest request, Locale locale, ITask task )
     {
         boolean bRefresh = Boolean.parseBoolean( request.getParameter( PARAMETER_REFRESH_APPOINTMENT_FORM ) );
+
         if ( bRefresh )
         {
             String strIdAppointmentForm = request.getParameter( PARAMETER_ID_APPOINTMENT_FORM );
-            return getUrlModifyTask( request, task.getId( ), strIdAppointmentForm );
+
+            return getUrlModifyTask( request, task.getId(  ), strIdAppointmentForm );
         }
 
         String strResourceType = request.getParameter( PARAMETER_ID_FORM_RESOURCE_TYPE );
+
         if ( StringUtils.isEmpty( strResourceType ) || !StringUtils.isNumeric( strResourceType ) )
         {
             return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
 
-        TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task
-                .getId( ) );
+        TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task.getId(  ) );
         boolean bCreate = false;
 
         if ( config == null )
         {
             bCreate = true;
-            config = new TaskSetAppointmentResourceConfig( );
-            config.setIdTask( task.getId( ) );
+            config = new TaskSetAppointmentResourceConfig(  );
+            config.setIdTask( task.getId(  ) );
         }
 
         config.setIdFormResourceType( Integer.parseInt( strResourceType ) );
@@ -210,7 +212,6 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
         }
 
         return null;
-
     }
 
     /**
@@ -218,40 +219,42 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
      */
     @Override
     public String getDisplayTaskForm( int nIdResource, String strResourceType, HttpServletRequest request,
-            Locale locale, ITask task )
+        Locale locale, ITask task )
     {
         if ( !StringUtils.equals( Appointment.APPOINTMENT_RESOURCE_TYPE, strResourceType ) )
         {
             return null;
         }
+
         Appointment appointment = AppointmentHome.findByPrimaryKey( nIdResource );
+
         if ( appointment == null )
         {
             return null;
         }
-        Map<String, Object> model = new HashMap<String, Object>( );
 
-        TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task
-                .getId( ) );
+        Map<String, Object> model = new HashMap<String, Object>(  );
+
+        TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task.getId(  ) );
 
         if ( config == null )
         {
             return null;
         }
 
-        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config
-                .getIdFormResourceType( ) );
+        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config.getIdFormResourceType(  ) );
 
-        List<IResource> listResources = ResourceService.getInstance( ).getListResources(
-                formResourceType.getResourceTypeName( ) );
-        ReferenceList refListResources = new ReferenceList( );
-        AppointmentResourceService appointmentResourceService = AppointmentResourceService.getInstance( );
+        List<IResource> listResources = ResourceService.getInstance(  )
+                                                       .getListResources( formResourceType.getResourceTypeName(  ) );
+        ReferenceList refListResources = new ReferenceList(  );
+        AppointmentResourceService appointmentResourceService = AppointmentResourceService.getInstance(  );
+
         for ( IResource resource : listResources )
         {
-            if ( appointmentResourceService.isResourceAvailableForAppointment( resource.getIdResource( ),
-                    resource.getResourceType( ), config.getIdFormResourceType( ), appointment ) )
+            if ( appointmentResourceService.isResourceAvailableForAppointment( resource.getIdResource(  ),
+                        resource.getResourceType(  ), config.getIdFormResourceType(  ), appointment ) )
             {
-                refListResources.addItem( resource.getIdResource( ), resource.getResourceName( ) );
+                refListResources.addItem( resource.getIdResource(  ), resource.getResourceName(  ) );
             }
         }
 
@@ -261,7 +264,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_FORM_SET_APPOINTMENT_RESOURCE, locale,
                 model );
 
-        return template.getHtml( );
+        return template.getHtml(  );
     }
 
     /**
@@ -269,28 +272,27 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
      */
     @Override
     public String doValidateTask( int nIdResource, String strResourceType, HttpServletRequest request, Locale locale,
-            ITask task )
+        ITask task )
     {
-        TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task
-                .getId( ) );
+        TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task.getId(  ) );
 
         if ( config == null )
         {
             return null;
         }
 
-        String strIdResource = request.getParameter( PARAMETER_ID_RESOURCE + config.getIdFormResourceType( ) );
+        String strIdResource = request.getParameter( PARAMETER_ID_RESOURCE + config.getIdFormResourceType(  ) );
 
         if ( StringUtils.isEmpty( strIdResource ) )
         {
             return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
 
-        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config
-                .getIdFormResourceType( ) );
+        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config.getIdFormResourceType(  ) );
 
-        IResource resource = ResourceService.getInstance( ).getResource( strIdResource,
-                formResourceType.getResourceTypeName( ) );
+        IResource resource = ResourceService.getInstance(  )
+                                            .getResource( strIdResource, formResourceType.getResourceTypeName(  ) );
+
         if ( resource == null )
         {
             return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
@@ -305,23 +307,22 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     @Override
     public String getDisplayTaskInformation( int nIdHistory, HttpServletRequest request, Locale locale, ITask task )
     {
-        List<SetAppointmentResourceHistory> listHistory = SetAppointmentResourceHistoryHome
-                .findByIdHistory( nIdHistory );
-        StringBuilder sbHistory = new StringBuilder( );
+        List<SetAppointmentResourceHistory> listHistory = SetAppointmentResourceHistoryHome.findByIdHistory( nIdHistory );
+        StringBuilder sbHistory = new StringBuilder(  );
 
         for ( SetAppointmentResourceHistory history : listHistory )
         {
-            AppointmentFormResourceType resourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( history
-                    .getIdFormResourceType( ) );
-            IResource resource = ResourceService.getInstance( ).getResource( history.getIdResource( ),
-                    resourceType.getResourceTypeName( ) );
+            AppointmentFormResourceType resourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( history.getIdFormResourceType(  ) );
+            IResource resource = ResourceService.getInstance(  )
+                                                .getResource( history.getIdResource(  ),
+                    resourceType.getResourceTypeName(  ) );
 
-            Object[] args = { resource.getResourceName( ), resourceType.getDescription( ) };
+            Object[] args = { resource.getResourceName(  ), resourceType.getDescription(  ) };
             sbHistory.append( I18nService.getLocalizedString( MESSAGE_APPOINTMENT_RESOURCE_SET, args, locale ) );
             sbHistory.append( "<br />" );
         }
 
-        return sbHistory.toString( );
+        return sbHistory.toString(  );
     }
 
     /**
@@ -338,6 +339,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
         UrlItem urlItem = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_URL_MODIFY_TASK );
         urlItem.addParameter( PARAMETER_ID_TASK, nIdTask );
         urlItem.addParameter( PARAMETER_ID_APPOINTMENT_FORM, strIdAppointmentForm );
-        return urlItem.getUrl( );
+
+        return urlItem.getUrl(  );
     }
 }

@@ -38,6 +38,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import java.sql.Date;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,22 +50,18 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
 {
     // Selects
     private static final String SQL_QUERY_SELECT_ALL = " SELECT id_appointment, id_app_form_res_type, id_resource FROM appointment_resource_app_res ";
-    private static final String SQL_QUERY_SELECT_BY_ID_APPOINTMENT = SQL_QUERY_SELECT_ALL
-            + " WHERE id_appointment = ? ";
-    private static final String SQL_QUERY_SELECT_BY_PRIMARY_KEY = SQL_QUERY_SELECT_ALL
-            + " WHERE id_appointment = ? AND id_app_form_res_type = ? ";
-
-    private static final String SQL_QUERY_IS_RESOURCE_AVAILABLE = " SELECT ar.id_resource FROM appointment_resource_app_res ar "
-            + " INNER JOIN appointment_resource_form_rt frt ON ar.id_app_form_res_type = frt.id "
-            + " INNER JOIN appointment_appointment a ON ar.id_appointment = a.id_appointment"
-            + " INNER JOIN appointment_slot s ON s.id_slot = a.id_slot"
-            + " WHERE ar.id_resource = ?"
-            + " AND frt.resource_type_name = ?"
-            + " AND a.date_appointment = ?"
-            + " AND a.status != ?"
-            + " AND ( ( ( s.starting_hour * 100 + s.starting_minute ) <= ? && ( s.ending_hour * 100 + s.ending_minute ) >= ? )"
-            + "     || ( ( s.starting_hour * 100 + s.starting_minute ) <= ? && ( s.ending_hour * 100 + s.ending_minute ) >= ? )"
-            + "     )";
+    private static final String SQL_QUERY_SELECT_BY_ID_APPOINTMENT = SQL_QUERY_SELECT_ALL +
+        " WHERE id_appointment = ? ";
+    private static final String SQL_QUERY_SELECT_BY_PRIMARY_KEY = SQL_QUERY_SELECT_ALL +
+        " WHERE id_appointment = ? AND id_app_form_res_type = ? ";
+    private static final String SQL_QUERY_IS_RESOURCE_AVAILABLE = " SELECT ar.id_resource FROM appointment_resource_app_res ar " +
+        " INNER JOIN appointment_resource_form_rt frt ON ar.id_app_form_res_type = frt.id " +
+        " INNER JOIN appointment_appointment a ON ar.id_appointment = a.id_appointment" +
+        " INNER JOIN appointment_slot s ON s.id_slot = a.id_slot" + " WHERE ar.id_resource = ?" +
+        " AND frt.resource_type_name = ?" + " AND a.date_appointment = ?" + " AND a.status != ?" +
+        " AND ( ( ( s.starting_hour * 100 + s.starting_minute ) <= ? && ( s.ending_hour * 100 + s.ending_minute ) >= ? )" +
+        "     || ( ( s.starting_hour * 100 + s.starting_minute ) <= ? && ( s.ending_hour * 100 + s.ending_minute ) >= ? )" +
+        "     )";
 
     // Insert, update
     private static final String SQL_QUERY_INSERT = " INSERT INTO appointment_resource_app_res (id_appointment,id_app_form_res_type,id_resource) VALUES (?,?,?) ";
@@ -83,11 +80,11 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         int nIndex = 1;
-        daoUtil.setInt( nIndex++, resource.getIdAppointment( ) );
-        daoUtil.setInt( nIndex++, resource.getIdAppointmentFormResourceType( ) );
-        daoUtil.setString( nIndex, resource.getIdResource( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.setInt( nIndex++, resource.getIdAppointment(  ) );
+        daoUtil.setInt( nIndex++, resource.getIdAppointmentFormResourceType(  ) );
+        daoUtil.setString( nIndex, resource.getIdResource(  ) );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -99,13 +96,16 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, nIdAppointment );
         daoUtil.setInt( 2, nIdAppointmentFormResourceType );
-        daoUtil.executeQuery( );
+        daoUtil.executeQuery(  );
+
         AppointmentResource resource = null;
-        if ( daoUtil.next( ) )
+
+        if ( daoUtil.next(  ) )
         {
             resource = getFromDAOUtil( daoUtil );
         }
-        daoUtil.free( );
+
+        daoUtil.free(  );
 
         return resource;
     }
@@ -118,13 +118,16 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_ID_APPOINTMENT, plugin );
         daoUtil.setInt( 1, nIdAppointment );
-        daoUtil.executeQuery( );
-        List<AppointmentResource> listAppointmentResource = new ArrayList<AppointmentResource>( );
-        while ( daoUtil.next( ) )
+        daoUtil.executeQuery(  );
+
+        List<AppointmentResource> listAppointmentResource = new ArrayList<AppointmentResource>(  );
+
+        while ( daoUtil.next(  ) )
         {
             listAppointmentResource.add( getFromDAOUtil( daoUtil ) );
         }
-        daoUtil.free( );
+
+        daoUtil.free(  );
 
         return listAppointmentResource;
     }
@@ -137,11 +140,11 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
         int nIndex = 1;
-        daoUtil.setString( nIndex++, resource.getIdResource( ) );
-        daoUtil.setInt( nIndex++, resource.getIdAppointment( ) );
-        daoUtil.setInt( nIndex, resource.getIdAppointmentFormResourceType( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.setString( nIndex++, resource.getIdResource(  ) );
+        daoUtil.setInt( nIndex++, resource.getIdAppointment(  ) );
+        daoUtil.setInt( nIndex, resource.getIdAppointmentFormResourceType(  ) );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -153,8 +156,8 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, nIdAppointment );
         daoUtil.setInt( 2, nIdAppointmentFormResourceType );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -165,8 +168,8 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_APPOINTMENT, plugin );
         daoUtil.setInt( 1, nIdAppointment );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -177,8 +180,8 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_APPOINTMENT_FORM_RESOURCE_TYPE, plugin );
         daoUtil.setInt( 1, nIdAppointmentFormResourceType );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -186,10 +189,10 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
      */
     @Override
     public boolean isResourceAvailable( String strIdResource, String strResourceTypeName, Date dateDay, int nHourBegin,
-            int nMinuteBegin, int nHourEnd, int nMinuteEnd, Plugin plugin )
+        int nMinuteBegin, int nHourEnd, int nMinuteEnd, Plugin plugin )
     {
-        int nStartingTime = nHourBegin * 100 + nMinuteBegin;
-        int nEndingTime = nHourEnd * 100 + nMinuteEnd;
+        int nStartingTime = ( nHourBegin * 100 ) + nMinuteBegin;
+        int nEndingTime = ( nHourEnd * 100 ) + nMinuteEnd;
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_IS_RESOURCE_AVAILABLE, plugin );
         int nIndex = 1;
@@ -202,16 +205,16 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
         daoUtil.setInt( nIndex++, nEndingTime );
         daoUtil.setInt( nIndex++, nEndingTime );
 
-        daoUtil.executeQuery( );
+        daoUtil.executeQuery(  );
 
         boolean bHasResult = true;
 
-        if ( daoUtil.next( ) )
+        if ( daoUtil.next(  ) )
         {
             bHasResult = false;
         }
 
-        daoUtil.free( );
+        daoUtil.free(  );
 
         return bHasResult;
     }
@@ -223,12 +226,12 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
      */
     private AppointmentResource getFromDAOUtil( DAOUtil daoUtil )
     {
-        AppointmentResource resource = new AppointmentResource( );
+        AppointmentResource resource = new AppointmentResource(  );
         int nIndex = 1;
         resource.setIdAppointment( daoUtil.getInt( nIndex++ ) );
         resource.setIdAppointmentFormResourceType( daoUtil.getInt( nIndex++ ) );
         resource.setIdResource( daoUtil.getString( nIndex ) );
+
         return resource;
     }
-
 }

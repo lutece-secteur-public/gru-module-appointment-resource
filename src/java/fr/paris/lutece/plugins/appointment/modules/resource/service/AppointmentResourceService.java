@@ -55,14 +55,14 @@ public class AppointmentResourceService
      * Get the instance of the service
      * @return The instance of the service
      */
-    public static AppointmentResourceService getInstance( )
+    public static AppointmentResourceService getInstance(  )
     {
         if ( _instance == null )
         {
             _instance = SpringContextService.getBean( BEAN_NAME );
         }
-        return _instance;
 
+        return _instance;
     }
 
     /**
@@ -76,20 +76,22 @@ public class AppointmentResourceService
      *         the time of the appointment
      */
     public boolean isResourceAvailableForAppointment( String strIdResource, String strResourceTypeName,
-            int nIdFormResourceType, Appointment appointment )
+        int nIdFormResourceType, Appointment appointment )
     {
-        AppointmentResource appResource = AppointmentResourceHome.findByPrimaryKey( appointment.getIdAppointment( ),
+        AppointmentResource appResource = AppointmentResourceHome.findByPrimaryKey( appointment.getIdAppointment(  ),
                 nIdFormResourceType );
-        if ( appResource != null && StringUtils.equals( appResource.getIdResource( ), strIdResource ) )
+
+        if ( ( appResource != null ) && StringUtils.equals( appResource.getIdResource(  ), strIdResource ) )
         {
             // The resource is already associated with this appointment for this form RT, so we allow it to be re-associated
             return true;
         }
 
         // We now have to check that the resource is not associated to another appointment during the time of this one
-        AppointmentSlot slot = AppointmentSlotHome.findByPrimaryKey( appointment.getIdSlot( ) );
+        AppointmentSlot slot = AppointmentSlotHome.findByPrimaryKey( appointment.getIdSlot(  ) );
+
         return AppointmentResourceHome.isResourceAvailable( strIdResource, strResourceTypeName,
-                appointment.getDateAppointment( ), slot.getStartingHour( ), slot.getStartingMinute( ),
-                slot.getEndingHour( ), slot.getEndingMinute( ) );
+            appointment.getDateAppointment(  ), slot.getStartingHour(  ), slot.getStartingMinute(  ),
+            slot.getEndingHour(  ), slot.getEndingMinute(  ) );
     }
 }

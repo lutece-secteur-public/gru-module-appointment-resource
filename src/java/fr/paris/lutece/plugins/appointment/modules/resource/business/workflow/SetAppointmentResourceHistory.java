@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.appointment.modules.resource.business.workflow;
 
+
 /**
  * Set appointment resource history
  */
@@ -48,7 +49,7 @@ public class SetAppointmentResourceHistory
      * Get the primary key of the update
      * @return The primary key of the update
      */
-    public int getId( )
+    public int getId(  )
     {
         return _nId;
     }
@@ -66,7 +67,7 @@ public class SetAppointmentResourceHistory
      * Get the id of the history
      * @return The id of the history
      */
-    public int getIdHistory( )
+    public int getIdHistory(  )
     {
         return _nIdHistory;
     }
@@ -84,7 +85,7 @@ public class SetAppointmentResourceHistory
      * Get the id of the appointment associated with this history
      * @return The id of the appointment associated with this history
      */
-    public int getIdAppointment( )
+    public int getIdAppointment(  )
     {
         return _nIdAppointment;
     }
@@ -103,7 +104,7 @@ public class SetAppointmentResourceHistory
      * Get the id of the resource set
      * @return The the id of the resource set
      */
-    public String getIdResource( )
+    public String getIdResource(  )
     {
         return _strIdResource;
     }
@@ -121,7 +122,7 @@ public class SetAppointmentResourceHistory
      * Get the id of the form resource type
      * @return The id of the form resource type
      */
-    public int getIdFormResourceType( )
+    public int getIdFormResourceType(  )
     {
         return _nIdFormResourceType;
     }

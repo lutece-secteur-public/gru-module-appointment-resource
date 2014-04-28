@@ -47,7 +47,7 @@ public class TaskSetAppointmentResourceConfig extends TaskConfig
      * Get the id of the type of the resource to set
      * @return The id of the type of the resource to set
      */
-    public int getIdFormResourceType( )
+    public int getIdFormResourceType(  )
     {
         return _nIdFormResourceType;
     }

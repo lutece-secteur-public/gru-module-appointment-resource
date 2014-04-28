@@ -42,7 +42,6 @@ import java.io.Serializable;
 public class AppointmentResource implements Serializable
 {
     private static final long serialVersionUID = -5425541631701969940L;
-
     private int _nIdAppointment;
     private int _nIdAppointmentFormResourceType;
     private String _strIdResource;
@@ -51,7 +50,7 @@ public class AppointmentResource implements Serializable
      * Get the id of the appointment
      * @return The id of the appointment
      */
-    public int getIdAppointment( )
+    public int getIdAppointment(  )
     {
         return _nIdAppointment;
     }
@@ -69,7 +68,7 @@ public class AppointmentResource implements Serializable
      * Get the id of the appointment form resource type
      * @return The id of the appointment form resource type
      */
-    public int getIdAppointmentFormResourceType( )
+    public int getIdAppointmentFormResourceType(  )
     {
         return _nIdAppointmentFormResourceType;
     }
@@ -88,7 +87,7 @@ public class AppointmentResource implements Serializable
      * Get the id of the resource
      * @return the id of the resource
      */
-    public String getIdResource( )
+    public String getIdResource(  )
     {
         return _strIdResource;
     }

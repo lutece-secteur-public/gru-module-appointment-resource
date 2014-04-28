@@ -39,6 +39,7 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.sql.Date;
+
 import java.util.List;
 
 
@@ -138,10 +139,9 @@ public class AppointmentResourceHome
      * @return True if the resource is available, false otherwise
      */
     public static boolean isResourceAvailable( String strIdResource, String strResourceTypeName, Date dateDay,
-            int nHourBegin, int nMinuteBegin, int nHourEnd, int nMinuteEnd )
+        int nHourBegin, int nMinuteBegin, int nHourEnd, int nMinuteEnd )
     {
         return _dao.isResourceAvailable( strIdResource, strResourceTypeName, dateDay, nHourBegin, nMinuteBegin,
-                nHourEnd, nMinuteEnd, _plugin );
+            nHourEnd, nMinuteEnd, _plugin );
     }
-
 }

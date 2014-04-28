@@ -39,18 +39,18 @@ import fr.paris.lutece.util.sql.DAOUtil;
 
 
 /**
- * 
+ *
  * TaskNotifyAppointmentConfigDAO
- * 
+ *
  */
 public class TaskSetAppointmentResourceConfigDAO implements ITaskConfigDAO<TaskSetAppointmentResourceConfig>
 {
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_task,id_form_resource_type "
-            + "FROM workflow_task_set_app_resource_cf WHERE id_task=?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO workflow_task_set_app_resource_cf( "
-            + "id_task,id_form_resource_type)" + "VALUES (?,?)";
-    private static final String SQL_QUERY_UPDATE = "UPDATE workflow_task_set_app_resource_cf "
-            + " SET id_form_resource_type = ? WHERE id_task = ? ";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_task,id_form_resource_type " +
+        "FROM workflow_task_set_app_resource_cf WHERE id_task=?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO workflow_task_set_app_resource_cf( " +
+        "id_task,id_form_resource_type)" + "VALUES (?,?)";
+    private static final String SQL_QUERY_UPDATE = "UPDATE workflow_task_set_app_resource_cf " +
+        " SET id_form_resource_type = ? WHERE id_task = ? ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM workflow_task_set_app_resource_cf WHERE id_task = ? ";
 
     /**
@@ -59,15 +59,15 @@ public class TaskSetAppointmentResourceConfigDAO implements ITaskConfigDAO<TaskS
     @Override
     public synchronized void insert( TaskSetAppointmentResourceConfig config )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, WorkflowAppointmentPlugin.getPlugin( ) );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, WorkflowAppointmentPlugin.getPlugin(  ) );
 
         int nIndex = 1;
 
-        daoUtil.setInt( nIndex++, config.getIdTask( ) );
-        daoUtil.setInt( nIndex++, config.getIdFormResourceType( ) );
+        daoUtil.setInt( nIndex++, config.getIdTask(  ) );
+        daoUtil.setInt( nIndex++, config.getIdFormResourceType(  ) );
 
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -76,15 +76,15 @@ public class TaskSetAppointmentResourceConfigDAO implements ITaskConfigDAO<TaskS
     @Override
     public void store( TaskSetAppointmentResourceConfig config )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, WorkflowAppointmentPlugin.getPlugin( ) );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, WorkflowAppointmentPlugin.getPlugin(  ) );
 
         int nIndex = 1;
 
-        daoUtil.setInt( nIndex++, config.getIdFormResourceType( ) );
+        daoUtil.setInt( nIndex++, config.getIdFormResourceType(  ) );
 
-        daoUtil.setInt( nIndex, config.getIdTask( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.setInt( nIndex, config.getIdTask(  ) );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -94,22 +94,22 @@ public class TaskSetAppointmentResourceConfigDAO implements ITaskConfigDAO<TaskS
     public TaskSetAppointmentResourceConfig load( int nIdTask )
     {
         TaskSetAppointmentResourceConfig config = null;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, WorkflowAppointmentPlugin.getPlugin( ) );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, WorkflowAppointmentPlugin.getPlugin(  ) );
 
         daoUtil.setInt( 1, nIdTask );
 
-        daoUtil.executeQuery( );
+        daoUtil.executeQuery(  );
 
         int nIndex = 1;
 
-        if ( daoUtil.next( ) )
+        if ( daoUtil.next(  ) )
         {
-            config = new TaskSetAppointmentResourceConfig( );
+            config = new TaskSetAppointmentResourceConfig(  );
             config.setIdTask( daoUtil.getInt( nIndex++ ) );
             config.setIdFormResourceType( daoUtil.getInt( nIndex ) );
         }
 
-        daoUtil.free( );
+        daoUtil.free(  );
 
         return config;
     }
@@ -120,10 +120,10 @@ public class TaskSetAppointmentResourceConfigDAO implements ITaskConfigDAO<TaskS
     @Override
     public void delete( int nIdTask )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, WorkflowAppointmentPlugin.getPlugin( ) );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, WorkflowAppointmentPlugin.getPlugin(  ) );
 
         daoUtil.setInt( 1, nIdTask );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 }
