@@ -62,6 +62,11 @@
     											#i18n{module.appointment.resource.manageAppointmentFormResources.labelAdminUser}
     										</span>
     									</#if>
+    									<#if formResourceType.isLocation>
+    										<span class="badge badge-success">
+    											#i18n{module.appointment.resource.manageAppointmentFormResources.labelLocation}
+    										</span>
+    									</#if>
     								</td>
     								<td>
     									<a class="btn btn-small btn-primary" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=modifyFormResourceType&idFormResourceType=${formResourceType.id}" title="#i18n{portal.util.labelModify}" >
@@ -70,6 +75,11 @@
     									<#if formResourceType.resourceTypeName == adminUserResourceType && !formResourceType.isAppointmentAdminUser>
     										<a class="btn btn-small btn-success" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?action=doSetAdminDefaultResourceType&idFormResourceType=${formResourceType.id}" title="#i18n{module.appointment.resource.manageAppointmentFormResources.labelSetResourceAsAdmin}">
     											<i class="fa fa-male"></i>
+    										</a>
+    									</#if>
+    									<#if formResourceType.resourceTypeName != adminUserResourceType && !formResourceType.isLocation>
+    										<a class="btn btn-small btn-success" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?action=doSetLocationDefaultResourceType&idFormResourceType=${formResourceType.id}" title="#i18n{module.appointment.resource.manageAppointmentFormResources.labelSetResourceAsLocation}" >
+    											<i class="fa fa-home"></i>
     										</a>
     									</#if>
     									<a class="btn btn-small btn-danger" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=confirmRemoveFormResourceType&idFormResourceType=${formResourceType.id}" title="#i18n{portal.util.labelDelete}" >

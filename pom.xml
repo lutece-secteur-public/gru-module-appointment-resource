@@ -50,7 +50,7 @@
     </dependencies>
 
     <properties>
-        <componentName>appointment-mydashboard</componentName>
+        <componentName>appointment-resource</componentName>
         <jiraProjectName>APRESOURCE</jiraProjectName>
         <jiraComponentId>12352</jiraComponentId>
     </properties>

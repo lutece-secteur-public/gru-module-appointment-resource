@@ -42,6 +42,8 @@ import fr.paris.lutece.plugins.appointment.modules.resource.business.Appointment
 import fr.paris.lutece.plugins.appointment.modules.resource.business.workflow.SetAppointmentResourceHistory;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.workflow.SetAppointmentResourceHistoryHome;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.workflow.TaskSetAppointmentResourceConfig;
+import fr.paris.lutece.plugins.resource.business.IResource;
+import fr.paris.lutece.plugins.resource.service.ResourceService;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
@@ -54,7 +56,6 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -88,21 +89,22 @@ public class TaskSetAppointmentResource extends SimpleTask
     public void processTask( int nIdResourceHistory, HttpServletRequest request, Locale locale )
     {
         ResourceHistory resourceHistory = _resourceHistoryService.findByPrimaryKey( nIdResourceHistory );
-        TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( this.getId(  ) );
+        TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( this
+                .getId( ) );
 
         if ( config == null )
         {
             return;
         }
 
-        String strIdResource = request.getParameter( PARAMETER_ID_RESOURCE + config.getIdFormResourceType(  ) );
+        String strIdResource = request.getParameter( PARAMETER_ID_RESOURCE + config.getIdFormResourceType( ) );
 
         if ( StringUtils.isNotEmpty( strIdResource ) )
         {
-            Appointment appointment = AppointmentHome.findByPrimaryKey( resourceHistory.getIdResource(  ) );
+            Appointment appointment = AppointmentHome.findByPrimaryKey( resourceHistory.getIdResource( ) );
 
-            AppointmentResource appResource = AppointmentResourceHome.findByPrimaryKey( appointment.getIdAppointment(  ),
-                    config.getIdFormResourceType(  ) );
+            AppointmentResource appResource = AppointmentResourceHome.findByPrimaryKey(
+                    appointment.getIdAppointment( ), config.getIdFormResourceType( ) );
 
             if ( appResource != null )
             {
@@ -111,31 +113,42 @@ public class TaskSetAppointmentResource extends SimpleTask
             }
             else
             {
-                appResource = new AppointmentResource(  );
-                appResource.setIdAppointment( appointment.getIdAppointment(  ) );
-                appResource.setIdAppointmentFormResourceType( config.getIdFormResourceType(  ) );
+                appResource = new AppointmentResource( );
+                appResource.setIdAppointment( appointment.getIdAppointment( ) );
+                appResource.setIdAppointmentFormResourceType( config.getIdFormResourceType( ) );
                 appResource.setIdResource( strIdResource );
                 AppointmentResourceHome.insert( appResource );
             }
 
-            AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config.getIdFormResourceType(  ) );
+            AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config
+                    .getIdFormResourceType( ) );
 
-            if ( formResourceType.getIsAppointmentAdminUser(  ) && StringUtils.isNumeric( strIdResource ) )
+            if ( formResourceType.getIsAppointmentAdminUser( ) && StringUtils.isNumeric( strIdResource ) )
             {
                 int nIdAdminUser = Integer.parseInt( strIdResource );
 
-                if ( appointment.getIdAppointment(  ) != nIdAdminUser )
+                if ( appointment.getIdAppointment( ) != nIdAdminUser )
                 {
                     appointment.setIdAdminUser( nIdAdminUser );
                     AppointmentHome.update( appointment );
                 }
             }
+            if ( formResourceType.getIsLocation( ) )
+            {
+                IResource resource = ResourceService.getInstance( ).getResource( strIdResource,
+                        formResourceType.getResourceTypeName( ) );
+                if ( resource != null && StringUtils.isNotEmpty( resource.getResourceName( ) ) )
+                {
+                    appointment.setLocation( resource.getResourceName( ) );
+                    AppointmentHome.update( appointment );
+                }
+            }
 
-            SetAppointmentResourceHistory history = new SetAppointmentResourceHistory(  );
+            SetAppointmentResourceHistory history = new SetAppointmentResourceHistory( );
             history.setIdHistory( nIdResourceHistory );
-            history.setIdAppointment( appResource.getIdAppointment(  ) );
-            history.setIdFormResourceType( appResource.getIdAppointmentFormResourceType(  ) );
-            history.setIdResource( appResource.getIdResource(  ) );
+            history.setIdAppointment( appResource.getIdAppointment( ) );
+            history.setIdFormResourceType( appResource.getIdAppointmentFormResourceType( ) );
+            history.setIdResource( appResource.getIdResource( ) );
             SetAppointmentResourceHistoryHome.create( history );
         }
     }
@@ -146,16 +159,26 @@ public class TaskSetAppointmentResource extends SimpleTask
     @Override
     public String getTitle( Locale locale )
     {
-        TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( getId(  ) );
+        TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( getId( ) );
 
         if ( config == null )
         {
             return StringUtils.EMPTY;
         }
 
-        AppointmentFormResourceType resourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config.getIdFormResourceType(  ) );
-        Object[] args = { ( resourceType != null ) ? resourceType.getDescription(  ) : StringUtils.EMPTY };
+        AppointmentFormResourceType resourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config
+                .getIdFormResourceType( ) );
+        Object[] args = { ( resourceType != null ) ? resourceType.getDescription( ) : StringUtils.EMPTY };
 
         return I18nService.getLocalizedString( MESSAGE_SET_APPOINTMENT_RESOURCE_TASK_DESCRIPTION, args, locale );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void doRemoveConfig( )
+    {
+        _taskSetAppointmentResourceConfigService.remove( getId( ) );
     }
 }

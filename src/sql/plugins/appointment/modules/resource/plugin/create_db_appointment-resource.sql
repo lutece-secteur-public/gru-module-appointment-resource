@@ -5,10 +5,12 @@ CREATE TABLE appointment_resource_form_rt (
 	resource_type_name varchar(255) NOT NULL default '',
 	description varchar(255) NOT NULL default '',
 	is_app_admin_user smallint NOT NULL default 0,
+	is_localization smallint NOT NULL default 0,
 	PRIMARY KEY (id)
 );
 
 CREATE INDEX idx_appointment_resource_form_rt_form ON appointment_resource_form_rt (id_appointment_form);
+CREATE INDEX idx_appointment_resource_form_rt_name ON appointment_resource_form_rt (resource_type_name);
 
 
 DROP TABLE IF EXISTS workflow_task_set_app_resource_cf;

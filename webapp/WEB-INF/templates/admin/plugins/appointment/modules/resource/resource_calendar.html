@@ -1,0 +1,110 @@
+<link href="css/plugins/appointment/appointment.css" rel="stylesheet" >
+<div class="row-fluid">
+	<div class="span12">
+		<table class="table appointment-table-container">
+			<tr>
+				<td>
+					<table class="table appointment-inner-table">
+						<tr>
+							<th>
+								<br />
+								<br />
+							</th>
+						</tr>
+						<#assign nbOccur = ( ( endingTime - startingTime ) / duration)?round />
+						<#assign currentTime = startingTime />
+						<#assign currentMinute = startingMinute />
+						<#assign currentHour = startingHour />
+						<#list 1..nbOccur as i>
+							<tr>
+								<td class="appointment-row1">
+									<#if currentHour &lt; 10>0</#if>${currentHour}h<#if currentMinute &lt; 10>0</#if>${currentMinute}
+									<@updateCurrentTimeHourAndMinute durationApp=duration />
+								</td>
+							</tr>
+						</#list>
+					</table>
+				</td>
+				<#list listDays as day>
+					<td>
+						<table class="table appointment-inner-table">
+							<thead>
+								<tr>
+									<th>
+										#i18n{${list_days_of_week[day_index]}}<br />
+										${day.date?date}
+									</th>
+								</tr>
+								<#assign currentTime = startingTime />
+								<#assign currentMinute = startingMinute />
+								<#assign currentHour = startingHour />
+								<#list day.listAppointmentResourceDTO as appointment>
+									<#assign nbOccur = ( ( ( appointment.startingHour * 60 + appointment.startingMinute ) - currentTime ) / duration)?round />
+									<#if nbOccur &gt; 0>
+										<#list 1..nbOccur as i>
+											<@addEmptyLine durationApp=duration />
+										</#list>
+									</#if>
+									<tr>
+										<#assign rowspan=((appointment.duration)/duration)?round>
+										<@updateCurrentTimeHourAndMinute durationApp=appointment.duration />
+										<td class="appointment-slot-avaiable appointment-row${rowspan} appointment-tooltip" title="">
+											<div>
+												<a href="jsp/admin/plugins/appointment/ManageAppointments.jsp?view=viewAppointment&id_appointment=${appointment.idApppointment}" title="#i18n{module.appointment.resource.resource_calendar.viewAppointment}">
+													<#if appointment.startingHour &lt; 10>0</#if>${appointment.startingHour}h<#if appointment.startingMinute &lt; 10>0</#if>${appointment.startingMinute}
+												</a>
+											</div>
+											<span class="appointment-tooltip-title">
+												<@getCellTitle startingHour=appointment.startingHour startingMinute=appointment.startingMinute endingHour=appointment.endingHour endingMinute=appointment.endingMinute appointmentDescription=appointment.appointmentDescription />
+											</span>
+										</td>
+									</tr>
+								</#list>
+								<#assign maxTime = endingTime />
+								<#assign nbOccur = ( ( maxTime - currentTime ) / duration )?round />
+								<#if nbOccur &gt; 0>
+									<#list 1..nbOccur as i>
+										<@addEmptyLine durationApp=duration/>
+									</#list>
+								</#if>
+							</thead>
+						</table>
+					</td>
+				</#list>
+			</tr>
+		</table>
+	</div>
+</div>
+<#macro addEmptyLine durationApp>
+	<#assign saveCurrentHour = currentHour />
+	<#assign saveCurrentMinute = currentMinute />
+	<@updateCurrentTimeHourAndMinute durationApp=durationApp />
+	<tr>
+		<td class="appointment-slot-closed appointment-row1 appointment-tooltip" title="">
+			&nbsp;
+			<span class="appointment-tooltip-title">
+				<@getCellTitle startingHour=saveCurrentHour startingMinute=saveCurrentMinute endingHour=currentHour endingMinute=currentMinute appointmentDescription='' />					
+			</span>
+		</td>
+	</tr>
+</#macro>
+
+<#macro updateCurrentTimeHourAndMinute durationApp>
+	<#assign currentTime = currentTime + durationApp />
+	<#assign currentMinute = currentMinute + durationApp />
+	<#if currentMinute &gt;= 60>
+		<#assign nbOccursPriv = (currentMinute / 60 )?floor />
+		<#list 1..nbOccursPriv as i>
+			<#assign currentHour = currentHour + 1 />
+		</#list>
+		<#assign currentMinute = currentMinute % 60 />
+	</#if>
+</#macro>
+
+<#macro getCellTitle startingHour startingMinute endingHour endingMinute appointmentDescription>
+	<#if startingHour &lt; 10>0</#if>${startingHour}h<#if startingMinute &lt; 10>0</#if>${startingMinute} - <#if endingHour &lt; 10>0</#if>${endingHour}h<#if endingMinute &lt; 10>0</#if>${endingMinute}
+	<#if appointmentDescription != ''>
+		<br />
+		${appointmentDescription}
+	</#if>
+</#macro>

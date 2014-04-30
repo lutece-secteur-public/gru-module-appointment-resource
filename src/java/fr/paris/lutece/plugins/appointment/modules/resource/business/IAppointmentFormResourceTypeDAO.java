@@ -101,4 +101,12 @@ public interface IAppointmentFormResourceTypeDAO
      * @param plugin The plugin
      */
     void resetAppAdminUser( int nIdAppointmentForm, Plugin plugin );
+
+    /**
+     * Reset the form resource type that was declared as containing the
+     * localization of appointments
+     * @param nIdAppointmentForm The id of the appointment form
+     * @param plugin The plugin
+     */
+    void resetLocalization( int nIdAppointmentForm, Plugin plugin );
 }

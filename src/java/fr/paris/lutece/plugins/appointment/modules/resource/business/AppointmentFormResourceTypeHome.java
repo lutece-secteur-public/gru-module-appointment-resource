@@ -47,12 +47,13 @@ import java.util.List;
 public final class AppointmentFormResourceTypeHome
 {
     private static Plugin _plugin = PluginService.getPlugin( AppointmentResourcePlugin.PLUGIN_NAME );
-    private static final IAppointmentFormResourceTypeDAO _dao = SpringContextService.getBean( IAppointmentFormResourceTypeDAO.BEAN_NAME );
+    private static final IAppointmentFormResourceTypeDAO _dao = SpringContextService
+            .getBean( IAppointmentFormResourceTypeDAO.BEAN_NAME );
 
     /**
      * Default constructor
      */
-    private AppointmentFormResourceTypeHome(  )
+    private AppointmentFormResourceTypeHome( )
     {
         // Private constructor
     }
@@ -124,5 +125,15 @@ public final class AppointmentFormResourceTypeHome
     public static void resetAppAdminUser( int nIdAppointmentForm )
     {
         _dao.resetAppAdminUser( nIdAppointmentForm, _plugin );
+    }
+
+    /**
+     * Reset the form resource type that was declared as containing the
+     * localization of appointments
+     * @param nIdAppointmentForm The id of the appointment form
+     */
+    public static void resetLocalization( int nIdAppointmentForm )
+    {
+        _dao.resetLocalization( nIdAppointmentForm, _plugin );
     }
 }

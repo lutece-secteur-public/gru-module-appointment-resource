@@ -26,6 +26,14 @@
     <admin-features>
     </admin-features>
 
+	<dashboard-components>
+        <dashboard-component>
+            <dashboard-component-name>APPOINTMENT_USER_CALENDAR</dashboard-component-name>
+            <dashboard-component-class>fr.paris.lutece.plugins.appointment.modules.resource.web.AppointmentUserCalendarDashboardComponent</dashboard-component-class>
+            <dashboard-feature-right>APPOINTMENT_FORM_MANAGEMENT</dashboard-feature-right>
+        </dashboard-component>
+    </dashboard-components>
+
 	<portlets>
     </portlets>
 

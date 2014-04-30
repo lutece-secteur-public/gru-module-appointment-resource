@@ -39,7 +39,6 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.sql.Date;
-
 import java.util.List;
 
 
@@ -139,9 +138,24 @@ public class AppointmentResourceHome
      * @return True if the resource is available, false otherwise
      */
     public static boolean isResourceAvailable( String strIdResource, String strResourceTypeName, Date dateDay,
-        int nHourBegin, int nMinuteBegin, int nHourEnd, int nMinuteEnd )
+            int nHourBegin, int nMinuteBegin, int nHourEnd, int nMinuteEnd )
     {
         return _dao.isResourceAvailable( strIdResource, strResourceTypeName, dateDay, nHourBegin, nMinuteBegin,
-            nHourEnd, nMinuteEnd, _plugin );
+                nHourEnd, nMinuteEnd, _plugin );
+    }
+
+    /**
+     * Get the list of id of appointments a resource is associated to between
+     * two given dates
+     * @param strIdResource The id of the resource
+     * @param strResourceType The resource type
+     * @param dateMin The minimum date
+     * @param dateMax the maximum date
+     * @return The list of ids of appointments
+     */
+    public static List<Integer> findIdAppointmentsByResourceAndDate( String strIdResource, String strResourceType,
+            Date dateMin, Date dateMax )
+    {
+        return _dao.findIdAppointmentsByResourceAndDate( strIdResource, strResourceType, dateMin, dateMax, _plugin );
     }
 }

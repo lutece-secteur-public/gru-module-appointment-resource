@@ -1,0 +1,7 @@
+<a href="mailto:${appointment.email}">
+	${appointment.lastName} ${appointment.firstName}
+</a>
+<#if appointment.location?? && appointment.location != ''>
+	<br />
+	${appointment.location}
+</#if>

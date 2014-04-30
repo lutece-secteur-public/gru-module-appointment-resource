@@ -1,0 +1,34 @@
+<div class="row-fluid">
+	<div class="span12">
+		<legend>
+			#i18n{module.appointment.resource.resource_calendar.pageTitle} ${resource.resourceName}
+			<div class="pull-right">
+				<#if offsetWeek != 0>
+					<a class="btn btn-primary btn-small" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=0<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("&","%26")}</#if>" title="#i18n{appointment.manage_appointment_calendar.labelCurrentWeek}">
+						<i class="fa fa-calendar">&nbsp;</i>#i18n{appointment.manage_appointment_calendar.labelCurrentWeek}
+					</a>
+				</#if>
+				<#if fromUrl?? && fromUrl != ''>
+				<a class="btn btn-small btn-primary" href="${fromUrl}">
+					<i class="icon-remove-circle icon-white">&nbsp;</i>&nbsp;#i18n{portal.util.labelBack}
+				</a>
+				</#if>
+			</div>
+		</legend>
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="pull-left">
+					<a class="btn btn-primary btn-small" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=${offsetWeek - 1}<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("&","%26")}</#if>" title="#i18n{appointment.appointmentApp.previousWeek}">
+						<i class="icon-arrow-left icon-white">&nbsp;</i>&nbsp;#i18n{appointment.appointmentApp.previousWeek}
+					</a>
+				</div>
+				<div class="pull-right">
+					<a class="btn btn-primary btn-small" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=${offsetWeek + 1}<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("&","%26")}</#if>" title="#i18n{appointment.appointmentApp.nextWeek}">
+						#i18n{appointment.appointmentApp.nextWeek}&nbsp;<i class="icon-arrow-right icon-white">&nbsp;</i>
+					</a>
+				</div>
+			</div>
+		</div>
+		${calendar}
+	</div>
+</div>

@@ -5,7 +5,9 @@
 				${(appResource.formResourceType.description)!}
 			</label>
 			<div class="controls">
-				${(appResource.resource.resourceName)!}
+				<a href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${appResource.resource.idResource}&resource_type=${appResource.formResourceType.resourceTypeName}" title="#i18n{module.appointment.resource.resource_calendar.viewResourceCalendar}" >
+					${(appResource.resource.resourceName)!}
+				</a>
 			</div>
 		</div>
 	</#list>

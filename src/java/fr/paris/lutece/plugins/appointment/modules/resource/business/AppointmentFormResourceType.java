@@ -56,12 +56,13 @@ public class AppointmentFormResourceType implements Serializable
     @Size( min = 1, max = 255, message = "#i18n{module.appointment.resource.model.entity.appointmentFormResourceType.attribute.resourceTypeName.size}" )
     private String _strResourceTypeName;
     private boolean _bIsAppointmentAdminUser;
+    private boolean _bIsLocation;
 
     /**
      * Get the id of the appointment form resource type
      * @return The id of the appointment form resource type
      */
-    public int getId(  )
+    public int getId( )
     {
         return _nId;
     }
@@ -79,7 +80,7 @@ public class AppointmentFormResourceType implements Serializable
      * Get the id of the appointment form
      * @return The id of the appointment form
      */
-    public int getIdAppointmentForm(  )
+    public int getIdAppointmentForm( )
     {
         return _nIdAppointmentForm;
     }
@@ -97,7 +98,7 @@ public class AppointmentFormResourceType implements Serializable
      * Get the description of the the appointment form resource type
      * @return The description of the the appointment form resource type
      */
-    public String getDescription(  )
+    public String getDescription( )
     {
         return _strDescription;
     }
@@ -116,7 +117,7 @@ public class AppointmentFormResourceType implements Serializable
      * Get the resource type name
      * @return The resource type name
      */
-    public String getResourceTypeName(  )
+    public String getResourceTypeName( )
     {
         return _strResourceTypeName;
     }
@@ -136,7 +137,7 @@ public class AppointmentFormResourceType implements Serializable
      * @return True if this resource should be bound to the admin user id
      *         property of the appointment, false otherwise
      */
-    public boolean getIsAppointmentAdminUser(  )
+    public boolean getIsAppointmentAdminUser( )
     {
         return _bIsAppointmentAdminUser;
     }
@@ -150,5 +151,24 @@ public class AppointmentFormResourceType implements Serializable
     public void setIsAppointmentAdminUser( boolean bIsAppointmentAdminUser )
     {
         this._bIsAppointmentAdminUser = bIsAppointmentAdminUser;
+    }
+
+    /**
+     * Check if this resource defines the location of the appointment
+     * @return True if this resource defines the location of the appointment
+     */
+    public boolean getIsLocation( )
+    {
+        return _bIsLocation;
+    }
+
+    /**
+     * Set whether this resource defines the location of the appointment
+     * @param bIsLocation True if this resource defines the location of
+     *            the appointment, false otherwise
+     */
+    public void setIsLocation( boolean bIsLocation )
+    {
+        this._bIsLocation = bIsLocation;
     }
 }
