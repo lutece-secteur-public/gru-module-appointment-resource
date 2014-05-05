@@ -52,7 +52,9 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
 import fr.paris.lutece.util.html.HtmlTemplate;
+import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -74,9 +76,18 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Appointment resource JSP Bean
  */
-@Controller( controllerJsp = "ManageAppointmentResources.jsp", controllerPath = "jsp/admin/plugins/appointment/modules/resource", right = AppointmentFormJspBean.RIGHT_MANAGEAPPOINTMENTFORM )
+@Controller( controllerJsp = AppointmentResourceJspBean.CONTROLLER_JSP, controllerPath = AppointmentResourceJspBean.CONTROLLER_PATH, right = AppointmentFormJspBean.RIGHT_MANAGEAPPOINTMENTFORM )
 public class AppointmentResourceJspBean extends MVCAdminJspBean
 {
+    /**
+     * The path of the JSP of the controller
+     */
+    public static final String CONTROLLER_PATH = "jsp/admin/plugins/appointment/modules/resource";
+
+    /**
+     * The name of the JSP of the controller
+     */
+    public static final String CONTROLLER_JSP = "ManageAppointmentResources.jsp";
     private static final long serialVersionUID = 3684357156472596848L;
 
     // Views
@@ -88,6 +99,9 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
     private static final String TEMPLATE_VIEW_RESOURCE_CALENDAR = "admin/plugins/appointment/modules/resource/view_resource_calendar.html";
     private static final String TEMPLATE_VIEW_USER_CALENDAR = "admin/plugins/appointment/modules/resource/view_user_calendar.html";
     private static final String TEMPLATE_APPOINTMENT_DESCRIPTION = "admin/plugins/appointment/modules/resource/appointment_description.html";
+
+    // URL
+    private static final String CONTROLLER_JSP_URL = CONTROLLER_PATH + "/" + CONTROLLER_JSP;
 
     // Marks
     private static final String MARK_RESOURCE = "resource";
@@ -198,15 +212,28 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
 
         IResourceProvider provider = ResourceService.getInstance(  ).getResourceProvider( strResourceType );
 
-        IResource resource = provider.getResource( strIdResource, strResourceType );
+        if ( provider != null )
+        {
+            IResource resource = provider.getResource( strIdResource, strResourceType );
 
-        Map<String, Object> model = getModel(  );
-        model.put( MARK_CALENDAR, getResourceCalendar( request, resource, nOffsetWeek, getLocale(  ) ) );
-        model.put( MARK_RESOURCE, resource );
-        model.put( PARAMETER_OFFSET_WEEK, nOffsetWeek );
-        model.put( PARAMETER_FROM_URL, strFromUrl );
+            if ( resource != null )
+            {
+                Map<String, Object> model = getModel(  );
+                model.put( MARK_CALENDAR, getResourceCalendar( request, resource, nOffsetWeek, getLocale(  ) ) );
+                model.put( MARK_RESOURCE, resource );
+                model.put( PARAMETER_OFFSET_WEEK, nOffsetWeek );
+                model.put( PARAMETER_FROM_URL, strFromUrl );
 
-        return getPage( MESSAGE_RESOURCE_CALENDAR_PAGE_TITLE, TEMPLATE_VIEW_RESOURCE_CALENDAR, model );
+                return getPage( MESSAGE_RESOURCE_CALENDAR_PAGE_TITLE, TEMPLATE_VIEW_RESOURCE_CALENDAR, model );
+            }
+        }
+
+        if ( StringUtils.isNotEmpty( strFromUrl ) )
+        {
+            return redirect( request, strFromUrl );
+        }
+
+        return redirect( request, AppointmentFormJspBean.getURLManageAppointmentForms( request ) );
     }
 
     /**
@@ -369,5 +396,22 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_APPOINTMENT_DESCRIPTION, locale, model );
 
         return template.getHtml(  );
+    }
+
+    /**
+     * Get the URL of the calendar of a resource
+     * @param strIdResource The id of the resource
+     * @param strResourceType the resource type
+     * @return The URL of the calendar of the resource. Note that the base URL
+     *         is not prefixed to the URL.
+     */
+    public static String getUrlResourceCalendar( String strIdResource, String strResourceType )
+    {
+        UrlItem urlItem = new UrlItem( CONTROLLER_JSP_URL );
+        urlItem.addParameter( MVCUtils.PARAMETER_VIEW, VIEW_RESOURCE_CALENDAR );
+        urlItem.addParameter( PARAMETER_ID_RESOURCE, strIdResource );
+        urlItem.addParameter( PARAMETER_RESOURCE_TYPE, strResourceType );
+
+        return urlItem.getUrl(  );
     }
 }

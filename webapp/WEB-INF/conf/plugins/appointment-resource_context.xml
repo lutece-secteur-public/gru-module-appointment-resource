@@ -9,13 +9,17 @@
        http://www.springframework.org/schema/context/spring-context-3.0.xsd
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
 	<bean id="appointment-resource.appointmentFormResourceTypeDAO"
 		class="fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceTypeDAO" />
 
 	<bean id="appointment-resource.appointmentFormResourceTypeRemovalListener"
 		class="fr.paris.lutece.plugins.appointment.modules.resource.service.listeners.AppointmentFormResourceTypeRemovalListener" />
-	<bean id="appointment-resource.appointmentResourceRemovalListener"
-		class="fr.paris.lutece.plugins.appointment.modules.resource.service.listeners.AppointmentResourceRemovalListener" />
+	<bean id="appointment-resource.appointmentResourceListener"
+		class="fr.paris.lutece.plugins.appointment.modules.resource.service.listeners.AppointmentResourceListener" />
+
+	<bean id="appointment-resource.appointmentResourceCalendarAction"
+		class="fr.paris.lutece.plugins.appointment.modules.resource.service.action.ResourceCalendarAction" />
 
 	<bean id="appointment-resource.appointmentResourceService"
 		class="fr.paris.lutece.plugins.appointment.modules.resource.service.AppointmentResourceService" />

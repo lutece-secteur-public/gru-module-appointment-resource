@@ -31,22 +31,57 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.appointment.modules.resource.service.listeners;
+package fr.paris.lutece.plugins.appointment.modules.resource.service.action;
 
-import fr.paris.lutece.plugins.appointment.service.listeners.IAppointmentRemovalListener;
+import fr.paris.lutece.plugins.appointment.modules.resource.web.AppointmentResourceJspBean;
+import fr.paris.lutece.plugins.resource.service.action.IResourceAction;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+
+import java.util.Locale;
 
 
 /**
- * Removal listener implementation for appointment resources
+ * Action to display the calendar of resources
  */
-public class AppointmentResourceRemovalListener implements IAppointmentRemovalListener
+public class ResourceCalendarAction implements IResourceAction
 {
+    private static final String MESSAGE_RESOURCE_CALENDAR_ACTION_TITLE = "module.appointment.resource.resourceCalendarAction.title";
+    private static final String RESOURCE_CALENDAR_ACTION_ICON = "fa fa-calendar";
+
+    /**
+     * {@inheritDoc}
+     * @return Always return <i>true</i>
+     */
+    @Override
+    public boolean canActionBePerformed( String strIdResource, String strResourceType )
+    {
+        return true;
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void notifyAppointmentRemoval( int nIdAppointment )
+    public String getActionUrl( String strIdResource, String strResourceType )
     {
-        // TODO implement me ! Remove resources association with the removed appointment
+        return AppointmentResourceJspBean.getUrlResourceCalendar( strIdResource, strResourceType );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getIcon( String strIdResource, String strResourceType )
+    {
+        return RESOURCE_CALENDAR_ACTION_ICON;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTitle( String strIdResource, String strResourceType, Locale locale )
+    {
+        return I18nService.getLocalizedString( MESSAGE_RESOURCE_CALENDAR_ACTION_TITLE, locale );
     }
 }
