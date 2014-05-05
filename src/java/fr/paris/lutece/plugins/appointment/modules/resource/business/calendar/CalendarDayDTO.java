@@ -118,4 +118,13 @@ public class CalendarDayDTO implements Comparable<CalendarDayDTO>
 
         return false;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode(  )
+    {
+        return super.hashCode(  );
+    }
 }

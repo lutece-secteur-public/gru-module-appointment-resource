@@ -216,4 +216,13 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
 
         return false;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode(  )
+    {
+        return super.hashCode(  );
+    }
 }
