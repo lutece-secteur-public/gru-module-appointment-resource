@@ -49,7 +49,7 @@ public class CalendarDayDTO implements Comparable<CalendarDayDTO>
      * Get the list of appointment resources DTO
      * @return The list of appointment resources DTO
      */
-    public List<CalendarAppointmentResourceDTO> getListAppointmentResourceDTO( )
+    public List<CalendarAppointmentResourceDTO> getListAppointmentResourceDTO(  )
     {
         return _listAppointmentResourceDTO;
     }
@@ -67,7 +67,7 @@ public class CalendarDayDTO implements Comparable<CalendarDayDTO>
      * Get the date of the day
      * @return The date of the day
      */
-    public Date getDate( )
+    public Date getDate(  )
     {
         return _date;
     }
@@ -87,18 +87,35 @@ public class CalendarDayDTO implements Comparable<CalendarDayDTO>
     @Override
     public int compareTo( CalendarDayDTO o )
     {
-        if ( getDate( ) == null )
+        if ( getDate(  ) == null )
         {
-            if ( o.getDate( ) == null )
+            if ( o.getDate(  ) == null )
             {
                 return 0;
             }
+
             return -1;
         }
-        if ( o.getDate( ) == null )
+
+        if ( o.getDate(  ) == null )
         {
             return 1;
         }
-        return getDate( ).compareTo( o.getDate( ) );
+
+        return getDate(  ).compareTo( o.getDate(  ) );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals( Object o )
+    {
+        if ( o instanceof CalendarDayDTO )
+        {
+            return compareTo( (CalendarDayDTO) o ) == 0;
+        }
+
+        return false;
     }
 }

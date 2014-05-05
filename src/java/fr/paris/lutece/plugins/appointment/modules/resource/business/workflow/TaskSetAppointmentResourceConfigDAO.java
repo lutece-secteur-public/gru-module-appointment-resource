@@ -64,7 +64,7 @@ public class TaskSetAppointmentResourceConfigDAO implements ITaskConfigDAO<TaskS
         int nIndex = 1;
 
         daoUtil.setInt( nIndex++, config.getIdTask(  ) );
-        daoUtil.setInt( nIndex++, config.getIdFormResourceType(  ) );
+        daoUtil.setInt( nIndex, config.getIdFormResourceType(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );

@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.appointment.modules.resource.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.sql.Date;
+
 import java.util.List;
 
 
@@ -124,7 +125,7 @@ public interface IAppointmentResourceDAO
      * @return True if the resource is available, false otherwise
      */
     boolean isResourceAvailable( String strIdResource, String strResourceTypeName, Date dateDay, int nHourBegin,
-            int nMinuteBegin, int nHourEnd, int nMinuteEnd, Plugin plugin );
+        int nMinuteBegin, int nHourEnd, int nMinuteEnd, Plugin plugin );
 
     /**
      * Get the list of id of appointments a resource is associated to between
@@ -137,5 +138,5 @@ public interface IAppointmentResourceDAO
      * @return The list of ids of appointments
      */
     List<Integer> findIdAppointmentsByResourceAndDate( String strIdResource, String strResourceType, Date dateMin,
-            Date dateMax, Plugin plugin );
+        Date dateMax, Plugin plugin );
 }

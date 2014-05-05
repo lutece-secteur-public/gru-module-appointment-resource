@@ -69,20 +69,21 @@ public class AppointmentUserCalendarDashboardComponent extends DashboardComponen
     @Override
     public String getDashboardData( AdminUser user, HttpServletRequest request )
     {
-        IResource resource = ResourceService.getInstance( ).getResource( Integer.toString( user.getUserId( ) ),
+        IResource resource = ResourceService.getInstance(  )
+                                            .getResource( Integer.toString( user.getUserId(  ) ),
                 AdminUser.RESOURCE_TYPE );
 
         Plugin plugin = PluginService.getPlugin( AppointmentPlugin.PLUGIN_NAME );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_CALENDAR,
-                AppointmentResourceJspBean.getResourceCalendar( request, resource, 0, user.getLocale( ) ) );
+            AppointmentResourceJspBean.getResourceCalendar( request, resource, 0, user.getLocale(  ) ) );
 
-        model.put( MARK_ICON, plugin.getIconUrl( ) );
+        model.put( MARK_ICON, plugin.getIconUrl(  ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_DASHBOARD,
                 AdminUserService.getLocale( request ), model );
 
-        return template.getHtml( );
+        return template.getHtml(  );
     }
 }

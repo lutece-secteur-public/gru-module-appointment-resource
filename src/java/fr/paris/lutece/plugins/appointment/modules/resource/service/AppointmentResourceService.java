@@ -81,8 +81,8 @@ public class AppointmentResourceService
         AppointmentResource appResource = AppointmentResourceHome.findByPrimaryKey( appointment.getIdAppointment(  ),
                 nIdFormResourceType );
 
-        if ( ( appResource != null ) && appointment.getStatus( ) != Appointment.STATUS_REJECTED
-                && StringUtils.equals( appResource.getIdResource( ), strIdResource ) )
+        if ( ( appResource != null ) && ( appointment.getStatus(  ) != Appointment.STATUS_REJECTED ) &&
+                StringUtils.equals( appResource.getIdResource(  ), strIdResource ) )
         {
             // The resource is already associated with this appointment for this form RT, so we allow it to be re-associated
             return true;

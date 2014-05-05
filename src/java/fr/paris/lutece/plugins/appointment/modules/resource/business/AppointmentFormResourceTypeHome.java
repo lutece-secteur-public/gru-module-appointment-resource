@@ -47,13 +47,12 @@ import java.util.List;
 public final class AppointmentFormResourceTypeHome
 {
     private static Plugin _plugin = PluginService.getPlugin( AppointmentResourcePlugin.PLUGIN_NAME );
-    private static final IAppointmentFormResourceTypeDAO _dao = SpringContextService
-            .getBean( IAppointmentFormResourceTypeDAO.BEAN_NAME );
+    private static final IAppointmentFormResourceTypeDAO _dao = SpringContextService.getBean( IAppointmentFormResourceTypeDAO.BEAN_NAME );
 
     /**
      * Default constructor
      */
-    private AppointmentFormResourceTypeHome( )
+    private AppointmentFormResourceTypeHome(  )
     {
         // Private constructor
     }

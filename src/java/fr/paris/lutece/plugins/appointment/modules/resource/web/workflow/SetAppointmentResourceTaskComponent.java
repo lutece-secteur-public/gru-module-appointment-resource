@@ -334,6 +334,13 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
         return null;
     }
 
+    /**
+     * Get the URL to modify the task
+     * @param request The request
+     * @param nIdTask The id of the task
+     * @param strIdAppointmentForm The id of the appointment form
+     * @return The requested URL
+     */
     private String getUrlModifyTask( HttpServletRequest request, int nIdTask, String strIdAppointmentForm )
     {
         UrlItem urlItem = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_URL_MODIFY_TASK );

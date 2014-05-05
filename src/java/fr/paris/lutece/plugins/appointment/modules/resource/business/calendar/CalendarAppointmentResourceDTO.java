@@ -42,7 +42,6 @@ import java.io.Serializable;
 public class CalendarAppointmentResourceDTO implements Serializable, Comparable<CalendarAppointmentResourceDTO>
 {
     private static final long serialVersionUID = 8142423630911536264L;
-
     private int _nIdApppointment;
     private int _nStartingHour;
     private int _nStartingMinute;
@@ -61,7 +60,7 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
      * @param appointmentDescription The description of the appointment
      */
     public CalendarAppointmentResourceDTO( int nIdApppointment, int nStartingHour, int nStartingMinute,
-            int nEndingHour, int nEndingMinute, String appointmentDescription )
+        int nEndingHour, int nEndingMinute, String appointmentDescription )
     {
         this._nIdApppointment = nIdApppointment;
         this._nStartingHour = nStartingHour;
@@ -75,7 +74,7 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
      * Get the id of the associated appointment
      * @return The id of the associated appointment
      */
-    public int getIdApppointment( )
+    public int getIdApppointment(  )
     {
         return _nIdApppointment;
     }
@@ -93,7 +92,7 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
      * Get the starting hour of the appointment
      * @return The starting hour of the appointment
      */
-    public int getStartingHour( )
+    public int getStartingHour(  )
     {
         return _nStartingHour;
     }
@@ -111,7 +110,7 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
      * Get the starting minute of the appointment
      * @return The starting minute of the appointment
      */
-    public int getStartingMinute( )
+    public int getStartingMinute(  )
     {
         return _nStartingMinute;
     }
@@ -129,7 +128,7 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
      * Get the ending hour of the appointment
      * @return The ending hour of the appointment
      */
-    public int getEndingHour( )
+    public int getEndingHour(  )
     {
         return _nEndingHour;
     }
@@ -147,7 +146,7 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
      * Get the ending minute of the appointment
      * @return The ending minute of the appointment
      */
-    public int getEndingMinute( )
+    public int getEndingMinute(  )
     {
         return _nEndingMinute;
     }
@@ -165,12 +164,14 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
      * Get the duration of the appointment in minutes
      * @return The duration of the appointment in minutes
      */
-    public int getDuration( )
+    public int getDuration(  )
     {
         if ( _nDuration == 0 )
         {
-            _nDuration = ( getEndingHour( ) - getStartingHour( ) ) * 60 + getEndingMinute( ) - getStartingMinute( );
+            _nDuration = ( ( ( getEndingHour(  ) - getStartingHour(  ) ) * 60 ) + getEndingMinute(  ) ) -
+                getStartingMinute(  );
         }
+
         return _nDuration;
     }
 
@@ -178,7 +179,7 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
      * Get the description of the appointment
      * @return The description of the appointment
      */
-    public String getAppointmentDescription( )
+    public String getAppointmentDescription(  )
     {
         return _appointmentDescription;
     }
@@ -198,7 +199,21 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
     @Override
     public int compareTo( CalendarAppointmentResourceDTO o )
     {
-        return ( getStartingHour( ) * 60 + getStartingMinute( ) )
-                - ( o.getStartingHour( ) * 60 + o.getStartingMinute( ) );
+        return ( ( getStartingHour(  ) * 60 ) + getStartingMinute(  ) ) -
+        ( ( o.getStartingHour(  ) * 60 ) + o.getStartingMinute(  ) );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals( Object o )
+    {
+        if ( o instanceof CalendarAppointmentResourceDTO )
+        {
+            return compareTo( (CalendarAppointmentResourceDTO) o ) == 0;
+        }
+
+        return false;
     }
 }

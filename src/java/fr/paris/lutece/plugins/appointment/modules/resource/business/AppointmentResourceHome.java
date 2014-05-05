@@ -39,16 +39,25 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.sql.Date;
+
 import java.util.List;
 
 
 /**
  * Home for appointment resource
  */
-public class AppointmentResourceHome
+public final class AppointmentResourceHome
 {
     private static IAppointmentResourceDAO _dao = SpringContextService.getBean( IAppointmentResourceDAO.BEAN_NAME );
     private static Plugin _plugin = PluginService.getPlugin( AppointmentResourcePlugin.PLUGIN_NAME );
+
+    /**
+     * Default constructor
+     */
+    private AppointmentResourceHome(  )
+    {
+        // Do nothing
+    }
 
     /**
      * Insert a new appointment resource
@@ -138,10 +147,10 @@ public class AppointmentResourceHome
      * @return True if the resource is available, false otherwise
      */
     public static boolean isResourceAvailable( String strIdResource, String strResourceTypeName, Date dateDay,
-            int nHourBegin, int nMinuteBegin, int nHourEnd, int nMinuteEnd )
+        int nHourBegin, int nMinuteBegin, int nHourEnd, int nMinuteEnd )
     {
         return _dao.isResourceAvailable( strIdResource, strResourceTypeName, dateDay, nHourBegin, nMinuteBegin,
-                nHourEnd, nMinuteEnd, _plugin );
+            nHourEnd, nMinuteEnd, _plugin );
     }
 
     /**
@@ -154,7 +163,7 @@ public class AppointmentResourceHome
      * @return The list of ids of appointments
      */
     public static List<Integer> findIdAppointmentsByResourceAndDate( String strIdResource, String strResourceType,
-            Date dateMin, Date dateMax )
+        Date dateMin, Date dateMax )
     {
         return _dao.findIdAppointmentsByResourceAndDate( strIdResource, strResourceType, dateMin, dateMax, _plugin );
     }
