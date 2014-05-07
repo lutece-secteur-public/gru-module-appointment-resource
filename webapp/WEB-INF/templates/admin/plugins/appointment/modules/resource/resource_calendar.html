@@ -1,5 +1,56 @@
 <link href="css/plugins/appointment/appointment.css" rel="stylesheet" >
-<div class="row-fluid">
+<div class="row-fluid hidden-desktop">
+	<div class="span12">
+		<#list listDays as day>
+			<div class="row-fluid">
+				<div class="span12">
+					<table class="table appointment-inner-table">
+						<thead>
+							<tr>
+								<th>
+									#i18n{${list_days_of_week[day_index]}}<br />
+									${day.date?date}
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<#assign currentTime = startingTime />
+							<#assign currentMinute = startingMinute />
+							<#assign currentHour = startingHour />
+							<#if day.listAppointmentResourceDTO?has_content>
+								<#list day.listAppointmentResourceDTO as appointment>
+									<#assign nbOccur = ( ( ( appointment.startingHour * 60 + appointment.startingMinute ) - currentTime ) / duration)?round />
+									<#if nbOccur &gt; 0>
+										<#list 1..nbOccur as i>
+											<@updateCurrentTimeHourAndMinute durationApp=duration />
+										</#list>
+									</#if>
+									<tr>
+										<@updateCurrentTimeHourAndMinute durationApp=appointment.duration />
+										<td class="appointment-slot-avaiable title="">
+											<div>
+												<a href="jsp/admin/plugins/appointment/ManageAppointments.jsp?view=viewAppointment&id_appointment=${appointment.idApppointment}" title="#i18n{module.appointment.resource.resource_calendar.viewAppointment}">
+													<#if appointment.startingHour &lt; 10>0</#if>${appointment.startingHour}h<#if appointment.startingMinute &lt; 10>0</#if>${appointment.startingMinute} - <#if appointment.endingHour &lt; 10>0</#if>${appointment.endingHour}h<#if appointment.endingMinute &lt; 10>0</#if>${appointment.endingMinute}
+												</a>
+											</div>
+										</td>
+									</tr>
+								</#list>
+							<#else>
+								<tr>
+									<td class="appointment-slot-closed appointment-row1">
+										#i18n{module.appointment.resource.labelNoAppointment}
+									</td>
+								</tr>
+							</#if>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</#list>
+	</div>
+</div>
+<div class="row-fluid visible-desktop">
 	<div class="span12">
 		<table class="table appointment-table-container">
 			<tr>
@@ -35,6 +86,8 @@
 										${day.date?date}
 									</th>
 								</tr>
+							</thead>
+							<tbody>
 								<#assign currentTime = startingTime />
 								<#assign currentMinute = startingMinute />
 								<#assign currentHour = startingHour />
@@ -67,7 +120,7 @@
 										<@addEmptyLine durationApp=duration/>
 									</#list>
 								</#if>
-							</thead>
+							</tbody>
 						</table>
 					</td>
 				</#list>
