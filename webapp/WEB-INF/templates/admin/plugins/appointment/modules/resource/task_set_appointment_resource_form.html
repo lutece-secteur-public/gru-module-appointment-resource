@@ -1,6 +1,6 @@
 <fieldset>
 	<div class="control-group">
-		<label class="control-label">${formResourceType.description} *</label>
+		<label class="control-label">${formResourceType.description} <#if isMandatory>*</#if></label>
 		<div class="controls">
 			<@combo items=refListResources default_value="" name="idResource_"+formResourceType.id />
 		</div>

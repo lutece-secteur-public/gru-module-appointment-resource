@@ -42,12 +42,13 @@ import fr.paris.lutece.plugins.workflowcore.business.config.TaskConfig;
 public class TaskSetAppointmentResourceConfig extends TaskConfig
 {
     private int _nIdFormResourceType;
+    private boolean _bIsMandatory;
 
     /**
      * Get the id of the type of the resource to set
      * @return The id of the type of the resource to set
      */
-    public int getIdFormResourceType(  )
+    public int getIdFormResourceType( )
     {
         return _nIdFormResourceType;
     }
@@ -60,4 +61,23 @@ public class TaskSetAppointmentResourceConfig extends TaskConfig
     {
         this._nIdFormResourceType = nIdFormResourceType;
     }
+
+    /**
+     * Check whether the field is mandatory
+     * @return True if the field is mandatory
+     */
+    public boolean getIsMandatory( )
+    {
+        return _bIsMandatory;
+    }
+
+    /**
+     * Set the field as mandatory or not
+     * @param bIsMandatory True if the field is mandatory, false otherwise
+     */
+    public void setIsMandatory( boolean bIsMandatory )
+    {
+        this._bIsMandatory = bIsMandatory;
+    }
+
 }

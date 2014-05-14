@@ -67,7 +67,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -92,13 +91,16 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     private static final String PARAMETER_REFRESH_APPOINTMENT_FORM = "refreshAppointmentForm";
     private static final String PARAMETER_ID_TASK = "id_task";
     private static final String PARAMETER_ID_RESOURCE = "idResource_";
+    private static final String PARAMETER_IS_MANDATORY = "isMandatory";
 
     // Jsp URL
     private static final String JSP_URL_MODIFY_TASK = "jsp/admin/plugins/workflow/ModifyTask.jsp";
 
     // MESSAGES
     private static final String MESSAGE_ERROR_MANDATORY_FIELDS = "module.appointment.resource.task_set_appointment_resource_config.mandatoryFields";
+    private static final String MESSAGE_NO_RESOURCE_TYPE = "module.appointment.resource.task_set_appointment_resource_config.noResourceType";
     private static final String MESSAGE_APPOINTMENT_RESOURCE_SET = "module.appointment.resource.task_set_appointment_resource_config.history.appointmentResourceSet";
+
     @Inject
     @Named( TaskSetAppointmentResource.CONFIG_SERVICE_BEAN_NAME )
     private ITaskConfigService _taskSetAppointmentResourceConfigService;
@@ -143,6 +145,11 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
         if ( config != null )
         {
             model.put( PARAMETER_ID_FORM_RESOURCE_TYPE, Integer.toString( config.getIdFormResourceType(  ) ) );
+            model.put( PARAMETER_IS_MANDATORY, config.getIsMandatory( ) );
+        }
+        else
+        {
+            model.put( PARAMETER_IS_MANDATORY, true );
         }
 
         ReferenceList refListFormTypes = new ReferenceList(  );
@@ -187,7 +194,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
 
         if ( StringUtils.isEmpty( strResourceType ) || !StringUtils.isNumeric( strResourceType ) )
         {
-            return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_NO_RESOURCE_TYPE, AdminMessage.TYPE_STOP );
         }
 
         TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task.getId(  ) );
@@ -199,6 +206,9 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
             config = new TaskSetAppointmentResourceConfig(  );
             config.setIdTask( task.getId(  ) );
         }
+
+        boolean bIsMandatory = request.getParameter( PARAMETER_IS_MANDATORY ) != null;
+        config.setIsMandatory( bIsMandatory );
 
         config.setIdFormResourceType( Integer.parseInt( strResourceType ) );
 
@@ -260,6 +270,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
 
         model.put( MARK_REF_LIST_RESOURCES, refListResources );
         model.put( MARK_FORM_RESOURCE_TYPE, formResourceType );
+        model.put( PARAMETER_IS_MANDATORY, config.getIsMandatory( ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_FORM_SET_APPOINTMENT_RESOURCE, locale,
                 model );
@@ -276,7 +287,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     {
         TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task.getId(  ) );
 
-        if ( config == null )
+        if ( config == null || !config.getIsMandatory( ) )
         {
             return null;
         }

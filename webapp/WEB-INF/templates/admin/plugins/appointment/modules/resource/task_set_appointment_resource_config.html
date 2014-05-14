@@ -10,9 +10,9 @@
 			</button>
 		</div>
 	</div>
-	
 	<@fieldInputCombo i18nLabelKey='module.appointment.resource.task_set_appointment_resource_config.labelFormResourceType'
 		inputName='idFormResourceType' value=(idFormResourceType)!''
 		items=refListFormResourceTypes />
+	<@fieldInputCheckBox i18nLabelKey='module.appointment.resource.task_set_appointment_resource_config.labelMandatory' inputName='isMandatory' value='true' checked=isMandatory />
 	
 </fieldset>

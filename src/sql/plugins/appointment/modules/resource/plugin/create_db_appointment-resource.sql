@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS workflow_task_set_app_resource_cf;
 CREATE TABLE workflow_task_set_app_resource_cf (
 	id_task int NOT NULL default '0',
 	id_form_resource_type int NOT NULL default '0',
+	is_mandatory smallint NOT NULL default 0,
 	PRIMARY KEY (id_task)
 );
 
