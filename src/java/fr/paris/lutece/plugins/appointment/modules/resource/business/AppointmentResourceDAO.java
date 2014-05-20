@@ -59,9 +59,10 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
         " INNER JOIN appointment_appointment a ON ar.id_appointment = a.id_appointment" +
         " INNER JOIN appointment_slot s ON s.id_slot = a.id_slot" + " WHERE ar.id_resource = ?" +
         " AND frt.resource_type_name = ?" + " AND a.date_appointment = ?" + " AND a.status != ?" +
-        " AND ( ( ( s.starting_hour * 60 + s.starting_minute ) <= ? && ( s.ending_hour * 60 + s.ending_minute ) >= ? )" +
-        "     || ( ( s.starting_hour * 60 + s.starting_minute ) <= ? && ( s.ending_hour * 60 + s.ending_minute ) >= ? )" +
-        "     || ( ( s.starting_hour * 60 + s.starting_minute ) >= ? && ( s.ending_hour * 60 + s.ending_minute ) <= ? )" +
+        " AND ( ( ( s.starting_hour * 60 + s.starting_minute ) < ? && ( s.ending_hour * 60 + s.ending_minute ) > ? )" +
+        "     || ( ( s.starting_hour * 60 + s.starting_minute ) < ? && ( s.ending_hour * 60 + s.ending_minute ) > ? )" +
+        "     || ( ( s.starting_hour * 60 + s.starting_minute ) > ? && ( s.ending_hour * 60 + s.ending_minute ) < ? )" +
+        "     || ( ( s.starting_hour * 60 + s.starting_minute ) = ? && ( s.ending_hour * 60 + s.ending_minute ) = ? )" +
         "     )";
     private static final String SQL_QUERY_FIND_ID_APPOINTMENT_BY_RESAOURCE_AND_DATE = "SELECT ar.id_appointment FROM appointment_resource_app_res ar INNER JOIN appointment_appointment a ON ar.id_appointment = a.id_appointment INNER JOIN appointment_resource_form_rt frt ON ar.id_app_form_res_type = frt.id" +
         " WHERE ar.id_resource = ? AND frt.resource_type_name = ? AND a.date_appointment > ? AND a.date_appointment < ? AND a.status != ? ";
@@ -207,6 +208,8 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
         daoUtil.setInt( nIndex++, nStartingTime );
         daoUtil.setInt( nIndex++, nEndingTime );
         daoUtil.setInt( nIndex++, nEndingTime );
+        daoUtil.setInt( nIndex++, nStartingTime );
+        daoUtil.setInt( nIndex, nEndingTime );
         daoUtil.setInt( nIndex++, nStartingTime );
         daoUtil.setInt( nIndex, nEndingTime );
 

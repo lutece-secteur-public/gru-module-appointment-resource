@@ -48,7 +48,7 @@ public class TaskSetAppointmentResourceConfig extends TaskConfig
      * Get the id of the type of the resource to set
      * @return The id of the type of the resource to set
      */
-    public int getIdFormResourceType( )
+    public int getIdFormResourceType(  )
     {
         return _nIdFormResourceType;
     }
@@ -66,7 +66,7 @@ public class TaskSetAppointmentResourceConfig extends TaskConfig
      * Check whether the field is mandatory
      * @return True if the field is mandatory
      */
-    public boolean getIsMandatory( )
+    public boolean getIsMandatory(  )
     {
         return _bIsMandatory;
     }
@@ -79,5 +79,4 @@ public class TaskSetAppointmentResourceConfig extends TaskConfig
     {
         this._bIsMandatory = bIsMandatory;
     }
-
 }
