@@ -209,7 +209,7 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
         daoUtil.setInt( nIndex++, nEndingTime );
         daoUtil.setInt( nIndex++, nEndingTime );
         daoUtil.setInt( nIndex++, nStartingTime );
-        daoUtil.setInt( nIndex, nEndingTime );
+        daoUtil.setInt( nIndex++, nEndingTime );
         daoUtil.setInt( nIndex++, nStartingTime );
         daoUtil.setInt( nIndex, nEndingTime );
 
