@@ -72,3 +72,7 @@ INSERT INTO workflow_task_set_app_resource_cf VALUES (170,1,1);
 INSERT INTO workflow_task_update_appointment_cancel_cf VALUES (150,122);
 
 UPDATE appointment_form SET id_workflow = 105 WHERE id_form = 1;
+
+INSERT INTO workflow_action VALUES(125,'Action d''arriver sur l''etat Non validé', '',105,109,109,1,0,0,0,1);
+INSERT INTO workflow_task VALUES(172,'taskUpdateAppointmentCancelAction',125,1);
+INSERT INTO workflow_task_update_appointment_cancel_cf VALUES (172,120);
