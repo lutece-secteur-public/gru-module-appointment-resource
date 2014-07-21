@@ -9,10 +9,7 @@ CREATE TABLE appointment_resource_form_rt (
 	PRIMARY KEY (id)
 );
 
-CREATE INDEX idx_appointment_resource_form_rt_form ON appointment_resource_form_rt (id_appointment_form);
 CREATE INDEX idx_appointment_resource_form_rt_name ON appointment_resource_form_rt (resource_type_name);
-
-
 DROP TABLE IF EXISTS workflow_task_set_app_resource_cf;
 CREATE TABLE workflow_task_set_app_resource_cf (
 	id_task int NOT NULL default '0',
@@ -40,5 +37,3 @@ CREATE TABLE workflow_task_set_appointment_resource_history (
 	id_form_resource_type int NOT NULL default '0',
 	PRIMARY KEY (id)
 );
-
-CREATE INDEX idx_wf_set_appointment_resource_hist_id_hist ON workflow_task_set_appointment_resource_history (id_history);
