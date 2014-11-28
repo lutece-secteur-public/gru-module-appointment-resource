@@ -57,7 +57,7 @@ public class AppointmentFormResourceTypeDAO implements IAppointmentFormResourceT
     private static final String SQL_QUERY_RESET_APP_ADMIN_USER = "UPDATE appointment_resource_form_rt SET is_app_admin_user = 0 WHERE id_appointment_form= ? ";
     private static final String SQL_QUERY_RESET_APP_LOCALIZATION = "UPDATE appointment_resource_form_rt SET is_localization = 0 WHERE id_appointment_form= ? ";
     private static final String SQL_QUERY_DELETE = " DELETE FROM appointment_resource_form_rt WHERE id = ? ";
-    private static final String SQL_QUERY_DELETE_FROM_ID_FORM = " REMOVE FROM appointment_resource_form_rt WHERE id_appointment_form = ? ";
+    private static final String SQL_QUERY_DELETE_FROM_ID_FORM = " DELETE FROM appointment_resource_form_rt WHERE id_appointment_form = ? ";
 
     /**
      * Get a new primary key
