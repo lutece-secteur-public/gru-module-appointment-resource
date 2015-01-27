@@ -1,5 +1,5 @@
-<div class="row-fluid">
-	<div class="span12">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<@messages errors=errors />
 		
 		<form class="form-horizontal" action="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp">
@@ -8,9 +8,9 @@
 
 				<@fieldInputText i18nLabelKey='module.appointment.resource.createAppointmentFormResources.labelDescription' inputName='description' mandatory=true value=(formResourceType.description)!'' maxlength=255 />
 				
-				<div class="control-group">
-					<label class="control-label">#i18n{module.appointment.resource.createAppointmentFormResources.labelResourceType}</label>
-					<div class="controls">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{module.appointment.resource.createAppointmentFormResources.labelResourceType}</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 						<p>
 							<#assign resourceTypeDescription = "" >
 							<#if listResourceTypes?? && listResourceTypes?has_content>
@@ -30,14 +30,14 @@
 					</div>
 				</div>
 				
-				<div class="form-actions">
+				<div class="form-group">
 					<input type="hidden" name="id_form" value="${formResourceType.idAppointmentForm}" />
 					<input type="hidden" name="idFormResourceType" value="${formResourceType.id}" />
-					<button class="btn btn-small btn-primary" name="action" value="doModifyFormResourceType">
-						<i class="icon-ok icon-white">&nbsp;</i>&nbsp;#i18n{portal.util.labelValidate}
+					<button class="btn btn-sm btn-primary" name="action" value="doModifyFormResourceType">
+						<i class="glyphicon glyphicon-ok">&nbsp;</i>&nbsp;#i18n{portal.util.labelValidate}
 					</button>
-					<a class="btn btn-small" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=manageFormResources&id_form=${formResourceType.idAppointmentForm}">
-						<i class="icon-remove-circle">&nbsp;</i>&nbsp;#i18n{portal.util.labelBack}
+					<a class="btn btn-sm" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=manageFormResources&id_form=${formResourceType.idAppointmentForm}">
+						<i class="glyphicon glyphicon-remove-circle">&nbsp;</i>&nbsp;#i18n{portal.util.labelBack}
 					</a>
 				</div>
 			</fieldset>

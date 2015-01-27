@@ -1,7 +1,7 @@
 <fieldset>
-	<div class="control-group">
-		<label class="control-label">${formResourceType.description} <#if isMandatory>*</#if></label>
-		<div class="controls">
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">${formResourceType.description} <#if isMandatory>*</#if></label>
+		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 			<@combo items=refListResources default_value="" name="idResource_"+formResourceType.id />
 		</div>
 	</div>

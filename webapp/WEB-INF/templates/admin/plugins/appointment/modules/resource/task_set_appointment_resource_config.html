@@ -1,12 +1,12 @@
 <fieldset>
 	<legend>#i18n{module.appointment.resource.task_set_appointment_resource_config.title}</legend>
 	
-	<div class="control-group">
-		<label class="control-label">#i18n{module.appointment.resource.task_set_appointment_resource_config.labelAppointmentForm}</label>
-		<div class="controls">
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{module.appointment.resource.task_set_appointment_resource_config.labelAppointmentForm}</label>
+		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 			<@combo items=refListAppointmentForm default_value=idAppointmentForm!'' name="idAppointmentForm" />
-			<button class="btn btn-small btn-primary" name="refreshAppointmentForm" value="true">
-				<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;#i18n{portal.util.labelRefresh}
+			<button class="btn btn-sm btn-primary" name="refreshAppointmentForm" value="true">
+				<i class="glyphicon glyphicon-refresh">&nbsp;</i>&nbsp;#i18n{portal.util.labelRefresh}
 			</button>
 		</div>
 	</div>
