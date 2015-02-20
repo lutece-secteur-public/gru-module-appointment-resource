@@ -105,6 +105,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
     private static final String MARK_LIST_FORM_RESOURCE_TYPES = "listFormResourceTypes";
     private static final String MARK_FORM_RESOURCE_TYPE = "formResourceType";
     private static final String MARK_ADMIN_USER_RESOURCE_TYPE = "adminUserResourceType";
+    private static final String MARK_LOCALE = "language";
 
     // Parameters
     private static final String PARAMETER_ID_FORM = "id_form";
@@ -168,7 +169,8 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         model.put( MARK_LIST_FORM_RESOURCE_TYPES,
             AppointmentFormResourceTypeHome.findResourceTypesListFromIdForm( nIdForm ) );
         model.put( MARK_ADMIN_USER_RESOURCE_TYPE, AdminUser.RESOURCE_TYPE );
-
+        model.put( MARK_LOCALE, getLocale ( ) );
+        
         AppointmentFormJspBean.addElementsToModelForLeftColumn( request, appointmentForm, getUser(  ), getLocale(  ),
             model );
 
@@ -226,7 +228,8 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         model.put( MARK_FORM_RESOURCE_TYPE, formResourceType );
         model.put( MARK_LIST_RESOURCE_TYPES, refListResourceTypes );
         model.put( PARAMETER_ID_FORM, nIdForm );
-
+        model.put( MARK_LOCALE, getLocale ( ) );
+        
         return getPage( MESSAGE_CREATE_FORM_RESOURCES_PAGE_TITLE, TEMPLATE_CREATE_FORM_RESOURCES, model );
     }
 
@@ -310,7 +313,8 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         Map<String, Object> model = getModel(  );
         model.put( MARK_FORM_RESOURCE_TYPE, formResourceType );
         model.put( MARK_LIST_RESOURCE_TYPES, listResourceTypes );
-
+        model.put( MARK_LOCALE, getLocale ( ) );
+        
         return getPage( MESSAGE_MODIFY_FORM_RESOURCES_PAGE_TITLE, TEMPLATE_MODIFY_FORM_RESOURCES, model );
     }
 
