@@ -203,7 +203,7 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
         daoUtil.setString( nIndex++, strIdResource );
         daoUtil.setString( nIndex++, strResourceTypeName );
         daoUtil.setDate( nIndex++, dateDay );
-        daoUtil.setInt( nIndex++, Appointment.STATUS_REJECTED );
+        daoUtil.setInt( nIndex++, Appointment.Status.STATUS_REJECTED.getValeur () );
         daoUtil.setInt( nIndex++, nStartingTime );
         daoUtil.setInt( nIndex++, nStartingTime );
         daoUtil.setInt( nIndex++, nEndingTime );
@@ -239,7 +239,7 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
         daoUtil.setString( 2, strResourceType );
         daoUtil.setDate( 3, dateMin );
         daoUtil.setDate( 4, dateMax );
-        daoUtil.setInt( 5, Appointment.STATUS_REJECTED );
+        daoUtil.setInt( 5, Appointment.Status.STATUS_REJECTED.getValeur () );
 
         List<Integer> listIdAppointments = new ArrayList<Integer>(  );
         daoUtil.executeQuery(  );
