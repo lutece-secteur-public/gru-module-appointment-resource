@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<plug-in>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><plug-in>
     <name>appointment-resource</name>
     <class>fr.paris.lutece.plugins.appointment.modules.resource.service.AppointmentResourcePlugin</class>
     <version>1.0.0</version>
