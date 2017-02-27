@@ -50,8 +50,8 @@ INSERT INTO workflow_task_change_appointment_status_cf VALUES (156,-10);
 INSERT INTO workflow_task_change_appointment_status_cf VALUES (159,-10);
 INSERT INTO workflow_task_change_appointment_status_cf VALUES (162,-10);
 
-INSERT INTO workflow_task_comment_config VALUES (151,'Veuillez saisir le motif de l\'annulation',1);
-INSERT INTO workflow_task_comment_config VALUES (158,'Veuillez saisir le motif de l\'annulation',1);
+INSERT INTO workflow_task_comment_config(id_task, title, is_mandatory) VALUES (151,'Veuillez saisir le motif de l\'annulation',1);
+INSERT INTO workflow_task_comment_config(id_task, title, is_mandatory) VALUES (158,'Veuillez saisir le motif de l\'annulation',1);
 
 INSERT INTO workflow_task_notify_admin_appointment_cf VALUES (149,0,'L\'équipe Lutèce','no-reply@mydomain.com','Une demande de rendez-vous vous a été attribuée pour le ${date_appointment} à ${time_appointment}','<p>Bonjour,</p>\r\n<p>&nbsp;</p>\r\n<p>Le rendez-vous du ${date_appointment} &agrave; ${time_appointment} vous a &eacute;t&eacute; attribu&eacute;. Merci de vous rendez disponible pour cet horraire, ou d\'annuler le rendez-vous en cas d\'impossibilit&eacute;.</p>\r\n<p>&nbsp;</p>\r\n<p>Cordialement,</p>\r\n<p>&nbsp;</p>\r\n<p>L\'&eacute;quipe Lut&egrave;ce</p>','','',102,0,1,1,'');
 INSERT INTO workflow_task_notify_admin_appointment_cf VALUES (153,0,'L\'équipe Lutèce','no-reply@mydomain.com','Annulation du rendez-vous du ${date_appointment}','<p>Bonjour,</p>\r\n<p>&nbsp;</p>\r\n<p>je rendez-vous du ${date_appointment} &agrave; ${time_appointment} a &eacute;t&eacute; annul&eacute;.</p>\r\n<p>&nbsp;</p>\r\n<p>Cordialement,</p>\r\n<p>&nbsp;</p>\r\n<p>L\'&eacute;quipe Lut&egrave;ce.</p>','','',0,0,1,0,'');
