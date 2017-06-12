@@ -33,19 +33,11 @@
  */
 package fr.paris.lutece.plugins.appointment.modules.resource.service.listeners;
 
-import fr.paris.lutece.plugins.appointment.business.Appointment;
-import fr.paris.lutece.plugins.appointment.business.AppointmentHome;
-import fr.paris.lutece.plugins.appointment.business.calendar.AppointmentSlot;
-import fr.paris.lutece.plugins.appointment.business.calendar.AppointmentSlotHome;
-import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceType;
-import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceTypeHome;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResourceHome;
+
 import fr.paris.lutece.plugins.appointment.service.listeners.IAppointmentListener;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 
-import org.apache.commons.lang.StringUtils;
-
-import java.util.List;
 import java.util.Locale;
 
 
@@ -71,40 +63,6 @@ public class AppointmentResourceListener implements IAppointmentListener
     @Override
     public String appointmentDateChanged( int nIdAppointment, int nIdSlot, Locale locale )
     {
-        AppointmentSlot slot = AppointmentSlotHome.findByPrimaryKey( nIdSlot );
-        List<AppointmentFormResourceType> listFormResourceType = AppointmentFormResourceTypeHome.findResourceTypesListFromIdForm( slot.getIdForm(  ) );
-        boolean bResetAdminUser = false;
-        boolean bResetLocation = false;
-
-        for ( AppointmentFormResourceType formResourceType : listFormResourceType )
-        {
-            if ( formResourceType.getIsAppointmentAdminUser(  ) )
-            {
-                bResetAdminUser = true;
-            }
-
-            if ( formResourceType.getIsLocation(  ) )
-            {
-                bResetLocation = true;
-            }
-        }
-
-        if ( bResetAdminUser || bResetLocation )
-        {
-            Appointment appointment = AppointmentHome.findByPrimaryKey( nIdAppointment );
-
-            if ( bResetAdminUser )
-            {
-                appointment.setIdAdminUser( 0 );
-            }
-
-            if ( bResetLocation )
-            {
-                appointment.setLocation( StringUtils.EMPTY );
-            }
-
-            AppointmentHome.update( appointment );
-        }
 
         AppointmentResourceHome.deleteByIdAppointment( nIdAppointment );
 

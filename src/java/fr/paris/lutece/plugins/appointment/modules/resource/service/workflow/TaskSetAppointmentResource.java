@@ -33,8 +33,7 @@
  */
 package fr.paris.lutece.plugins.appointment.modules.resource.service.workflow;
 
-import fr.paris.lutece.plugins.appointment.business.Appointment;
-import fr.paris.lutece.plugins.appointment.business.AppointmentHome;
+import fr.paris.lutece.plugins.appointment.business.appointment.Appointment;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceType;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceTypeHome;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResource;
@@ -42,8 +41,7 @@ import fr.paris.lutece.plugins.appointment.modules.resource.business.Appointment
 import fr.paris.lutece.plugins.appointment.modules.resource.business.workflow.SetAppointmentResourceHistory;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.workflow.SetAppointmentResourceHistoryHome;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.workflow.TaskSetAppointmentResourceConfig;
-import fr.paris.lutece.plugins.resource.business.IResource;
-import fr.paris.lutece.plugins.resource.service.ResourceService;
+import fr.paris.lutece.plugins.appointment.service.AppointmentService;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
@@ -56,7 +54,6 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -101,7 +98,7 @@ public class TaskSetAppointmentResource extends SimpleTask
 
         if ( StringUtils.isNotEmpty( strIdResource ) )
         {
-            Appointment appointment = AppointmentHome.findByPrimaryKey( resourceHistory.getIdResource(  ) );
+            Appointment appointment = AppointmentService.findAppointmentById( resourceHistory.getIdResource(  ));
 
             AppointmentResource appResource = AppointmentResourceHome.findByPrimaryKey( appointment.getIdAppointment(  ),
                     config.getIdFormResourceType(  ) );
@@ -119,33 +116,7 @@ public class TaskSetAppointmentResource extends SimpleTask
                 appResource.setIdResource( strIdResource );
                 AppointmentResourceHome.insert( appResource );
             }
-
-            AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config.getIdFormResourceType(  ) );
-
-            if ( formResourceType.getIsAppointmentAdminUser(  ) && StringUtils.isNumeric( strIdResource ) )
-            {
-                int nIdAdminUser = Integer.parseInt( strIdResource );
-
-                if ( appointment.getIdAppointment(  ) != nIdAdminUser )
-                {
-                    appointment.setIdAdminUser( nIdAdminUser );
-                    AppointmentHome.update( appointment );
-                }
-            }
-
-            if ( formResourceType.getIsLocation(  ) )
-            {
-                IResource resource = ResourceService.getInstance(  )
-                                                    .getResource( strIdResource,
-                        formResourceType.getResourceTypeName(  ) );
-
-                if ( ( resource != null ) && StringUtils.isNotEmpty( resource.getResourceName(  ) ) )
-                {
-                    appointment.setLocation( resource.getResourceName(  ) );
-                    AppointmentHome.update( appointment );
-                }
-            }
-
+            
             SetAppointmentResourceHistory history = new SetAppointmentResourceHistory(  );
             history.setIdHistory( nIdResourceHistory );
             history.setIdAppointment( appResource.getIdAppointment(  ) );

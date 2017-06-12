@@ -49,6 +49,7 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
     private int _nEndingMinute;
     private int _nDuration;
     private String _appointmentDescription;
+    private int _nIdForm;
 
     /**
      * Creates a new calendar appointment resource DTO
@@ -58,9 +59,10 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
      * @param nEndingHour The ending hour
      * @param nEndingMinute The ending minute
      * @param appointmentDescription The description of the appointment
+     * @param nIdForm The id of the form
      */
     public CalendarAppointmentResourceDTO( int nIdApppointment, int nStartingHour, int nStartingMinute,
-        int nEndingHour, int nEndingMinute, String appointmentDescription )
+        int nEndingHour, int nEndingMinute, String appointmentDescription, int nIdForm )
     {
         this._nIdApppointment = nIdApppointment;
         this._nStartingHour = nStartingHour;
@@ -68,6 +70,7 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
         this._nEndingHour = nEndingHour;
         this._nEndingMinute = nEndingMinute;
         this._appointmentDescription = appointmentDescription;
+        this._nIdForm = nIdForm;
     }
 
     /**
@@ -191,6 +194,25 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
     public void setAppointmentDescription( String appointmentDescription )
     {
         this._appointmentDescription = appointmentDescription;
+    }
+    
+
+    /**
+     * Get the id of the associated formulaire
+     * @return The id of the associated formulaire
+     */
+    public int getIdForm(  )
+    {
+        return _nIdForm;
+    }
+
+    /**
+     * Set the id of the associated form
+     * @param nIdApppointment The id of the associated form
+     */
+    public void setIdForm( int nIdForm )
+    {
+        this._nIdForm = nIdForm;
     }
 
     /**

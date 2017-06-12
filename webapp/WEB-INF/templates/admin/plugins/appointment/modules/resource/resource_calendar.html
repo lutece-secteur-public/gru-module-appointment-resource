@@ -29,7 +29,7 @@
 										<@updateCurrentTimeHourAndMinute durationApp=appointment.duration />
 										<td class="appointment-slot-avaiable title="">
 											<div>
-												<a href="jsp/admin/plugins/appointment/ManageAppointments.jsp?view=viewAppointment&id_appointment=${appointment.idApppointment}" title="#i18n{module.appointment.resource.resource_calendar.viewAppointment}">
+												<a href="jsp/admin/plugins/appointment/ManageAppointments.jsp?view=viewAppointment&id_appointment=${appointment.idApppointment}" title="#i18n{module.appointment.resource.resource_calendar.viewAppointment}&id_form=${appointment.idForm!}">
 													<#if appointment.startingHour &lt; 10>0</#if>${appointment.startingHour}h<#if appointment.startingMinute &lt; 10>0</#if>${appointment.startingMinute} - <#if appointment.endingHour &lt; 10>0</#if>${appointment.endingHour}h<#if appointment.endingMinute &lt; 10>0</#if>${appointment.endingMinute}
 												</a>
 											</div>
@@ -103,7 +103,7 @@
 										<@updateCurrentTimeHourAndMinute durationApp=appointment.duration />
 										<td class="appointment-slot-avaiable appointment-row${rowspan} appointment-tooltip" title="">
 											<div>
-												<a href="jsp/admin/plugins/appointment/ManageAppointments.jsp?view=viewAppointment&id_appointment=${appointment.idApppointment}" title="#i18n{module.appointment.resource.resource_calendar.viewAppointment}">
+												<a href="jsp/admin/plugins/appointment/ManageAppointments.jsp?view=viewAppointment&id_appointment=${appointment.idApppointment}&id_form=${appointment.idForm!}" title="#i18n{module.appointment.resource.resource_calendar.viewAppointment}">
 													<#if appointment.startingHour &lt; 10>0</#if>${appointment.startingHour}h<#if appointment.startingMinute &lt; 10>0</#if>${appointment.startingMinute}
 												</a>
 											</div>

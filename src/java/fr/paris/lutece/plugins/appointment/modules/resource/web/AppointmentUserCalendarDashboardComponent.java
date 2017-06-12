@@ -58,7 +58,7 @@ public class AppointmentUserCalendarDashboardComponent extends DashboardComponen
 {
     // MARKS
     private static final String MARK_CALENDAR = "calendar";
-    private static final String MARK_ICON = "icon";
+    private static final String MARK_ICON = "icone";
 
     // TEMPALTES
     private static final String TEMPLATE_DASHBOARD = "/admin/plugins/appointment/modules/resource/user_calendar_dashboard.html";

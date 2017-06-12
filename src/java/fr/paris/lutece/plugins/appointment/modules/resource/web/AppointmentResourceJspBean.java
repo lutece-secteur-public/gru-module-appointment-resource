@@ -33,16 +33,16 @@
  */
 package fr.paris.lutece.plugins.appointment.modules.resource.web;
 
-import fr.paris.lutece.plugins.appointment.business.Appointment;
+import fr.paris.lutece.plugins.appointment.business.AppointmentDTO;
 import fr.paris.lutece.plugins.appointment.business.AppointmentForm;
-import fr.paris.lutece.plugins.appointment.business.AppointmentFormHome;
-import fr.paris.lutece.plugins.appointment.business.AppointmentHome;
-import fr.paris.lutece.plugins.appointment.business.calendar.AppointmentSlot;
-import fr.paris.lutece.plugins.appointment.business.calendar.AppointmentSlotHome;
+import fr.paris.lutece.plugins.appointment.business.appointment.Appointment;
+import fr.paris.lutece.plugins.appointment.business.slot.Slot;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResourceHome;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.calendar.CalendarAppointmentResourceDTO;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.calendar.CalendarDayDTO;
 import fr.paris.lutece.plugins.appointment.service.AppointmentService;
+import fr.paris.lutece.plugins.appointment.service.FormService;
+import fr.paris.lutece.plugins.appointment.service.SlotService;
 import fr.paris.lutece.plugins.appointment.web.AppointmentFormJspBean;
 import fr.paris.lutece.plugins.resource.business.IResource;
 import fr.paris.lutece.plugins.resource.service.ResourceService;
@@ -59,7 +59,8 @@ import fr.paris.lutece.util.url.UrlItem;
 import org.apache.commons.lang.StringUtils;
 
 import java.sql.Date;
-
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -69,6 +70,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -127,7 +129,15 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
     // Messages
     private static final String MESSAGE_RESOURCE_CALENDAR_PAGE_TITLE = "module.appointment.resource.resource_calendar.pageTitle";
     private static final String MESSAGE_USER_CALENDAR_PAGE_TITLE = "module.appointment.resource.user_calendar.pageTitle";
-    private static final String[] MESSAGE_LIST_DAYS_OF_WEEK = AppointmentService.getListDaysOfWeek(  );
+
+    /**
+     * List of i18n keys of days of week
+     */
+    private static final String [ ] MESSAGE_LIST_DAYS_OF_WEEK = {
+            "module.appointment.resource.manageCalendarSlots.labelMonday", "module.appointment.resource.manageCalendarSlots.labelTuesday", "module.appointment.resource.manageCalendarSlots.labelWednesday",
+            "module.appointment.resource.manageCalendarSlots.labelThursday", "module.appointment.resource.manageCalendarSlots.labelFriday", "module.appointment.resource.manageCalendarSlots.labelSaturday",
+            "module.appointment.resource.manageCalendarSlots.labelSunday",
+    };
 
     /**
      * Get the page to view the calendar of a user
@@ -155,7 +165,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
 
         if ( StringUtils.isNotEmpty( strOffsetWeek ) )
         {
-            nOffsetWeek = AppointmentService.getService(  ).parseInt( strOffsetWeek );
+            nOffsetWeek = parseInt( strOffsetWeek );
         }
 
         AdminUser adminUser = getUser(  );
@@ -207,7 +217,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
 
         if ( StringUtils.isNotEmpty( strOffsetWeek ) )
         {
-            nOffsetWeek = AppointmentService.getService(  ).parseInt( strOffsetWeek );
+            nOffsetWeek = parseInt( strOffsetWeek );
         }
 
         IResourceProvider provider = ResourceService.getInstance(  ).getResourceProvider( strResourceType );
@@ -248,13 +258,12 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
     public static String getResourceCalendar( HttpServletRequest request, IResource resource, int nOffsetWeek,
         Locale locale )
     {
-        AppointmentService appointmentService = AppointmentService.getService(  );
 
         Map<String, Object> model = new HashMap<String, Object>(  );
 
         model.put( MARK_RESOURCE, resource );
 
-        Date dateMonday = appointmentService.getDateMonday( nOffsetWeek );
+        Date dateMonday = getDateMonday( nOffsetWeek );
         Calendar calendar = new GregorianCalendar(  );
         calendar.setTime( dateMonday );
 
@@ -265,7 +274,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
         List<Integer> listIdAppointments = AppointmentResourceHome.findIdAppointmentsByResourceAndDate( resource.getIdResource(  ),
                 resource.getResourceType(  ), dateMonday, dateMax );
 
-        List<Appointment> listAppointment = new ArrayList<Appointment>( listIdAppointments.size(  ) );
+        List<AppointmentDTO> listAppointment = new ArrayList<AppointmentDTO>( listIdAppointments.size(  ) );
 
         Map<Integer, List<CalendarAppointmentResourceDTO>> mapCalendarAppointmentResourceByDayOfWeek = new HashMap<Integer, List<CalendarAppointmentResourceDTO>>(  );
 
@@ -284,40 +293,43 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
 
         for ( int nIdAppointment : listIdAppointments )
         {
-            Appointment appointment = AppointmentHome.findByPrimaryKey( nIdAppointment );
+            AppointmentDTO appointment = AppointmentService.buildAppointmentDTOFromIdAppointment( nIdAppointment );
             listAppointment.add( appointment );
 
-            AppointmentSlot slot = AppointmentSlotHome.findByPrimaryKey( appointment.getIdSlot(  ) );
-            CalendarAppointmentResourceDTO calendarAppointmentResource = new CalendarAppointmentResourceDTO( appointment.getIdAppointment(  ),
-                    slot.getStartingHour(  ), slot.getStartingMinute(  ), slot.getEndingHour(  ),
-                    slot.getEndingMinute(  ), getAppointmentRecap( appointment, locale ) );
+            Slot slot = SlotService.findSlotById( appointment.getIdSlot(  ) );
+           CalendarAppointmentResourceDTO calendarAppointmentResource = new CalendarAppointmentResourceDTO( appointment.getIdAppointment(  ),
+                    slot.getStartingDateTime().getHour( ), slot.getStartingDateTime().getMinute( ), slot.getEndingDateTime().getHour( ),
+                    slot.getEndingDateTime().getMinute( ), getAppointmentRecap( appointment, locale ), appointment.getIdForm( ) );
+            long startThen = slot.getStartingDateTime().getHour() * 60 + slot.getStartingDateTime().getMinute();
+            long endThen = slot.getEndingDateTime().getHour() * 60 + slot.getEndingDateTime().getMinute();
 
-            int nStartingTimeSlot = ( slot.getStartingHour(  ) * 60 ) + slot.getStartingMinute(  );
+            int nStartingTimeSlot = (int) startThen;
 
             if ( nStartingTimeSlot < nMinGlobalStartingTime )
             {
                 nMinGlobalStartingTime = nStartingTimeSlot;
-                nStartingHour = slot.getStartingHour(  );
-                nStartingMinute = slot.getStartingMinute(  );
+                nStartingHour = slot.getStartingDateTime().getHour();
+                nStartingMinute = slot.getStartingDateTime().getMinute( );
             }
 
-            int nEndingTimeSlot = ( slot.getEndingHour(  ) * 60 ) + slot.getEndingMinute(  );
+            int nEndingTimeSlot = (int) endThen;
 
             if ( nEndingTimeSlot > nMaxGlobalEndingTime )
             {
                 nMaxGlobalEndingTime = nEndingTimeSlot;
-                nEndingHour = slot.getEndingHour(  );
-                nEndingMinute = slot.getEndingMinute(  );
+                nEndingHour = slot.getEndingDateTime().getHour();
+                nEndingMinute = slot.getEndingDateTime().getMinute();
             }
 
             if ( ( calendarAppointmentResource.getDuration(  ) < nMinDuration ) || ( nMinDuration == -1 ) )
             {
                 nMinDuration = calendarAppointmentResource.getDuration(  );
             }
-
-            int nDayOfWeek = appointmentService.getDayOfWeek( appointment.getDateAppointment(  ) );
+          
+            int nDayOfWeek = appointment.getStartingDateTime().getDayOfWeek().getValue();
             List<CalendarAppointmentResourceDTO> listCalendar = mapCalendarAppointmentResourceByDayOfWeek.get( nDayOfWeek );
             listCalendar.add( calendarAppointmentResource );
+        	
         }
 
         List<CalendarDayDTO> listDays = new ArrayList<CalendarDayDTO>( 7 );
@@ -338,31 +350,32 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
 
         Collections.sort( listDays );
 
-        List<AppointmentForm> listAppointmentForm = AppointmentFormHome.getActiveAppointmentFormsList(  );
-
-        for ( AppointmentForm appointmentForm : listAppointmentForm )
+        List<AppointmentForm> listForm = FormService.buildAllActiveAppointmentForm();;
+      
+        for ( AppointmentForm form : listForm )
         {
-            int nOpeningTime = ( appointmentForm.getOpeningHour(  ) * 60 ) + appointmentForm.getOpeningMinutes(  );
+        	
+            int nOpeningTime = (LocalTime.parse(form.getTimeStart()).getHour() * 60 ) + LocalTime.parse(form.getTimeStart()).getMinute();
 
             if ( nOpeningTime < nMinGlobalStartingTime )
             {
                 nMinGlobalStartingTime = nOpeningTime;
-                nStartingHour = appointmentForm.getOpeningHour(  );
-                nStartingMinute = appointmentForm.getOpeningMinutes(  );
+                nStartingHour = LocalTime.parse(form.getTimeStart()).getHour();
+                nStartingMinute = LocalTime.parse(form.getTimeStart()).getMinute();
             }
 
-            int nClosingTime = ( appointmentForm.getClosingHour(  ) * 60 ) + appointmentForm.getClosingMinutes(  );
+            int nClosingTime = ( LocalTime.parse(form.getTimeEnd()).getHour() * 60 ) + LocalTime.parse(form.getTimeEnd()).getMinute( );
 
             if ( nClosingTime > nMaxGlobalEndingTime )
             {
                 nMaxGlobalEndingTime = nClosingTime;
-                nEndingHour = appointmentForm.getClosingHour(  );
-                nEndingMinute = appointmentForm.getClosingMinutes(  );
+                nEndingHour = LocalTime.parse(form.getTimeEnd()).getHour();
+                nEndingMinute = LocalTime.parse(form.getTimeEnd()).getMinute( );
             }
 
-            if ( ( appointmentForm.getDurationAppointments(  ) < nMinDuration ) || ( nMinDuration < 0 ) )
+            if ( ( form.getDurationAppointments(  ) < nMinDuration ) || ( nMinDuration < 0 ) )
             {
-                nMinDuration = appointmentForm.getDurationAppointments(  );
+                nMinDuration = form.getDurationAppointments( );
             }
         }
 
@@ -388,7 +401,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
      * @param locale The locale
      * @return The HTML code of the description of the appointment
      */
-    private static String getAppointmentRecap( Appointment appointment, Locale locale )
+    private static String getAppointmentRecap( AppointmentDTO appointment, Locale locale )
     {
         Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_APPOINTMENT, appointment );
@@ -414,4 +427,62 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
 
         return urlItem.getUrl(  );
     }
+    
+    /**
+     * Get the date of a Monday.
+     * 
+     * @param nOffsetWeek
+     *            The offset of the week (0 for the current week, 1 for the next one, ...)
+     * @return The date of the Monday of the requested week
+     */
+    private static Date getDateMonday( int nOffsetWeek )
+    {
+        Date date = new Date( System.currentTimeMillis( ) );
+        Calendar calendar = GregorianCalendar.getInstance( Locale.FRANCE );
+        calendar.setTime( date );
+        // We set the week to the requested one
+        calendar.add( Calendar.DAY_OF_MONTH, 7 * nOffsetWeek );
+
+        // We get the current day of the week
+        int nCurrentDayOfWeek = calendar.get( Calendar.DAY_OF_WEEK );
+        // We add the day of the week to Monday on the calendar
+        calendar.add( Calendar.DAY_OF_WEEK, Calendar.MONDAY - nCurrentDayOfWeek );
+
+        return new Date( calendar.getTimeInMillis( ) );
+    }
+    /**
+     * Parse a string representing a positive or negative integer
+     * 
+     * @param strNumber
+     *            The string to parse
+     * @return The integer value of the number represented by the string, or 0 if the string could not be parsed
+     */
+    private int parseInt( String strNumber )
+    {
+        int nNumber = 0;
+
+        if ( StringUtils.isEmpty( strNumber ) )
+        {
+            return nNumber;
+        }
+
+        if ( strNumber.startsWith( "-" ) )
+        {
+            String strParseableNumber = strNumber.substring( 1 );
+
+            if ( StringUtils.isNumeric( strParseableNumber ) )
+            {
+                nNumber = Integer.parseInt( strParseableNumber ) * -1;
+            }
+        }
+        else
+            if ( StringUtils.isNumeric( strNumber ) )
+            {
+                nNumber = Integer.parseInt( strNumber );
+            }
+
+        return nNumber;
+    }
+    
+    
 }

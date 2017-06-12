@@ -33,12 +33,11 @@
  */
 package fr.paris.lutece.plugins.appointment.modules.resource.business;
 
-import fr.paris.lutece.plugins.appointment.business.Appointment;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import java.sql.Date;
-
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,14 +57,14 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
         " INNER JOIN appointment_resource_form_rt frt ON ar.id_app_form_res_type = frt.id " +
         " INNER JOIN appointment_appointment a ON ar.id_appointment = a.id_appointment" +
         " INNER JOIN appointment_slot s ON s.id_slot = a.id_slot" + " WHERE ar.id_resource = ?" +
-        " AND frt.resource_type_name = ?" + " AND a.date_appointment = ?" + " AND a.status != ?" +
-        " AND ( ( ( s.starting_hour * 60 + s.starting_minute ) < ? && ( s.ending_hour * 60 + s.ending_minute ) > ? )" +
-        "     || ( ( s.starting_hour * 60 + s.starting_minute ) < ? && ( s.ending_hour * 60 + s.ending_minute ) > ? )" +
-        "     || ( ( s.starting_hour * 60 + s.starting_minute ) > ? && ( s.ending_hour * 60 + s.ending_minute ) < ? )" +
-        "     || ( ( s.starting_hour * 60 + s.starting_minute ) = ? && ( s.ending_hour * 60 + s.ending_minute ) = ? )" +
+        " AND frt.resource_type_name = ?" + " AND a.is_cancelled != ?" +
+        " AND ( ( ( s.starting_date_time ) < ? && ( s.ending_date_time ) > ? )" +
+        "     || ( ( s.starting_date_time ) < ? && ( s.ending_date_time ) > ? )" +
+        "     || ( ( s.starting_date_time ) > ? && ( s.ending_date_time ) < ? )" +
+        "     || ( ( s.starting_date_time ) = ? && ( s.ending_date_time ) = ? )" +
         "     )";
-    private static final String SQL_QUERY_FIND_ID_APPOINTMENT_BY_RESAOURCE_AND_DATE = "SELECT ar.id_appointment FROM appointment_resource_app_res ar INNER JOIN appointment_appointment a ON ar.id_appointment = a.id_appointment INNER JOIN appointment_resource_form_rt frt ON ar.id_app_form_res_type = frt.id" +
-        " WHERE ar.id_resource = ? AND frt.resource_type_name = ? AND a.date_appointment > ? AND a.date_appointment < ? AND a.status != ? ";
+    private static final String SQL_QUERY_FIND_ID_APPOINTMENT_BY_RESAOURCE_AND_DATE = "SELECT ar.id_appointment FROM appointment_resource_app_res ar INNER JOIN appointment_appointment a ON ar.id_appointment = a.id_appointment INNER JOIN appointment_resource_form_rt frt ON ar.id_app_form_res_type = frt.id " +
+        " INNER JOIN appointment_slot s ON s.id_slot = a.id_slot WHERE ar.id_resource = ? AND frt.resource_type_name = ? AND s.starting_date_time > ? AND s.ending_date_time < ? AND a.is_cancelled != ? ";
 
     // Insert, update
     private static final String SQL_QUERY_INSERT = " INSERT INTO appointment_resource_app_res (id_appointment,id_app_form_res_type,id_resource) VALUES (?,?,?) ";
@@ -192,26 +191,25 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
      * {@inheritDoc}
      */
     @Override
-    public boolean isResourceAvailable( String strIdResource, String strResourceTypeName, Date dateDay, int nHourBegin,
-        int nMinuteBegin, int nHourEnd, int nMinuteEnd, Plugin plugin )
+    public boolean isResourceAvailable( String strIdResource, String strResourceTypeName,  Timestamp nStartingTime,
+    		Timestamp nEndingTime, Plugin plugin )
     {
-        int nStartingTime = ( nHourBegin * 60 ) + nMinuteBegin;
-        int nEndingTime = ( nHourEnd * 60 ) + nMinuteEnd;
+
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_IS_RESOURCE_AVAILABLE, plugin );
         int nIndex = 1;
         daoUtil.setString( nIndex++, strIdResource );
         daoUtil.setString( nIndex++, strResourceTypeName );
-        daoUtil.setDate( nIndex++, dateDay );
-        daoUtil.setInt( nIndex++, Appointment.Status.STATUS_UNRESERVED.getValeur () );
-        daoUtil.setInt( nIndex++, nStartingTime );
-        daoUtil.setInt( nIndex++, nStartingTime );
-        daoUtil.setInt( nIndex++, nEndingTime );
-        daoUtil.setInt( nIndex++, nEndingTime );
-        daoUtil.setInt( nIndex++, nStartingTime );
-        daoUtil.setInt( nIndex++, nEndingTime );
-        daoUtil.setInt( nIndex++, nStartingTime );
-        daoUtil.setInt( nIndex, nEndingTime );
+       // daoUtil.setDate( nIndex++, dateDay );
+        daoUtil.setBoolean(nIndex++, true );
+        daoUtil.setTimestamp( nIndex++, nStartingTime );
+        daoUtil.setTimestamp( nIndex++, nStartingTime );
+        daoUtil.setTimestamp( nIndex++, nEndingTime );
+        daoUtil.setTimestamp( nIndex++, nEndingTime );
+        daoUtil.setTimestamp( nIndex++, nStartingTime );
+        daoUtil.setTimestamp( nIndex++, nEndingTime );
+        daoUtil.setTimestamp( nIndex++, nStartingTime );
+        daoUtil.setTimestamp( nIndex, nEndingTime );
 
         daoUtil.executeQuery(  );
 
@@ -234,12 +232,13 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
     public List<Integer> findIdAppointmentsByResourceAndDate( String strIdResource, String strResourceType,
         Date dateMin, Date dateMax, Plugin plugin )
     {
+    	
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ID_APPOINTMENT_BY_RESAOURCE_AND_DATE, plugin );
         daoUtil.setString( 1, strIdResource );
         daoUtil.setString( 2, strResourceType );
-        daoUtil.setDate( 3, dateMin );
-        daoUtil.setDate( 4, dateMax );
-        daoUtil.setInt( 5, Appointment.Status.STATUS_UNRESERVED.getValeur () );
+        daoUtil.setTimestamp( 3, new Timestamp(dateMin.getTime()) );
+        daoUtil.setTimestamp( 4, new Timestamp(dateMax.getTime()) );
+        daoUtil.setBoolean( 5, true );
 
         List<Integer> listIdAppointments = new ArrayList<Integer>(  );
         daoUtil.executeQuery(  );

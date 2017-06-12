@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.appointment.modules.resource.service;
 
-import fr.paris.lutece.plugins.appointment.business.Appointment;
-import fr.paris.lutece.plugins.appointment.business.calendar.AppointmentSlot;
-import fr.paris.lutece.plugins.appointment.business.calendar.AppointmentSlotHome;
+import fr.paris.lutece.plugins.appointment.business.appointment.Appointment;
+import fr.paris.lutece.plugins.appointment.business.slot.Slot;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResource;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResourceHome;
+import fr.paris.lutece.plugins.appointment.service.SlotService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import org.apache.commons.lang.StringUtils;
@@ -81,7 +81,7 @@ public class AppointmentResourceService
         AppointmentResource appResource = AppointmentResourceHome.findByPrimaryKey( appointment.getIdAppointment(  ),
                 nIdFormResourceType );
 
-        if ( ( appResource != null ) && ( appointment.getStatus(  ) != Appointment.Status.STATUS_UNRESERVED.getValeur() ) &&
+        if ( ( appResource != null ) && ( !appointment.getIsCancelled() ) &&
                 StringUtils.equals( appResource.getIdResource(  ), strIdResource ) )
         {
             // The resource is already associated with this appointment for this form RT, so we allow it to be re-associated
@@ -89,10 +89,9 @@ public class AppointmentResourceService
         }
 
         // We now have to check that the resource is not associated to another appointment during the time of this one
-        AppointmentSlot slot = AppointmentSlotHome.findByPrimaryKey( appointment.getIdSlot(  ) );
+        Slot slot = SlotService.findSlotById(appointment.getIdSlot(  ) );
 
         return AppointmentResourceHome.isResourceAvailable( strIdResource, strResourceTypeName,
-            appointment.getDateAppointment(  ), slot.getStartingHour(  ), slot.getStartingMinute(  ),
-            slot.getEndingHour(  ), slot.getEndingMinute(  ) );
+             slot.getStartingTimestampDate(  ), slot.getEndingTimestampDate() );
     }
 }

@@ -33,10 +33,8 @@
  */
 package fr.paris.lutece.plugins.appointment.modules.resource.web.workflow;
 
-import fr.paris.lutece.plugins.appointment.business.Appointment;
 import fr.paris.lutece.plugins.appointment.business.AppointmentForm;
-import fr.paris.lutece.plugins.appointment.business.AppointmentFormHome;
-import fr.paris.lutece.plugins.appointment.business.AppointmentHome;
+import fr.paris.lutece.plugins.appointment.business.appointment.Appointment;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceType;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceTypeHome;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.workflow.SetAppointmentResourceHistory;
@@ -44,6 +42,8 @@ import fr.paris.lutece.plugins.appointment.modules.resource.business.workflow.Se
 import fr.paris.lutece.plugins.appointment.modules.resource.business.workflow.TaskSetAppointmentResourceConfig;
 import fr.paris.lutece.plugins.appointment.modules.resource.service.AppointmentResourceService;
 import fr.paris.lutece.plugins.appointment.modules.resource.service.workflow.TaskSetAppointmentResource;
+import fr.paris.lutece.plugins.appointment.service.AppointmentService;
+import fr.paris.lutece.plugins.appointment.service.FormService;
 import fr.paris.lutece.plugins.resource.business.IResource;
 import fr.paris.lutece.plugins.resource.service.ResourceService;
 import fr.paris.lutece.plugins.workflow.web.task.AbstractTaskComponent;
@@ -67,7 +67,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -115,7 +114,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
 
         TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task.getId(  ) );
 
-        List<AppointmentForm> listAppointmentform = AppointmentFormHome.getAppointmentFormsList(  );
+        List<AppointmentForm> listAppointmentform = FormService.buildAllAppointmentFormLight( );
         ReferenceList refListAppointmentForm = new ReferenceList(  );
 
         for ( AppointmentForm form : listAppointmentform )
@@ -236,7 +235,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
             return null;
         }
 
-        Appointment appointment = AppointmentHome.findByPrimaryKey( nIdResource );
+        Appointment appointment = AppointmentService.findAppointmentById( nIdResource );
 
         if ( appointment == null )
         {
