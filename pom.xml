@@ -10,7 +10,7 @@
     <groupId>fr.paris.lutece.plugins</groupId>
     <artifactId>module-appointment-resource</artifactId>
     <packaging>lutece-plugin</packaging>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>Lutece Appointment Resource module</name>
 
     <repositories>
@@ -59,7 +59,7 @@
         <connection>scm:git:https://github.com/lutece-secteur-public/gru-module-appointment-resource.git</connection>
         <developerConnection>scm:git:https://github.com/lutece-secteur-public/gru-module-appointment-resource.git</developerConnection>
         <url>https://github.com/lutece-secteur-public/gru-module-appointment-resource.git</url>
-      <tag>HEAD</tag>
+      <tag>gru-module-appointment-resource-1.0.1</tag>
   </scm>
     
 </project>
