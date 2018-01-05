@@ -171,7 +171,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         model.put( MARK_ADMIN_USER_RESOURCE_TYPE, AdminUser.RESOURCE_TYPE );
         model.put( MARK_LOCALE, getLocale ( ) );
         
-        AppointmentFormJspBean.addElementsToModelForLeftColumn( request, appointmentForm, getUser(  ), getLocale(  ),
+        AppointmentFormJspBean.addElementsToModel( request, appointmentForm, getUser(  ), getLocale(  ),
             model );
 
         return getPage( MESSAGE_MANAGE_FORM_RESOURCES_PAGE_TITLE, TEMPLATE_MANAGE_FORM_RESOURCES, model );
