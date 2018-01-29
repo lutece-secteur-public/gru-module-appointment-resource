@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.appointment.modules.resource.business;
 
 import java.io.Serializable;
 
-
 /**
  * Appointment resource
  */
@@ -48,16 +47,19 @@ public class AppointmentResource implements Serializable
 
     /**
      * Get the id of the appointment
+     * 
      * @return The id of the appointment
      */
-    public int getIdAppointment(  )
+    public int getIdAppointment( )
     {
         return _nIdAppointment;
     }
 
     /**
      * Set the id of the appointment
-     * @param nIdAppointment The id of the appointment
+     * 
+     * @param nIdAppointment
+     *            The id of the appointment
      */
     public void setIdAppointment( int nIdAppointment )
     {
@@ -66,17 +68,19 @@ public class AppointmentResource implements Serializable
 
     /**
      * Get the id of the appointment form resource type
+     * 
      * @return The id of the appointment form resource type
      */
-    public int getIdAppointmentFormResourceType(  )
+    public int getIdAppointmentFormResourceType( )
     {
         return _nIdAppointmentFormResourceType;
     }
 
     /**
      * Set the id of the appointment form resource type
-     * @param nIdAppointmentFormResourceType The id of the appointment form
-     *            resource type
+     * 
+     * @param nIdAppointmentFormResourceType
+     *            The id of the appointment form resource type
      */
     public void setIdAppointmentFormResourceType( int nIdAppointmentFormResourceType )
     {
@@ -85,16 +89,19 @@ public class AppointmentResource implements Serializable
 
     /**
      * Get the id of the resource
+     * 
      * @return the id of the resource
      */
-    public String getIdResource(  )
+    public String getIdResource( )
     {
         return _strIdResource;
     }
 
     /**
      * Set the id of the resource
-     * @param strIdResource The id of the resource
+     * 
+     * @param strIdResource
+     *            The id of the resource
      */
     public void setIdResource( String strIdResource )
     {

@@ -42,7 +42,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import org.apache.commons.lang.StringUtils;
 
-
 /**
  * Service to manage appointment resources
  */
@@ -53,9 +52,10 @@ public class AppointmentResourceService
 
     /**
      * Get the instance of the service
+     * 
      * @return The instance of the service
      */
-    public static AppointmentResourceService getInstance(  )
+    public static AppointmentResourceService getInstance( )
     {
         if ( _instance == null )
         {
@@ -67,31 +67,32 @@ public class AppointmentResourceService
 
     /**
      * Check if the resource is available for a given appointment
-     * @param strIdResource The id of the resource
-     * @param strResourceTypeName The resource type
-     * @param nIdFormResourceType The id of the form resource type
-     * @param appointment The appointment
-     * @return true if the resource is available for the given appointment,
-     *         false if it is already associated with another resource during
-     *         the time of the appointment
+     * 
+     * @param strIdResource
+     *            The id of the resource
+     * @param strResourceTypeName
+     *            The resource type
+     * @param nIdFormResourceType
+     *            The id of the form resource type
+     * @param appointment
+     *            The appointment
+     * @return true if the resource is available for the given appointment, false if it is already associated with another resource during the time of the
+     *         appointment
      */
-    public boolean isResourceAvailableForAppointment( String strIdResource, String strResourceTypeName,
-        int nIdFormResourceType, Appointment appointment )
+    public boolean isResourceAvailableForAppointment( String strIdResource, String strResourceTypeName, int nIdFormResourceType, Appointment appointment )
     {
-        AppointmentResource appResource = AppointmentResourceHome.findByPrimaryKey( appointment.getIdAppointment(  ),
-                nIdFormResourceType );
+        AppointmentResource appResource = AppointmentResourceHome.findByPrimaryKey( appointment.getIdAppointment( ), nIdFormResourceType );
 
-        if ( ( appResource != null ) && ( !appointment.getIsCancelled() ) &&
-                StringUtils.equals( appResource.getIdResource(  ), strIdResource ) )
+        if ( ( appResource != null ) && ( !appointment.getIsCancelled( ) ) && StringUtils.equals( appResource.getIdResource( ), strIdResource ) )
         {
             // The resource is already associated with this appointment for this form RT, so we allow it to be re-associated
             return true;
         }
 
         // We now have to check that the resource is not associated to another appointment during the time of this one
-        Slot slot = SlotService.findSlotById(appointment.getIdSlot(  ) );
+        Slot slot = SlotService.findSlotById( appointment.getIdSlot( ) );
 
-        return AppointmentResourceHome.isResourceAvailable( strIdResource, strResourceTypeName,
-             slot.getStartingTimestampDate(  ), slot.getEndingTimestampDate() );
+        return AppointmentResourceHome
+                .isResourceAvailable( strIdResource, strResourceTypeName, slot.getStartingTimestampDate( ), slot.getEndingTimestampDate( ) );
     }
 }

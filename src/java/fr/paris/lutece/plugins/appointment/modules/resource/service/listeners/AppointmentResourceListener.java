@@ -40,7 +40,6 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 
 import java.util.Locale;
 
-
 /**
  * Listener implementation for appointment resources
  */

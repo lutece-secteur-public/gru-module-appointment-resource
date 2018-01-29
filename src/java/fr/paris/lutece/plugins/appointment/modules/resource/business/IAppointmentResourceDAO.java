@@ -39,7 +39,6 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
-
 /**
  * Interface of appointment resource DAO
  */
@@ -52,88 +51,112 @@ public interface IAppointmentResourceDAO
 
     /**
      * Insert a new appointment resource
-     * @param resource The appointment resource to insert
-     * @param plugin The plugin
+     * 
+     * @param resource
+     *            The appointment resource to insert
+     * @param plugin
+     *            The plugin
      */
     void insert( AppointmentResource resource, Plugin plugin );
 
     /**
      * Find an appointment resource from its primary key
-     * @param nIdAppointment The id of the appointment
-     * @param nIdAppointmentFormResourceType the id of the appointment form
-     *            resource type
-     * @param plugin The plugin
-     * @return The appointment resource, or null if no appointment resource has
-     *         the given id
+     * 
+     * @param nIdAppointment
+     *            The id of the appointment
+     * @param nIdAppointmentFormResourceType
+     *            the id of the appointment form resource type
+     * @param plugin
+     *            The plugin
+     * @return The appointment resource, or null if no appointment resource has the given id
      */
     AppointmentResource findByPrimaryKey( int nIdAppointment, int nIdAppointmentFormResourceType, Plugin plugin );
 
     /**
      * Find appointment resource associated with a given appointment
-     * @param nIdAppointment the id of the appointment
-     * @param plugin The plugin
-     * @return The list of appointment resource associated with the given
-     *         appointment, or an empty list if no appointment resource is
-     *         associated with the appointment
+     * 
+     * @param nIdAppointment
+     *            the id of the appointment
+     * @param plugin
+     *            The plugin
+     * @return The list of appointment resource associated with the given appointment, or an empty list if no appointment resource is associated with the
+     *         appointment
      */
     List<AppointmentResource> findByIdAppointment( int nIdAppointment, Plugin plugin );
 
     /**
      * Update an appointment resource
-     * @param resource The appointment resource to update
-     * @param plugin The plugin
+     * 
+     * @param resource
+     *            The appointment resource to update
+     * @param plugin
+     *            The plugin
      */
     void update( AppointmentResource resource, Plugin plugin );
 
     /**
      * Delete an appointment resource
-     * @param nIdAppointment The id of the appointment of the appointment
-     *            resource
-     * @param nIdAppointmentFormResourceType The id of the appointment form
-     *            resource type of the appointment resource
-     * @param plugin The plugin
+     * 
+     * @param nIdAppointment
+     *            The id of the appointment of the appointment resource
+     * @param nIdAppointmentFormResourceType
+     *            The id of the appointment form resource type of the appointment resource
+     * @param plugin
+     *            The plugin
      */
     void delete( int nIdAppointment, int nIdAppointmentFormResourceType, Plugin plugin );
 
     /**
      * Delete appointment resource associated with a given appointment
-     * @param nIdAppointment The id of the appointment
-     * @param plugin The plugin
+     * 
+     * @param nIdAppointment
+     *            The id of the appointment
+     * @param plugin
+     *            The plugin
      */
     void deleteByIdAppointment( int nIdAppointment, Plugin plugin );
 
     /**
-     * Delete appointment resource associated with a given appointment form
-     * resource type
-     * @param nIdAppointmentFormResourceType The id of the appointment form
-     *            resource type
-     * @param plugin The plugin
+     * Delete appointment resource associated with a given appointment form resource type
+     * 
+     * @param nIdAppointmentFormResourceType
+     *            The id of the appointment form resource type
+     * @param plugin
+     *            The plugin
      */
     void deleteByIdAppointmentFormResourceType( int nIdAppointmentFormResourceType, Plugin plugin );
 
     /**
-     * Check if a resource is available for a given period, or if it has already
-     * been associated with an appointment
-     * @param strIdResource The id of the resource
-     * @param strResourceTypeName The type of the resource
-     * @param nStartingTime The beginning time
-     * @param nEndingTime the ending time
-     * @param plugin the plugin
+     * Check if a resource is available for a given period, or if it has already been associated with an appointment
+     * 
+     * @param strIdResource
+     *            The id of the resource
+     * @param strResourceTypeName
+     *            The type of the resource
+     * @param nStartingTime
+     *            The beginning time
+     * @param nEndingTime
+     *            the ending time
+     * @param plugin
+     *            the plugin
      * @return True if the resource is available, false otherwise
      */
-    boolean  isResourceAvailable( String strIdResource, String strResourceTypeName,  Timestamp nStartingTime,
-    		Timestamp nEndingTime, Plugin plugin );
+    boolean isResourceAvailable( String strIdResource, String strResourceTypeName, Timestamp nStartingTime, Timestamp nEndingTime, Plugin plugin );
 
     /**
-     * Get the list of id of appointments a resource is associated to between
-     * two given dates
-     * @param strIdResource The id of the resource
-     * @param strResourceType The resource type
-     * @param dateMin The minimum date
-     * @param dateMax the maximum date
-     * @param plugin The plugin
+     * Get the list of id of appointments a resource is associated to between two given dates
+     * 
+     * @param strIdResource
+     *            The id of the resource
+     * @param strResourceType
+     *            The resource type
+     * @param dateMin
+     *            The minimum date
+     * @param dateMax
+     *            the maximum date
+     * @param plugin
+     *            The plugin
      * @return The list of ids of appointments
      */
-    List<Integer> findIdAppointmentsByResourceAndDate( String strIdResource, String strResourceType, Date dateMin,
-        Date dateMax, Plugin plugin );
+    List<Integer> findIdAppointmentsByResourceAndDate( String strIdResource, String strResourceType, Date dateMin, Date dateMax, Plugin plugin );
 }

@@ -39,10 +39,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
 /**
- * Class to describe an association between an appointment form and a resource
- * type
+ * Class to describe an association between an appointment form and a resource type
  */
 public class AppointmentFormResourceType implements Serializable
 {
@@ -60,16 +58,19 @@ public class AppointmentFormResourceType implements Serializable
 
     /**
      * Get the id of the appointment form resource type
+     * 
      * @return The id of the appointment form resource type
      */
-    public int getId(  )
+    public int getId( )
     {
         return _nId;
     }
 
     /**
      * Set the id of the appointment form resource type
-     * @param nId The id of the appointment form resource type
+     * 
+     * @param nId
+     *            The id of the appointment form resource type
      */
     public void setId( int nId )
     {
@@ -78,16 +79,19 @@ public class AppointmentFormResourceType implements Serializable
 
     /**
      * Get the id of the appointment form
+     * 
      * @return The id of the appointment form
      */
-    public int getIdAppointmentForm(  )
+    public int getIdAppointmentForm( )
     {
         return _nIdAppointmentForm;
     }
 
     /**
      * Set the id of the appointment form
-     * @param nIdAppointmentForm The id of the appointment form
+     * 
+     * @param nIdAppointmentForm
+     *            The id of the appointment form
      */
     public void setIdAppointmentForm( int nIdAppointmentForm )
     {
@@ -96,17 +100,19 @@ public class AppointmentFormResourceType implements Serializable
 
     /**
      * Get the description of the the appointment form resource type
+     * 
      * @return The description of the the appointment form resource type
      */
-    public String getDescription(  )
+    public String getDescription( )
     {
         return _strDescription;
     }
 
     /**
      * Set the description of the the appointment form resource type
-     * @param strDescription The description of the the appointment form
-     *            resource type
+     * 
+     * @param strDescription
+     *            The description of the the appointment form resource type
      */
     public void setDescription( String strDescription )
     {
@@ -115,16 +121,19 @@ public class AppointmentFormResourceType implements Serializable
 
     /**
      * Get the resource type name
+     * 
      * @return The resource type name
      */
-    public String getResourceTypeName(  )
+    public String getResourceTypeName( )
     {
         return _strResourceTypeName;
     }
 
     /**
      * Set the resource type name
-     * @param strResourceTypeName The resource type name
+     * 
+     * @param strResourceTypeName
+     *            The resource type name
      */
     public void setResourceTypeName( String strResourceTypeName )
     {
@@ -132,21 +141,20 @@ public class AppointmentFormResourceType implements Serializable
     }
 
     /**
-     * Check if this resource should be bound to the admin user id property of
-     * the appointment or not
-     * @return True if this resource should be bound to the admin user id
-     *         property of the appointment, false otherwise
+     * Check if this resource should be bound to the admin user id property of the appointment or not
+     * 
+     * @return True if this resource should be bound to the admin user id property of the appointment, false otherwise
      */
-    public boolean getIsAppointmentAdminUser(  )
+    public boolean getIsAppointmentAdminUser( )
     {
         return _bIsAppointmentAdminUser;
     }
 
     /**
-     * Set whether this resource should be bound to the admin user id property
-     * of the appointment
-     * @param bIsAppointmentAdminUser True if this resource should be bound to
-     *            the admin user id property of the appointment, false otherwise
+     * Set whether this resource should be bound to the admin user id property of the appointment
+     * 
+     * @param bIsAppointmentAdminUser
+     *            True if this resource should be bound to the admin user id property of the appointment, false otherwise
      */
     public void setIsAppointmentAdminUser( boolean bIsAppointmentAdminUser )
     {
@@ -155,17 +163,19 @@ public class AppointmentFormResourceType implements Serializable
 
     /**
      * Check if this resource defines the location of the appointment
+     * 
      * @return True if this resource defines the location of the appointment
      */
-    public boolean getIsLocation(  )
+    public boolean getIsLocation( )
     {
         return _bIsLocation;
     }
 
     /**
      * Set whether this resource defines the location of the appointment
-     * @param bIsLocation True if this resource defines the location of
-     *            the appointment, false otherwise
+     * 
+     * @param bIsLocation
+     *            True if this resource defines the location of the appointment, false otherwise
      */
     public void setIsLocation( boolean bIsLocation )
     {

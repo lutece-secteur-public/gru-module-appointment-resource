@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.appointment.modules.resource.business;
 
 import fr.paris.lutece.plugins.resource.business.IResource;
 
-
 /**
  * Appointment resource
  */
@@ -46,29 +45,33 @@ public class AppointmentResourceDTO extends AppointmentResource
     private AppointmentFormResourceType _formResourceType;
 
     /**
-     * Creates a new appointment resource DTO with data from an appointment
-     * resource
-     * @param appResource The appointment resource to read data from
+     * Creates a new appointment resource DTO with data from an appointment resource
+     * 
+     * @param appResource
+     *            The appointment resource to read data from
      */
     public AppointmentResourceDTO( AppointmentResource appResource )
     {
-        setIdAppointment( appResource.getIdAppointment(  ) );
-        setIdAppointmentFormResourceType( appResource.getIdAppointmentFormResourceType(  ) );
-        setIdResource( appResource.getIdResource(  ) );
+        setIdAppointment( appResource.getIdAppointment( ) );
+        setIdAppointmentFormResourceType( appResource.getIdAppointmentFormResourceType( ) );
+        setIdResource( appResource.getIdResource( ) );
     }
 
     /**
      * Get the resource associated with this appointment resource
+     * 
      * @return The resource associated with this appointment resource
      */
-    public IResource getResource(  )
+    public IResource getResource( )
     {
         return _resource;
     }
 
     /**
      * Set the resource associated with this appointment resource
-     * @param resource The resource associated with this appointment resource
+     * 
+     * @param resource
+     *            The resource associated with this appointment resource
      */
     public void setResource( IResource resource )
     {
@@ -77,17 +80,19 @@ public class AppointmentResourceDTO extends AppointmentResource
 
     /**
      * Get the form resource type associated with this appointment resource
+     * 
      * @return The form resource type associated with this appointment resource
      */
-    public AppointmentFormResourceType getFormResourceType(  )
+    public AppointmentFormResourceType getFormResourceType( )
     {
         return _formResourceType;
     }
 
     /**
      * Set the form resource type associated with this appointment resource
-     * @param formResourceType The form resource type associated with this
-     *            appointment resource
+     * 
+     * @param formResourceType
+     *            The form resource type associated with this appointment resource
      */
     public void setFormResourceType( AppointmentFormResourceType formResourceType )
     {

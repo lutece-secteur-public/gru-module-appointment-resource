@@ -39,7 +39,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * DAO to manage history of set appointment resource tasks
  */
@@ -54,22 +53,24 @@ public class SetAppointmentResourceHistoryDAO implements ISetAppointmentResource
 
     /**
      * Get a new primary key
-     * @param plugin The plugin
+     * 
+     * @param plugin
+     *            The plugin
      * @return The new value of the primary key
      */
     private int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUEERY_NEW_PRIMARY_KEY, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nRes = 1;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             nRes = daoUtil.getInt( 1 ) + 1;
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nRes;
     }
@@ -84,13 +85,13 @@ public class SetAppointmentResourceHistoryDAO implements ISetAppointmentResource
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         int nIndex = 1;
-        daoUtil.setInt( nIndex++, history.getId(  ) );
-        daoUtil.setInt( nIndex++, history.getIdHistory(  ) );
-        daoUtil.setInt( nIndex++, history.getIdAppointment(  ) );
-        daoUtil.setString( nIndex++, history.getIdResource(  ) );
-        daoUtil.setInt( nIndex, history.getIdFormResourceType(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.setInt( nIndex++, history.getId( ) );
+        daoUtil.setInt( nIndex++, history.getIdHistory( ) );
+        daoUtil.setInt( nIndex++, history.getIdAppointment( ) );
+        daoUtil.setString( nIndex++, history.getIdResource( ) );
+        daoUtil.setInt( nIndex, history.getIdFormResourceType( ) );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -101,14 +102,14 @@ public class SetAppointmentResourceHistoryDAO implements ISetAppointmentResource
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, nId );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         SetAppointmentResourceHistory history;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             int nIndex = 1;
-            history = new SetAppointmentResourceHistory(  );
+            history = new SetAppointmentResourceHistory( );
             history.setId( nId );
             history.setIdHistory( daoUtil.getInt( nIndex++ ) );
             history.setIdAppointment( daoUtil.getInt( nIndex++ ) );
@@ -120,7 +121,7 @@ public class SetAppointmentResourceHistoryDAO implements ISetAppointmentResource
             history = null;
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return history;
     }
@@ -133,8 +134,8 @@ public class SetAppointmentResourceHistoryDAO implements ISetAppointmentResource
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nIdNotif );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -145,14 +146,14 @@ public class SetAppointmentResourceHistoryDAO implements ISetAppointmentResource
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_HISTORY, plugin );
         daoUtil.setInt( 1, nIdHistory );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        List<SetAppointmentResourceHistory> listHistory = new ArrayList<SetAppointmentResourceHistory>(  );
+        List<SetAppointmentResourceHistory> listHistory = new ArrayList<SetAppointmentResourceHistory>( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             int nIndex = 1;
-            SetAppointmentResourceHistory history = new SetAppointmentResourceHistory(  );
+            SetAppointmentResourceHistory history = new SetAppointmentResourceHistory( );
             history.setId( daoUtil.getInt( nIndex++ ) );
             history.setIdHistory( daoUtil.getInt( nIndex++ ) );
             history.setIdAppointment( daoUtil.getInt( nIndex++ ) );
@@ -161,7 +162,7 @@ public class SetAppointmentResourceHistoryDAO implements ISetAppointmentResource
             listHistory.add( history );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return listHistory;
     }
@@ -174,7 +175,7 @@ public class SetAppointmentResourceHistoryDAO implements ISetAppointmentResource
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_APPOINTMENT, plugin );
         daoUtil.setInt( 1, nIdAppointment );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 }

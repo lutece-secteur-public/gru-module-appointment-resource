@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.appointment.modules.resource.service;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
-
 /**
  * Appointment resource plugin
  */
@@ -50,7 +49,7 @@ public class AppointmentResourcePlugin extends Plugin
      * {@inheritDoc}
      */
     @Override
-    public void init(  )
+    public void init( )
     {
         // Nothing to do
     }

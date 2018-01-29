@@ -50,7 +50,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-
 /**
  * Add service for resources of appointments
  */
@@ -67,31 +66,28 @@ public class AppointmentResourceAddonService implements IAppointmentAddonService
     {
         List<AppointmentResource> listAppResources = AppointmentResourceHome.findByIdAppointment( nIdAppointment );
 
-        List<AppointmentResourceDTO> listAppResourcesDTO = new ArrayList<AppointmentResourceDTO>( listAppResources.size(  ) );
+        List<AppointmentResourceDTO> listAppResourcesDTO = new ArrayList<AppointmentResourceDTO>( listAppResources.size( ) );
 
         for ( AppointmentResource appResource : listAppResources )
         {
             AppointmentResourceDTO appResDTO = new AppointmentResourceDTO( appResource );
-            appResDTO.setFormResourceType( AppointmentFormResourceTypeHome.findByPrimaryKey( 
-                    appResource.getIdAppointmentFormResourceType(  ) ) );
+            appResDTO.setFormResourceType( AppointmentFormResourceTypeHome.findByPrimaryKey( appResource.getIdAppointmentFormResourceType( ) ) );
 
-            if ( StringUtils.isNotEmpty( appResDTO.getIdResource(  ) ) &&
-                    StringUtils.isNotEmpty( appResDTO.getFormResourceType(  ).getResourceTypeName(  ) ) )
+            if ( StringUtils.isNotEmpty( appResDTO.getIdResource( ) ) && StringUtils.isNotEmpty( appResDTO.getFormResourceType( ).getResourceTypeName( ) ) )
             {
-                appResDTO.setResource( ResourceService.getInstance(  )
-                                                      .getResource( appResDTO.getIdResource(  ),
-                        appResDTO.getFormResourceType(  ).getResourceTypeName(  ) ) );
+                appResDTO.setResource( ResourceService.getInstance( ).getResource( appResDTO.getIdResource( ),
+                        appResDTO.getFormResourceType( ).getResourceTypeName( ) ) );
             }
 
             listAppResourcesDTO.add( appResDTO );
         }
 
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
 
         model.put( MARK_LIST_APP_RESOURCES, listAppResourcesDTO );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_APPOINTMENT_RESOURCE_ADDON, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 }

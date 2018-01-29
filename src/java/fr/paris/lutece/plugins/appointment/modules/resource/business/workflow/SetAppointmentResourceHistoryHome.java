@@ -40,7 +40,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
  * Home for set appointment resource history
  */
@@ -52,14 +51,16 @@ public final class SetAppointmentResourceHistoryHome
     /**
      * Private default constructor
      */
-    private SetAppointmentResourceHistoryHome(  )
+    private SetAppointmentResourceHistoryHome( )
     {
         // Nothing to do
     }
 
     /**
      * Create a new history
-     * @param historyNotif The history to insert into the database
+     * 
+     * @param historyNotif
+     *            The history to insert into the database
      */
     public static void create( SetAppointmentResourceHistory historyNotif )
     {
@@ -68,7 +69,9 @@ public final class SetAppointmentResourceHistoryHome
 
     /**
      * Get an history from its primary key
-     * @param nId The primary key
+     * 
+     * @param nId
+     *            The primary key
      * @return The history
      */
     public static SetAppointmentResourceHistory findByPrimaryKey( int nId )
@@ -78,7 +81,9 @@ public final class SetAppointmentResourceHistoryHome
 
     /**
      * Get the list of history associated with a given history id
-     * @param nIdHistory The history id
+     * 
+     * @param nIdHistory
+     *            The history id
      * @return the list of history, or an empty list if none was found
      */
     public static List<SetAppointmentResourceHistory> findByIdHistory( int nIdHistory )
@@ -88,7 +93,9 @@ public final class SetAppointmentResourceHistoryHome
 
     /**
      * Remove an history from its primary key
-     * @param nId The primary key
+     * 
+     * @param nId
+     *            The primary key
      */
     public static void delete( int nId )
     {
@@ -97,7 +104,9 @@ public final class SetAppointmentResourceHistoryHome
 
     /**
      * Remove every history associated with a given appointment
-     * @param nIdAppointment The id of the appointment
+     * 
+     * @param nIdAppointment
+     *            The id of the appointment
      */
     public static void deleteByIdAppointment( int nIdAppointment )
     {

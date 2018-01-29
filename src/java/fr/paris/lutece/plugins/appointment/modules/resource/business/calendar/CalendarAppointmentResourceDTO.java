@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.appointment.modules.resource.business.calendar;
 
 import java.io.Serializable;
 
-
 /**
  * DTO to display appointments of resources in a calendar
  */
@@ -53,16 +52,24 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
 
     /**
      * Creates a new calendar appointment resource DTO
-     * @param nIdApppointment The id of the appointment
-     * @param nStartingHour The starting hour
-     * @param nStartingMinute The starting minute
-     * @param nEndingHour The ending hour
-     * @param nEndingMinute The ending minute
-     * @param appointmentDescription The description of the appointment
-     * @param nIdForm The id of the form
+     * 
+     * @param nIdApppointment
+     *            The id of the appointment
+     * @param nStartingHour
+     *            The starting hour
+     * @param nStartingMinute
+     *            The starting minute
+     * @param nEndingHour
+     *            The ending hour
+     * @param nEndingMinute
+     *            The ending minute
+     * @param appointmentDescription
+     *            The description of the appointment
+     * @param nIdForm
+     *            The id of the form
      */
-    public CalendarAppointmentResourceDTO( int nIdApppointment, int nStartingHour, int nStartingMinute,
-        int nEndingHour, int nEndingMinute, String appointmentDescription, int nIdForm )
+    public CalendarAppointmentResourceDTO( int nIdApppointment, int nStartingHour, int nStartingMinute, int nEndingHour, int nEndingMinute,
+            String appointmentDescription, int nIdForm )
     {
         this._nIdApppointment = nIdApppointment;
         this._nStartingHour = nStartingHour;
@@ -75,16 +82,19 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
 
     /**
      * Get the id of the associated appointment
+     * 
      * @return The id of the associated appointment
      */
-    public int getIdApppointment(  )
+    public int getIdApppointment( )
     {
         return _nIdApppointment;
     }
 
     /**
      * Set the id of the associated appointment
-     * @param nIdApppointment The id of the associated appointment
+     * 
+     * @param nIdApppointment
+     *            The id of the associated appointment
      */
     public void setIdApppointment( int nIdApppointment )
     {
@@ -93,16 +103,19 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
 
     /**
      * Get the starting hour of the appointment
+     * 
      * @return The starting hour of the appointment
      */
-    public int getStartingHour(  )
+    public int getStartingHour( )
     {
         return _nStartingHour;
     }
 
     /**
      * Set the starting hour of the appointment
-     * @param nStartingHour The starting hour of the appointment
+     * 
+     * @param nStartingHour
+     *            The starting hour of the appointment
      */
     public void setStartingHour( int nStartingHour )
     {
@@ -111,16 +124,19 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
 
     /**
      * Get the starting minute of the appointment
+     * 
      * @return The starting minute of the appointment
      */
-    public int getStartingMinute(  )
+    public int getStartingMinute( )
     {
         return _nStartingMinute;
     }
 
     /**
      * Get the starting minute of the appointment
-     * @param nStartingMinute The starting minute of the appointment
+     * 
+     * @param nStartingMinute
+     *            The starting minute of the appointment
      */
     public void setStartingMinute( int nStartingMinute )
     {
@@ -129,16 +145,19 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
 
     /**
      * Get the ending hour of the appointment
+     * 
      * @return The ending hour of the appointment
      */
-    public int getEndingHour(  )
+    public int getEndingHour( )
     {
         return _nEndingHour;
     }
 
     /**
      * Set the ending hour of the appointment
-     * @param nEndingHour The ending hour of the appointment
+     * 
+     * @param nEndingHour
+     *            The ending hour of the appointment
      */
     public void setEndingHour( int nEndingHour )
     {
@@ -147,16 +166,19 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
 
     /**
      * Get the ending minute of the appointment
+     * 
      * @return The ending minute of the appointment
      */
-    public int getEndingMinute(  )
+    public int getEndingMinute( )
     {
         return _nEndingMinute;
     }
 
     /**
      * Set the ending minute of the appointment
-     * @param nEndingMinute The ending minute of the appointment
+     * 
+     * @param nEndingMinute
+     *            The ending minute of the appointment
      */
     public void setEndingMinute( int nEndingMinute )
     {
@@ -165,14 +187,14 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
 
     /**
      * Get the duration of the appointment in minutes
+     * 
      * @return The duration of the appointment in minutes
      */
-    public int getDuration(  )
+    public int getDuration( )
     {
         if ( _nDuration == 0 )
         {
-            _nDuration = ( ( ( getEndingHour(  ) - getStartingHour(  ) ) * 60 ) + getEndingMinute(  ) ) -
-                getStartingMinute(  );
+            _nDuration = ( ( ( getEndingHour( ) - getStartingHour( ) ) * 60 ) + getEndingMinute( ) ) - getStartingMinute( );
         }
 
         return _nDuration;
@@ -180,35 +202,40 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
 
     /**
      * Get the description of the appointment
+     * 
      * @return The description of the appointment
      */
-    public String getAppointmentDescription(  )
+    public String getAppointmentDescription( )
     {
         return _appointmentDescription;
     }
 
     /**
      * Set the description of the appointment
-     * @param appointmentDescription The description of the appointment
+     * 
+     * @param appointmentDescription
+     *            The description of the appointment
      */
     public void setAppointmentDescription( String appointmentDescription )
     {
         this._appointmentDescription = appointmentDescription;
     }
-    
 
     /**
      * Get the id of the associated formulaire
+     * 
      * @return The id of the associated formulaire
      */
-    public int getIdForm(  )
+    public int getIdForm( )
     {
         return _nIdForm;
     }
 
     /**
      * Set the id of the associated form
-     * @param nIdApppointment The id of the associated form
+     * 
+     * @param nIdApppointment
+     *            The id of the associated form
      */
     public void setIdForm( int nIdForm )
     {
@@ -221,8 +248,7 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
     @Override
     public int compareTo( CalendarAppointmentResourceDTO o )
     {
-        return ( ( getStartingHour(  ) * 60 ) + getStartingMinute(  ) ) -
-        ( ( o.getStartingHour(  ) * 60 ) + o.getStartingMinute(  ) );
+        return ( ( getStartingHour( ) * 60 ) + getStartingMinute( ) ) - ( ( o.getStartingHour( ) * 60 ) + o.getStartingMinute( ) );
     }
 
     /**
@@ -243,8 +269,8 @@ public class CalendarAppointmentResourceDTO implements Serializable, Comparable<
      * {@inheritDoc}
      */
     @Override
-    public int hashCode(  )
+    public int hashCode( )
     {
-        return super.hashCode(  );
+        return super.hashCode( );
     }
 }

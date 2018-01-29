@@ -42,7 +42,6 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
-
 /**
  * Home for appointment resource
  */
@@ -54,14 +53,16 @@ public final class AppointmentResourceHome
     /**
      * Default constructor
      */
-    private AppointmentResourceHome(  )
+    private AppointmentResourceHome( )
     {
         // Do nothing
     }
 
     /**
      * Insert a new appointment resource
-     * @param resource The appointment resource to insert
+     * 
+     * @param resource
+     *            The appointment resource to insert
      */
     public static void insert( AppointmentResource resource )
     {
@@ -70,11 +71,12 @@ public final class AppointmentResourceHome
 
     /**
      * Find an appointment resource from its primary key
-     * @param nIdAppointment The id of the appointment
-     * @param nIdAppointmentFormResourceType the id of the appointment form
-     *            resource type
-     * @return The appointment resource, or null if no appointment resource has
-     *         the given id
+     * 
+     * @param nIdAppointment
+     *            The id of the appointment
+     * @param nIdAppointmentFormResourceType
+     *            the id of the appointment form resource type
+     * @return The appointment resource, or null if no appointment resource has the given id
      */
     public static AppointmentResource findByPrimaryKey( int nIdAppointment, int nIdAppointmentFormResourceType )
     {
@@ -83,10 +85,11 @@ public final class AppointmentResourceHome
 
     /**
      * Find appointment resource associated with a given appointment
-     * @param nIdAppointment the id of the appointment
-     * @return The list of appointment resource associated with the given
-     *         appointment, or an empty list if no appointment resource is
-     *         associated with the appointment
+     * 
+     * @param nIdAppointment
+     *            the id of the appointment
+     * @return The list of appointment resource associated with the given appointment, or an empty list if no appointment resource is associated with the
+     *         appointment
      */
     public static List<AppointmentResource> findByIdAppointment( int nIdAppointment )
     {
@@ -95,7 +98,9 @@ public final class AppointmentResourceHome
 
     /**
      * Update an appointment resource
-     * @param resource The appointment resource to update
+     * 
+     * @param resource
+     *            The appointment resource to update
      */
     public static void update( AppointmentResource resource )
     {
@@ -104,10 +109,11 @@ public final class AppointmentResourceHome
 
     /**
      * Delete an appointment resource
-     * @param nIdAppointment The id of the appointment of the appointment
-     *            resource
-     * @param nIdAppointmentFormResourceType The id of the appointment form
-     *            resource type of the appointment resource
+     * 
+     * @param nIdAppointment
+     *            The id of the appointment of the appointment resource
+     * @param nIdAppointmentFormResourceType
+     *            The id of the appointment form resource type of the appointment resource
      */
     public static void delete( int nIdAppointment, int nIdAppointmentFormResourceType )
     {
@@ -116,7 +122,9 @@ public final class AppointmentResourceHome
 
     /**
      * Delete appointment resource associated with a given appointment
-     * @param nIdAppointment The id of the appointment
+     * 
+     * @param nIdAppointment
+     *            The id of the appointment
      */
     public static void deleteByIdAppointment( int nIdAppointment )
     {
@@ -124,10 +132,10 @@ public final class AppointmentResourceHome
     }
 
     /**
-     * Delete appointment resource associated with a given appointment form
-     * resource type
-     * @param nIdAppointmentFormResourceType The id of the appointment form
-     *            resource type
+     * Delete appointment resource associated with a given appointment form resource type
+     * 
+     * @param nIdAppointmentFormResourceType
+     *            The id of the appointment form resource type
      */
     public static void deleteByIdAppointmentFormResourceType( int nIdAppointmentFormResourceType )
     {
@@ -135,31 +143,37 @@ public final class AppointmentResourceHome
     }
 
     /**
-     * Check if a resource is available for a given period, or if it has already
-     * been associated with an appointment
-     * @param strIdResource The id of the resource
-     * @param strResourceTypeName The type of the resource
-     * @param nStartingTime The beginning time
-     * @param nEndingTime the ending time
+     * Check if a resource is available for a given period, or if it has already been associated with an appointment
+     * 
+     * @param strIdResource
+     *            The id of the resource
+     * @param strResourceTypeName
+     *            The type of the resource
+     * @param nStartingTime
+     *            The beginning time
+     * @param nEndingTime
+     *            the ending time
      * @return True if the resource is available, false otherwise
      */
-    public static boolean isResourceAvailable(String strIdResource, String strResourceTypeName,  Timestamp nStartingTime,
-    		Timestamp nEndingTime)
+    public static boolean isResourceAvailable( String strIdResource, String strResourceTypeName, Timestamp nStartingTime, Timestamp nEndingTime )
     {
-        return _dao.isResourceAvailable( strIdResource, strResourceTypeName,  nStartingTime, nEndingTime, _plugin );
+        return _dao.isResourceAvailable( strIdResource, strResourceTypeName, nStartingTime, nEndingTime, _plugin );
     }
 
     /**
-     * Get the list of id of appointments a resource is associated to between
-     * two given dates
-     * @param strIdResource The id of the resource
-     * @param strResourceType The resource type
-     * @param dateMin The minimum date
-     * @param dateMax the maximum date
+     * Get the list of id of appointments a resource is associated to between two given dates
+     * 
+     * @param strIdResource
+     *            The id of the resource
+     * @param strResourceType
+     *            The resource type
+     * @param dateMin
+     *            The minimum date
+     * @param dateMax
+     *            the maximum date
      * @return The list of ids of appointments
      */
-    public static List<Integer> findIdAppointmentsByResourceAndDate( String strIdResource, String strResourceType,
-        Date dateMin, Date dateMax )
+    public static List<Integer> findIdAppointmentsByResourceAndDate( String strIdResource, String strResourceType, Date dateMin, Date dateMax )
     {
         return _dao.findIdAppointmentsByResourceAndDate( strIdResource, strResourceType, dateMin, dateMax, _plugin );
     }

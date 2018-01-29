@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.appointment.modules.resource.business.workflow;
 
-
 /**
  * Set appointment resource history
  */
@@ -47,16 +46,19 @@ public class SetAppointmentResourceHistory
 
     /**
      * Get the primary key of the update
+     * 
      * @return The primary key of the update
      */
-    public int getId(  )
+    public int getId( )
     {
         return _nId;
     }
 
     /**
      * Set the primary key
-     * @param nId The primary key
+     * 
+     * @param nId
+     *            The primary key
      */
     public void setId( int nId )
     {
@@ -65,16 +67,19 @@ public class SetAppointmentResourceHistory
 
     /**
      * Get the id of the history
+     * 
      * @return The id of the history
      */
-    public int getIdHistory(  )
+    public int getIdHistory( )
     {
         return _nIdHistory;
     }
 
     /**
      * Set the id of the history
-     * @param nIdHistory The id of the history
+     * 
+     * @param nIdHistory
+     *            The id of the history
      */
     public void setIdHistory( int nIdHistory )
     {
@@ -83,17 +88,19 @@ public class SetAppointmentResourceHistory
 
     /**
      * Get the id of the appointment associated with this history
+     * 
      * @return The id of the appointment associated with this history
      */
-    public int getIdAppointment(  )
+    public int getIdAppointment( )
     {
         return _nIdAppointment;
     }
 
     /**
      * Set the id of the appointment associated with this history
-     * @param nIdAppointment The id of the appointment associated with this
-     *            history
+     * 
+     * @param nIdAppointment
+     *            The id of the appointment associated with this history
      */
     public void setIdAppointment( int nIdAppointment )
     {
@@ -102,16 +109,19 @@ public class SetAppointmentResourceHistory
 
     /**
      * Get the id of the resource set
+     * 
      * @return The the id of the resource set
      */
-    public String getIdResource(  )
+    public String getIdResource( )
     {
         return _strIdResource;
     }
 
     /**
      * Set the id of the resource set
-     * @param strIdResource The id of the resource set
+     * 
+     * @param strIdResource
+     *            The id of the resource set
      */
     public void setIdResource( String strIdResource )
     {
@@ -120,16 +130,19 @@ public class SetAppointmentResourceHistory
 
     /**
      * Get the id of the form resource type
+     * 
      * @return The id of the form resource type
      */
-    public int getIdFormResourceType(  )
+    public int getIdFormResourceType( )
     {
         return _nIdFormResourceType;
     }
 
     /**
      * Set the id of the form resource type
-     * @param nIdFormResourceType The id of the form resource type
+     * 
+     * @param nIdFormResourceType
+     *            The id of the form resource type
      */
     public void setIdFormResourceType( int nIdFormResourceType )
     {

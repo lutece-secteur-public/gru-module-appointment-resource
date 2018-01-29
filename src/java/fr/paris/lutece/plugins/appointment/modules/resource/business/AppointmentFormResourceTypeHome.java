@@ -40,7 +40,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
  * Home for appointment form resources
  */
@@ -52,14 +51,16 @@ public final class AppointmentFormResourceTypeHome
     /**
      * Default constructor
      */
-    private AppointmentFormResourceTypeHome(  )
+    private AppointmentFormResourceTypeHome( )
     {
         // Private constructor
     }
 
     /**
      * Create an association between an appointment form and a resource type
-     * @param formResourceType The appointment form resource type
+     * 
+     * @param formResourceType
+     *            The appointment form resource type
      */
     public static void insert( AppointmentFormResourceType formResourceType )
     {
@@ -68,7 +69,9 @@ public final class AppointmentFormResourceTypeHome
 
     /**
      * Update an association between an appointment form and a resource type
-     * @param formResourceType The appointment form resource type
+     * 
+     * @param formResourceType
+     *            The appointment form resource type
      */
     public static void update( AppointmentFormResourceType formResourceType )
     {
@@ -77,7 +80,9 @@ public final class AppointmentFormResourceTypeHome
 
     /**
      * Remove an association between an appointment form and a resource type
-     * @param nId The id of the appointment form resource type to remove
+     * 
+     * @param nId
+     *            The id of the appointment form resource type to remove
      */
     public static void remove( int nId )
     {
@@ -86,7 +91,9 @@ public final class AppointmentFormResourceTypeHome
 
     /**
      * Remove every associations between an appointment form and resource types
-     * @param nIdAppointmentForm The id of the appointment form
+     * 
+     * @param nIdAppointmentForm
+     *            The id of the appointment form
      */
     public static void removeFromIdAppointmentForm( int nIdAppointmentForm )
     {
@@ -95,9 +102,10 @@ public final class AppointmentFormResourceTypeHome
 
     /**
      * Find an appointment form resource type from its primary key
-     * @param nId the id of the appointment form resource type to get
-     * @return The appointment form resource type, or null if no appointment
-     *         form with the given id was found
+     * 
+     * @param nId
+     *            the id of the appointment form resource type to get
+     * @return The appointment form resource type, or null if no appointment form with the given id was found
      */
     public static AppointmentFormResourceType findByPrimaryKey( int nId )
     {
@@ -106,10 +114,10 @@ public final class AppointmentFormResourceTypeHome
 
     /**
      * Get the list of resource types associated with a given form
-     * @param nIdForm The id of the form
-     * @return The list of appointment form resource types associated with the
-     *         given form, or an empty list if no resource is associated with
-     *         this form
+     * 
+     * @param nIdForm
+     *            The id of the form
+     * @return The list of appointment form resource types associated with the given form, or an empty list if no resource is associated with this form
      */
     public static List<AppointmentFormResourceType> findResourceTypesListFromIdForm( int nIdForm )
     {
@@ -117,9 +125,10 @@ public final class AppointmentFormResourceTypeHome
     }
 
     /**
-     * Reset the form resource type that was declared as containing the admin
-     * user of appointments
-     * @param nIdAppointmentForm The id of the appointment form
+     * Reset the form resource type that was declared as containing the admin user of appointments
+     * 
+     * @param nIdAppointmentForm
+     *            The id of the appointment form
      */
     public static void resetAppAdminUser( int nIdAppointmentForm )
     {
@@ -127,9 +136,10 @@ public final class AppointmentFormResourceTypeHome
     }
 
     /**
-     * Reset the form resource type that was declared as containing the
-     * localization of appointments
-     * @param nIdAppointmentForm The id of the appointment form
+     * Reset the form resource type that was declared as containing the localization of appointments
+     * 
+     * @param nIdAppointmentForm
+     *            The id of the appointment form
      */
     public static void resetLocalization( int nIdAppointmentForm )
     {

@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.appointment.modules.resource.service.listeners;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceTypeHome;
 import fr.paris.lutece.plugins.appointment.service.listeners.IAppointmentFormRemovalListener;
 
-
 /**
  * Appointment form resource type removal listener
  */

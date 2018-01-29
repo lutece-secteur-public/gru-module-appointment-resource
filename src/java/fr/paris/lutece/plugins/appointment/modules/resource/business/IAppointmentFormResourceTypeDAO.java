@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  * Interface for appointment form resource type DAO
  */
@@ -50,63 +49,83 @@ public interface IAppointmentFormResourceTypeDAO
 
     /**
      * Create an association between an appointment form and a resource type
-     * @param formResourceType The appointment form resource type
-     * @param plugin the plugin
+     * 
+     * @param formResourceType
+     *            The appointment form resource type
+     * @param plugin
+     *            the plugin
      */
     void insert( AppointmentFormResourceType formResourceType, Plugin plugin );
 
     /**
      * Update an existing appointment form resource type
-     * @param formResourceType the form resource type
-     * @param plugin the plugin
+     * 
+     * @param formResourceType
+     *            the form resource type
+     * @param plugin
+     *            the plugin
      */
     void update( AppointmentFormResourceType formResourceType, Plugin plugin );
 
     /**
      * Remove an association between an appointment form and a resource type
-     * @param nId The id of the appointment form resource type to remove
-     * @param plugin the plugin
+     * 
+     * @param nId
+     *            The id of the appointment form resource type to remove
+     * @param plugin
+     *            the plugin
      */
     void remove( int nId, Plugin plugin );
 
     /**
      * Remove every associations between an appointment form and resource types
-     * @param nIdAppointmentForm The id of the appointment form
-     * @param plugin The plugin
+     * 
+     * @param nIdAppointmentForm
+     *            The id of the appointment form
+     * @param plugin
+     *            The plugin
      */
     void removeFromIdAppointmentForm( int nIdAppointmentForm, Plugin plugin );
 
     /**
      * Find an appointment form resource type from its primary key
-     * @param nId the id of the appointment form resource type to get
-     * @param plugin The plugin
-     * @return The appointment form resource type, or null if no appointment
-     *         form with the given id was found
+     * 
+     * @param nId
+     *            the id of the appointment form resource type to get
+     * @param plugin
+     *            The plugin
+     * @return The appointment form resource type, or null if no appointment form with the given id was found
      */
     AppointmentFormResourceType findByPrimaryKey( int nId, Plugin plugin );
 
     /**
      * Get the list of resource types associated with a given form
-     * @param nIdForm The id of the form
-     * @param plugin The plugin
-     * @return The list of resources associated with the given form, or an empty
-     *         list if no resource is associated with this form
+     * 
+     * @param nIdForm
+     *            The id of the form
+     * @param plugin
+     *            The plugin
+     * @return The list of resources associated with the given form, or an empty list if no resource is associated with this form
      */
     List<AppointmentFormResourceType> findResourceTypesListFromIdForm( int nIdForm, Plugin plugin );
 
     /**
-     * Reset the form resource type that was declared as containing the admin
-     * user of appointments
-     * @param nIdAppointmentForm The id of the appointment form
-     * @param plugin The plugin
+     * Reset the form resource type that was declared as containing the admin user of appointments
+     * 
+     * @param nIdAppointmentForm
+     *            The id of the appointment form
+     * @param plugin
+     *            The plugin
      */
     void resetAppAdminUser( int nIdAppointmentForm, Plugin plugin );
 
     /**
-     * Reset the form resource type that was declared as containing the
-     * localization of appointments
-     * @param nIdAppointmentForm The id of the appointment form
-     * @param plugin The plugin
+     * Reset the form resource type that was declared as containing the localization of appointments
+     * 
+     * @param nIdAppointmentForm
+     *            The id of the appointment form
+     * @param plugin
+     *            The plugin
      */
     void resetLocalization( int nIdAppointmentForm, Plugin plugin );
 }

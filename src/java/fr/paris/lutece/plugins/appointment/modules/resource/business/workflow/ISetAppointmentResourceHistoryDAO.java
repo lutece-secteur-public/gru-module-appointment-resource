@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  * Interface for set appointment resource history
  */
@@ -50,38 +49,53 @@ public interface ISetAppointmentResourceHistoryDAO
 
     /**
      * Create a new history
-     * @param history The history to insert into the database
-     * @param plugin The plugin
+     * 
+     * @param history
+     *            The history to insert into the database
+     * @param plugin
+     *            The plugin
      */
     void create( SetAppointmentResourceHistory history, Plugin plugin );
 
     /**
      * Get an history from its primary key
-     * @param nId The primary key
-     * @param plugin The plugin
+     * 
+     * @param nId
+     *            The primary key
+     * @param plugin
+     *            The plugin
      * @return The history
      */
     SetAppointmentResourceHistory findByPrimaryKey( int nId, Plugin plugin );
 
     /**
      * Get the list of history associated with a given history id
-     * @param nIdHistory The history id
-     * @param plugin The plugin
+     * 
+     * @param nIdHistory
+     *            The history id
+     * @param plugin
+     *            The plugin
      * @return the list of history, or an empty list if none was found
      */
     List<SetAppointmentResourceHistory> findByIdHistory( int nIdHistory, Plugin plugin );
 
     /**
      * Remove an history from its primary key
-     * @param nId The primary key
-     * @param plugin the plugin
+     * 
+     * @param nId
+     *            The primary key
+     * @param plugin
+     *            the plugin
      */
     void delete( int nId, Plugin plugin );
 
     /**
      * Remove every history associated with a given appointment
-     * @param nIdAppointment The id of the appointment
-     * @param plugin the plugin
+     * 
+     * @param nIdAppointment
+     *            The id of the appointment
+     * @param plugin
+     *            the plugin
      */
     void deleteByIdAppointment( int nIdAppointment, Plugin plugin );
 }

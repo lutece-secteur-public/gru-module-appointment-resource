@@ -39,7 +39,6 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 
 import java.util.Locale;
 
-
 /**
  * Action to display the calendar of resources
  */
@@ -50,6 +49,7 @@ public class ResourceCalendarAction implements IResourceAction
 
     /**
      * {@inheritDoc}
+     * 
      * @return Always return <i>true</i>
      */
     @Override

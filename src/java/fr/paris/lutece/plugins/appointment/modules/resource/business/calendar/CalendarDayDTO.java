@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.appointment.modules.resource.business.calendar;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * DTO to display days in a calendar
  */
@@ -47,16 +46,19 @@ public class CalendarDayDTO implements Comparable<CalendarDayDTO>
 
     /**
      * Get the list of appointment resources DTO
+     * 
      * @return The list of appointment resources DTO
      */
-    public List<CalendarAppointmentResourceDTO> getListAppointmentResourceDTO(  )
+    public List<CalendarAppointmentResourceDTO> getListAppointmentResourceDTO( )
     {
         return _listAppointmentResourceDTO;
     }
 
     /**
      * Set the list of appointment resources DTO
-     * @param listAppointmentResourceDTO The list of appointment resources DTO
+     * 
+     * @param listAppointmentResourceDTO
+     *            The list of appointment resources DTO
      */
     public void setListAppointmentResourceDTO( List<CalendarAppointmentResourceDTO> listAppointmentResourceDTO )
     {
@@ -65,16 +67,19 @@ public class CalendarDayDTO implements Comparable<CalendarDayDTO>
 
     /**
      * Get the date of the day
+     * 
      * @return The date of the day
      */
-    public Date getDate(  )
+    public Date getDate( )
     {
         return _date;
     }
 
     /**
      * Set the date of the day
-     * @param date The date of the day
+     * 
+     * @param date
+     *            The date of the day
      */
     public void setDate( Date date )
     {
@@ -87,9 +92,9 @@ public class CalendarDayDTO implements Comparable<CalendarDayDTO>
     @Override
     public int compareTo( CalendarDayDTO o )
     {
-        if ( getDate(  ) == null )
+        if ( getDate( ) == null )
         {
-            if ( o.getDate(  ) == null )
+            if ( o.getDate( ) == null )
             {
                 return 0;
             }
@@ -97,12 +102,12 @@ public class CalendarDayDTO implements Comparable<CalendarDayDTO>
             return -1;
         }
 
-        if ( o.getDate(  ) == null )
+        if ( o.getDate( ) == null )
         {
             return 1;
         }
 
-        return getDate(  ).compareTo( o.getDate(  ) );
+        return getDate( ).compareTo( o.getDate( ) );
     }
 
     /**
@@ -123,8 +128,8 @@ public class CalendarDayDTO implements Comparable<CalendarDayDTO>
      * {@inheritDoc}
      */
     @Override
-    public int hashCode(  )
+    public int hashCode( )
     {
-        return super.hashCode(  );
+        return super.hashCode( );
     }
 }
