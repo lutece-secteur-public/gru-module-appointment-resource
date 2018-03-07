@@ -1,2 +1,2 @@
 # gru-module-appointment-resource
-Module de Gestion des ressources des RDV
+Module for the managment of the resources attached to the appointments
