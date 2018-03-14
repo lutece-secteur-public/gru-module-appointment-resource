@@ -124,6 +124,9 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
     private static final String TEMPLATE_MODIFY_FORM_RESOURCES = "admin/plugins/appointment/modules/resource/modify_form_resources.html";
     private AppointmentFormResourceType _formResourceType;
 
+    // Session variable to store working values
+    private static final String SESSION_ATTRIBUTE_APPOINTMENT_FORM = "appointment.session.appointmentForm";
+    
     /**
      * Manage the resources of an appointment form
      * 
@@ -152,7 +155,11 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
 
-        AppointmentForm appointmentForm = FormService.buildAppointmentFormLight( nIdForm );
+        AppointmentForm appointmentForm = (AppointmentForm) request.getSession( ).getAttribute( SESSION_ATTRIBUTE_APPOINTMENT_FORM );
+        if ( ( appointmentForm == null ) || ( nIdForm != appointmentForm.getIdForm( ) ) )
+        {
+            appointmentForm = FormService.buildAppointmentForm( nIdForm, 0, 0 );
+        }
 
         if ( appointmentForm == null )
         {
