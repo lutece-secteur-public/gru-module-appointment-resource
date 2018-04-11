@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.appointment.modules.resource.web.workflow;
 
-import fr.paris.lutece.plugins.appointment.business.AppointmentForm;
 import fr.paris.lutece.plugins.appointment.business.appointment.Appointment;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceType;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceTypeHome;
@@ -44,6 +43,7 @@ import fr.paris.lutece.plugins.appointment.modules.resource.service.AppointmentR
 import fr.paris.lutece.plugins.appointment.modules.resource.service.workflow.TaskSetAppointmentResource;
 import fr.paris.lutece.plugins.appointment.service.AppointmentService;
 import fr.paris.lutece.plugins.appointment.service.FormService;
+import fr.paris.lutece.plugins.appointment.web.dto.AppointmentFormDTO;
 import fr.paris.lutece.plugins.resource.business.IResource;
 import fr.paris.lutece.plugins.resource.service.ResourceService;
 import fr.paris.lutece.plugins.workflow.web.task.AbstractTaskComponent;
@@ -113,10 +113,10 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
 
         TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task.getId( ) );
 
-        List<AppointmentForm> listAppointmentform = FormService.buildAllAppointmentFormLight( );
+        List<AppointmentFormDTO> listAppointmentform = FormService.buildAllAppointmentFormLight( );
         ReferenceList refListAppointmentForm = new ReferenceList( );
 
-        for ( AppointmentForm form : listAppointmentform )
+        for ( AppointmentFormDTO form : listAppointmentform )
         {
             refListAppointmentForm.addItem( form.getIdForm( ), form.getTitle( ) );
         }

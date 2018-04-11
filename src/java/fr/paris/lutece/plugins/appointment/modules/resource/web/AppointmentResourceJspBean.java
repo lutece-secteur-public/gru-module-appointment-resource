@@ -49,7 +49,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 
-import fr.paris.lutece.plugins.appointment.business.AppointmentForm;
 import fr.paris.lutece.plugins.appointment.business.slot.Slot;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResourceHome;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.calendar.CalendarAppointmentResourceDTO;
@@ -59,6 +58,7 @@ import fr.paris.lutece.plugins.appointment.service.FormService;
 import fr.paris.lutece.plugins.appointment.service.SlotService;
 import fr.paris.lutece.plugins.appointment.web.AppointmentFormJspBean;
 import fr.paris.lutece.plugins.appointment.web.dto.AppointmentDTO;
+import fr.paris.lutece.plugins.appointment.web.dto.AppointmentFormDTO;
 import fr.paris.lutece.plugins.resource.business.IResource;
 import fr.paris.lutece.plugins.resource.service.ResourceService;
 import fr.paris.lutece.plugins.resource.service.provider.IResourceProvider;
@@ -352,10 +352,10 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
 
         Collections.sort( listDays );
 
-        List<AppointmentForm> listForm = FormService.buildAllActiveAppointmentForm( );
+        List<AppointmentFormDTO> listForm = FormService.buildAllActiveAppointmentForm( );
         ;
 
-        for ( AppointmentForm form : listForm )
+        for ( AppointmentFormDTO form : listForm )
         {
 
             int nOpeningTime = ( LocalTime.parse( form.getTimeStart( ) ).getHour( ) * 60 ) + LocalTime.parse( form.getTimeStart( ) ).getMinute( );
