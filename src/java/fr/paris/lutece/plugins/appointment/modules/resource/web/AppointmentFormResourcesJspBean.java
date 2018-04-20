@@ -341,7 +341,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
 
         int nIdFormResourceType = Integer.parseInt( strIdFormResourceType );
 
-        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( nIdFormResourceType );
+        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( nIdFormResourceType );               
 
         if ( formResourceType == null )
         {
@@ -353,9 +353,12 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         {
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
-
+        // Need to save the configuration for these two boolean because the populate method lost them
+        boolean bIsAppointmentAdminUser = formResourceType.getIsAppointmentAdminUser();
+        boolean bIsLocation = formResourceType.getIsLocation();
         populate( formResourceType, request );
-
+        formResourceType.setIsAppointmentAdminUser(bIsAppointmentAdminUser);
+        formResourceType.setIsLocation(bIsLocation);
         if ( !validateBean( formResourceType, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
             _formResourceType = formResourceType;
