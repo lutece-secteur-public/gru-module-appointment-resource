@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><plug-in>
     <name>appointment-resource</name>
     <class>fr.paris.lutece.plugins.appointment.modules.resource.service.AppointmentResourcePlugin</class>
-    <version>2.0.4-SNAPSHOT</version>
+    <version>2.0.4</version>
     <description>module.appointment.resource.plugin.description</description>
     <documentation/>
     <installation/>
