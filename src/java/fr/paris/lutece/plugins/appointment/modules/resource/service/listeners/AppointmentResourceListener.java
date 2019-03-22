@@ -67,4 +67,16 @@ public class AppointmentResourceListener implements IAppointmentListener
 
         return I18nService.getLocalizedString( MESSAGE_APPOINTMENT_RESOURCE_REMOVED, locale );
     }
+
+	@Override
+	public void notifyAppointmentCreated(int nIdAppointment) {
+		 // Do nothing
+		
+	}
+
+	@Override
+	public void notifyAppointmentUpdated(int nIdAppointment) {
+		
+		 // Do nothing
+	}
 }
