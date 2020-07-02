@@ -1,18 +1,16 @@
 <fieldset>
 	<legend>#i18n{module.appointment.resource.task_set_appointment_resource_config.title}</legend>
 	
-	<div class="form-group">
-		<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{module.appointment.resource.task_set_appointment_resource_config.labelAppointmentForm}</label>
-		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-			<@combo items=refListAppointmentForm default_value=idAppointmentForm!'' name="idAppointmentForm" />
-			<button class="btn btn-sm btn-primary" name="refreshAppointmentForm" value="true">
-				<i class="glyphicon glyphicon-refresh">&nbsp;</i>&nbsp;#i18n{portal.util.labelRefresh}
-			</button>
-		</div>
-	</div>
-	<@fieldInputCombo i18nLabelKey='module.appointment.resource.task_set_appointment_resource_config.labelFormResourceType'
-		inputName='idFormResourceType' value=(idFormResourceType)!''
-		items=refListFormResourceTypes />
-	<@fieldInputCheckBox i18nLabelKey='module.appointment.resource.task_set_appointment_resource_config.labelMandatory' inputName='isMandatory' value='true' checked=isMandatory />
+	<@formGroup labelKey='#i18n{module.appointment.resource.task_set_appointment_resource_config.labelAppointmentForm}'>
+		<@select name='idAppointmentForm' items=refListAppointmentForm default_value=idAppointmentForm!''  />
+		<@button type='submit' name='refreshAppointmentForm' value='true' buttonIcon='sync' buttonIcon='#i18n{portal.util.labelRefresh}' />
+	</@formGroup>
 	
+	<@formGroup labelFor='idFormResourceType' labelKey='#i18n{module.appointment.resource.task_set_appointment_resource_config.labelFormResourceType}'>
+		<@select name='idFormResourceType' default_value=(idFormResourceType)!'' items=refListFormResourceTypes />
+	</@formGroup>
+	
+	<@formGroup labelKey='#i18n{module.appointment.resource.task_set_appointment_resource_config.labelMandatory}'>
+		<@checkBox labelFor='isMandatory' labelKey='#i18n{module.appointment.resource.task_set_appointment_resource_config.labelMandatory}' name='isMandatory' id='isMandatory' value='true' checked=isMandatory />
+	</@formGroup>
 </fieldset>

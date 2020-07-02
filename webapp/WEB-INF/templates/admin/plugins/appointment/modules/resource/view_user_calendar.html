@@ -1,5 +1,5 @@
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<@row>
+	<@columns>
 		<legend>
 			#i18n{module.appointment.resource.user_calendar.pageTitle}
 			<div class="pull-right">
@@ -9,26 +9,20 @@
 					</a>
 				</#if>
 				<#if fromUrl?? && fromUrl != ''>
-				<a class="btn btn-sm btn-primary" href="${fromUrl}">
-					<i class="fa fa-times" aria-hidden="true"></i> &nbsp;#i18n{portal.util.labelBack}
-				</a>
+				<@aButton href='${fromUrl}' buttonIcon='times' title='#i18n{portal.util.labelBack}' color='btn-default' />
 				</#if>
 			</div>
 		</legend>
-		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				<div class="pull-left">
-					<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewUserCalendar&offsetWeek=${offsetWeek - 1}<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("&","%26")}</#if>" title="#i18n{appointment.appointmentApp.previousWeek}">
-						<i class="glyphicon glyphicon-arrow-left">&nbsp;</i>&nbsp;#i18n{appointment.appointmentApp.previousWeek}
-					</a>
-				</div>
-				<div class="pull-right">
-					<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewUserCalendar&offsetWeek=${offsetWeek + 1}<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("&","%26")}</#if>" title="#i18n{appointment.appointmentApp.nextWeek}">
-						#i18n{appointment.appointmentApp.nextWeek}&nbsp;<i class="glyphicon glyphicon-arrow-right">&nbsp;</i>
-					</a>
-				</div>
-			</div>
+		<div class="pull-left">
+			<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewUserCalendar&offsetWeek=${offsetWeek - 1}<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("&","%26")}</#if>" title="#i18n{appointment.appointmentApp.previousWeek}">
+				<i class="glyphicon glyphicon-arrow-left">&nbsp;</i>&nbsp;#i18n{appointment.appointmentApp.previousWeek}
+			</a>
+		</div>
+		<div class="pull-right">
+			<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewUserCalendar&offsetWeek=${offsetWeek + 1}<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("&","%26")}</#if>" title="#i18n{appointment.appointmentApp.nextWeek}">
+				#i18n{appointment.appointmentApp.nextWeek}&nbsp;<i class="glyphicon glyphicon-arrow-right">&nbsp;</i>
+			</a>
 		</div>
 		${calendar}
-	</div>
-</div>
+	</@columns>
+</@row>

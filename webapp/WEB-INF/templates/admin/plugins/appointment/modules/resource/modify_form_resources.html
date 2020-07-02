@@ -1,47 +1,41 @@
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<@row>
+	<@columns>
 		<@messages errors=errors />
 		
-		<form class="form-horizontal" action="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp">
+		<@tform action='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp'>
 			<fieldset>
 				<legend>#i18n{module.appointment.resource.modifyAppointmentFormResources.pageTitle}</legend>
 
-				<@fieldInputText i18nLabelKey='module.appointment.resource.createAppointmentFormResources.labelDescription' inputName='description' mandatory=true value=(formResourceType.description)!'' maxlength=255 />
+				<@formGroup labelFor='description' labelKey='#i18n{module.appointment.resource.createAppointmentFormResources.labelDescription}' mandatory=true>
+					<@input type='text' name='description' id='description' value=(formResourceType.description)!'' maxlength=255 />
+				</@formGroup>
 				
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{module.appointment.resource.createAppointmentFormResources.labelResourceType}</label>
-					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-						<p>
-							<#assign resourceTypeDescription = "" >
-							<#if listResourceTypes?? && listResourceTypes?has_content>
-								<#list listResourceTypes as resourceType>
-									<#if resourceType.resourceTypeName == formResourceType.resourceTypeName>
-										<#assign resourceTypeDescription = resourceType.resourceTypeDescription>
-										<#break>
-									</#if>
-								</#list>
-							</#if>
-							<#if resourceTypeDescription == "">
-								${formResourceType.resourceTypeName}
-							<#else>
-								${resourceTypeDescription}
-							</#if>
-						</p>
-					</div>
-				</div>
+				<@formGroup labelKey='#i18n{module.appointment.resource.createAppointmentFormResources.labelResourceType}'>
+					<p>
+						<#assign resourceTypeDescription = "" >
+						<#if listResourceTypes?? && listResourceTypes?has_content>
+							<#list listResourceTypes as resourceType>
+								<#if resourceType.resourceTypeName == formResourceType.resourceTypeName>
+									<#assign resourceTypeDescription = resourceType.resourceTypeDescription>
+									<#break>
+								</#if>
+							</#list>
+						</#if>
+						<#if resourceTypeDescription == "">
+							${formResourceType.resourceTypeName}
+						<#else>
+							${resourceTypeDescription}
+						</#if>
+					</p>
+				</@formGroup>
 				
-				<div class="form-group">
-					<input type="hidden" name="id_form" value="${formResourceType.idAppointmentForm}" />
-					<input type="hidden" name="idFormResourceType" value="${formResourceType.id}" />
-					<button class="btn btn-sm btn-primary" name="action" value="doModifyFormResourceType">
-						<i class="glyphicon glyphicon-ok">&nbsp;</i>&nbsp;#i18n{portal.util.labelValidate}
-					</button>
-					<a class="btn btn-sm" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=manageFormResources&id_form=${formResourceType.idAppointmentForm}">
-						<i class="fa fa-times" aria-hidden="true"></i> #i18n{portal.util.labelBack}
-					</a>
-				</div>
+				<@formGroup>
+					<input type='hidden' name='id_form' value='${formResourceType.idAppointmentForm}' />
+					<input type='hidden' name='idFormResourceType' value='${formResourceType.id}' />
+					<@button type='submit' name='action' id='action' value='doModifyFormResourceType' buttonIcon='check' title='#i18n{portal.util.labelValidate}' />
+					<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=manageFormResources&id_form=${formResourceType.idAppointmentForm}' buttonIcon='times' title='#i18n{portal.util.labelBack}' color='btn-default' />
+				</@formGroup>
 			</fieldset>
-		</form>
-		
-	</div>
-</div>
+		</@tform>
+	</@columns>
+</@row>

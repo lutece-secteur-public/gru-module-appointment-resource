@@ -1,10 +1,10 @@
 <link href="css/plugins/appointment/appointment.css" rel="stylesheet" >
-<div class="row hidden-desktop">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<@row class='hidden-desktop'>
+	<@columns>
 		<#list listDays as day>
-			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					<table class="table appointment-inner-table">
+			<@row>
+				<@columns>
+					<@table>
 						<thead>
 							<tr>
 								<th>
@@ -27,7 +27,7 @@
 									</#if>
 									<tr>
 										<@updateCurrentTimeHourAndMinute durationApp=appointment.duration />
-										<td class="appointment-slot-avaiable title="">
+										<td class="appointment-slot-avaiable" title="">
 											<div>
 												<a href="jsp/admin/plugins/appointment/ManageAppointments.jsp?view=viewAppointment&id_appointment=${appointment.idApppointment}" title="#i18n{module.appointment.resource.resource_calendar.viewAppointment}&id_form=${appointment.idForm!}">
 													<#if appointment.startingHour &lt; 10>0</#if>${appointment.startingHour}h<#if appointment.startingMinute &lt; 10>0</#if>${appointment.startingMinute} - <#if appointment.endingHour &lt; 10>0</#if>${appointment.endingHour}h<#if appointment.endingMinute &lt; 10>0</#if>${appointment.endingMinute}
@@ -44,18 +44,18 @@
 								</tr>
 							</#if>
 						</tbody>
-					</table>
-				</div>
-			</div>
+					</@table>
+				</@columns>
+			</@row>
 		</#list>
-	</div>
-</div>
-<div class="row visible-desktop">
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<table class="table appointment-table-container">
+	</@columns>
+</@row>
+<@row class='visible-desktop'>
+	<@columns>
+		<@table>
 			<tr>
 				<td>
-					<table class="table appointment-inner-table">
+					<@table>
 						<tr>
 							<th>
 								<br />
@@ -74,11 +74,11 @@
 								</td>
 							</tr>
 						</#list>
-					</table>
+					</@table>
 				</td>
 				<#list listDays as day>
 					<td>
-						<table class="table appointment-inner-table">
+						<@table class="table appointment-inner-table">
 							<thead>
 								<tr>
 									<th>
@@ -121,13 +121,13 @@
 									</#list>
 								</#if>
 							</tbody>
-						</table>
+						</@table>
 					</td>
 				</#list>
 			</tr>
-		</table>
-	</div>
-</div>
+		</@table>
+	</@columns>
+</@row>
 <#macro addEmptyLine durationApp>
 	<#assign saveCurrentHour = currentHour />
 	<#assign saveCurrentMinute = currentMinute />
