@@ -298,20 +298,19 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
             AppointmentDTO appointment = AppointmentService.buildAppointmentDTOFromIdAppointment( nIdAppointment );
             listAppointment.add( appointment );
 
-            Slot slot = SlotService.findSlotById( appointment.getIdSlot( ) );
-            CalendarAppointmentResourceDTO calendarAppointmentResource = new CalendarAppointmentResourceDTO( appointment.getIdAppointment( ), slot
-                    .getStartingDateTime( ).getHour( ), slot.getStartingDateTime( ).getMinute( ), slot.getEndingDateTime( ).getHour( ), slot
+            CalendarAppointmentResourceDTO calendarAppointmentResource = new CalendarAppointmentResourceDTO( appointment.getIdAppointment( ), appointment
+                    .getStartingDateTime( ).getHour( ), appointment.getStartingDateTime( ).getMinute( ), appointment.getEndingDateTime( ).getHour( ), appointment
                     .getEndingDateTime( ).getMinute( ), getAppointmentRecap( appointment, locale ), appointment.getIdForm( ) );
-            long startThen = slot.getStartingDateTime( ).getHour( ) * 60 + slot.getStartingDateTime( ).getMinute( );
-            long endThen = slot.getEndingDateTime( ).getHour( ) * 60 + slot.getEndingDateTime( ).getMinute( );
+            long startThen = appointment.getStartingDateTime( ).getHour( ) * 60 + appointment.getStartingDateTime( ).getMinute( );
+            long endThen = appointment.getEndingDateTime( ).getHour( ) * 60 + appointment.getEndingDateTime( ).getMinute( );
 
             int nStartingTimeSlot = (int) startThen;
 
             if ( nStartingTimeSlot < nMinGlobalStartingTime )
             {
                 nMinGlobalStartingTime = nStartingTimeSlot;
-                nStartingHour = slot.getStartingDateTime( ).getHour( );
-                nStartingMinute = slot.getStartingDateTime( ).getMinute( );
+                nStartingHour = appointment.getStartingDateTime( ).getHour( );
+                nStartingMinute = appointment.getStartingDateTime( ).getMinute( );
             }
 
             int nEndingTimeSlot = (int) endThen;
@@ -319,8 +318,8 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
             if ( nEndingTimeSlot > nMaxGlobalEndingTime )
             {
                 nMaxGlobalEndingTime = nEndingTimeSlot;
-                nEndingHour = slot.getEndingDateTime( ).getHour( );
-                nEndingMinute = slot.getEndingDateTime( ).getMinute( );
+                nEndingHour = appointment.getEndingDateTime( ).getHour( );
+                nEndingMinute = appointment.getEndingDateTime( ).getMinute( );
             }
 
             if ( ( calendarAppointmentResource.getDuration( ) < nMinDuration ) || ( nMinDuration == -1 ) )

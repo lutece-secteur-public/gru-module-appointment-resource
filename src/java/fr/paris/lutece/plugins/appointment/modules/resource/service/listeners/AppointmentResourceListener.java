@@ -38,6 +38,7 @@ import fr.paris.lutece.plugins.appointment.modules.resource.business.Appointment
 import fr.paris.lutece.plugins.appointment.service.listeners.IAppointmentListener;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -56,17 +57,6 @@ public class AppointmentResourceListener implements IAppointmentListener
         AppointmentResourceHome.deleteByIdAppointment( nIdAppointment );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String appointmentDateChanged( int nIdAppointment, int nIdSlot, Locale locale )
-    {
-
-        AppointmentResourceHome.deleteByIdAppointment( nIdAppointment );
-
-        return I18nService.getLocalizedString( MESSAGE_APPOINTMENT_RESOURCE_REMOVED, locale );
-    }
 
 	@Override
 	public void notifyAppointmentCreated(int nIdAppointment) {
@@ -78,5 +68,12 @@ public class AppointmentResourceListener implements IAppointmentListener
 	public void notifyAppointmentUpdated(int nIdAppointment) {
 		
 		 // Do nothing
+	}
+
+	@Override
+	public String appointmentDateChanged(int nIdAppointment, List<Integer> listIdSlot, Locale locale) {
+		 AppointmentResourceHome.deleteByIdAppointment( nIdAppointment );
+
+	        return I18nService.getLocalizedString( MESSAGE_APPOINTMENT_RESOURCE_REMOVED, locale );
 	}
 }

@@ -43,6 +43,7 @@ import fr.paris.lutece.plugins.appointment.modules.resource.service.AppointmentR
 import fr.paris.lutece.plugins.appointment.modules.resource.service.workflow.TaskSetAppointmentResource;
 import fr.paris.lutece.plugins.appointment.service.AppointmentService;
 import fr.paris.lutece.plugins.appointment.service.FormService;
+import fr.paris.lutece.plugins.appointment.web.dto.AppointmentDTO;
 import fr.paris.lutece.plugins.appointment.web.dto.AppointmentFormDTO;
 import fr.paris.lutece.plugins.resource.business.IResource;
 import fr.paris.lutece.plugins.resource.service.ResourceService;
@@ -232,14 +233,15 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
             return null;
         }
 
-        Appointment appointment = AppointmentService.findAppointmentById( nIdResource );
+        AppointmentDTO appointment = AppointmentService.buildAppointmentDTOFromIdAppointment( nIdResource );
+
 
         if ( appointment == null )
         {
             return null;
         }
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap< >( );
 
         TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task.getId( ) );
 

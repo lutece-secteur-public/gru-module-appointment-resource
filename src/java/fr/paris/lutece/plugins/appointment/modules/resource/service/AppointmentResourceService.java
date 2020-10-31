@@ -38,7 +38,10 @@ import fr.paris.lutece.plugins.appointment.business.slot.Slot;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResource;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResourceHome;
 import fr.paris.lutece.plugins.appointment.service.SlotService;
+import fr.paris.lutece.plugins.appointment.web.dto.AppointmentDTO;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+
+import java.sql.Timestamp;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -79,7 +82,7 @@ public class AppointmentResourceService
      * @return true if the resource is available for the given appointment, false if it is already associated with another resource during the time of the
      *         appointment
      */
-    public boolean isResourceAvailableForAppointment( String strIdResource, String strResourceTypeName, int nIdFormResourceType, Appointment appointment )
+    public boolean isResourceAvailableForAppointment( String strIdResource, String strResourceTypeName, int nIdFormResourceType, AppointmentDTO appointment )
     {
         AppointmentResource appResource = AppointmentResourceHome.findByPrimaryKey( appointment.getIdAppointment( ), nIdFormResourceType );
 
@@ -90,9 +93,7 @@ public class AppointmentResourceService
         }
 
         // We now have to check that the resource is not associated to another appointment during the time of this one
-        Slot slot = SlotService.findSlotById( appointment.getIdSlot( ) );
-
         return AppointmentResourceHome
-                .isResourceAvailable( strIdResource, strResourceTypeName, slot.getStartingTimestampDate( ), slot.getEndingTimestampDate( ) );
+                .isResourceAvailable( strIdResource, strResourceTypeName, Timestamp.valueOf( appointment.getStartingDateTime( )), Timestamp.valueOf( appointment.getEndingDateTime( )));
     }
 }
