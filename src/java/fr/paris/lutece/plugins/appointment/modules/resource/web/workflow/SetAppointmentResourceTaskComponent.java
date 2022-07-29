@@ -110,7 +110,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     @Override
     public String getDisplayConfigForm( HttpServletRequest request, Locale locale, ITask task )
     {
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task.getId( ) );
 
@@ -147,7 +147,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
         }
         else
         {
-            model.put( PARAMETER_IS_MANDATORY, true );
+            model.put( PARAMETER_IS_MANDATORY, Boolean.TRUE );
         }
 
         ReferenceList refListFormTypes = new ReferenceList( );
@@ -240,7 +240,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
             return null;
         }
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task.getId( ) );
 

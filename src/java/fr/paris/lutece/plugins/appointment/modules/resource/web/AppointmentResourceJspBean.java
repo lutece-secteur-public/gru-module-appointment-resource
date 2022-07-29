@@ -55,7 +55,6 @@ import fr.paris.lutece.plugins.appointment.modules.resource.business.calendar.Ca
 import fr.paris.lutece.plugins.appointment.modules.resource.business.calendar.CalendarDayDTO;
 import fr.paris.lutece.plugins.appointment.service.AppointmentService;
 import fr.paris.lutece.plugins.appointment.service.FormService;
-import fr.paris.lutece.plugins.appointment.service.SlotService;
 import fr.paris.lutece.plugins.appointment.web.AppointmentFormJspBean;
 import fr.paris.lutece.plugins.appointment.web.dto.AppointmentDTO;
 import fr.paris.lutece.plugins.appointment.web.dto.AppointmentFormDTO;

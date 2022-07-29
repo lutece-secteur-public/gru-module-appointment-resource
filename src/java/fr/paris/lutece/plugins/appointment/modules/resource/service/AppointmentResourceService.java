@@ -37,7 +37,6 @@ import fr.paris.lutece.plugins.appointment.business.appointment.Appointment;
 import fr.paris.lutece.plugins.appointment.business.slot.Slot;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResource;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResourceHome;
-import fr.paris.lutece.plugins.appointment.service.SlotService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import org.apache.commons.lang3.StringUtils;
