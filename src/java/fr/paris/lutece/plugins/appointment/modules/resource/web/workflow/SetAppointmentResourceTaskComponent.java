@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.appointment.modules.resource.web.workflow;
 
 import fr.paris.lutece.plugins.appointment.business.appointment.Appointment;
+import fr.paris.lutece.plugins.appointment.business.slot.Slot;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceType;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceTypeHome;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.workflow.SetAppointmentResourceHistory;
@@ -253,14 +254,18 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
         List<IResource> listResources = ResourceService.getInstance( ).getListResources( formResourceType.getResourceTypeName( ) );
         ReferenceList refListResources = new ReferenceList( );
         AppointmentResourceService appointmentResourceService = AppointmentResourceService.getInstance( );
+        List<Slot> slotsList = appointment.getSlot( );
 
-        for ( IResource resource : listResources )
+        for( Slot slot : slotsList )
         {
-            if ( appointmentResourceService.isResourceAvailableForAppointment( resource.getIdResource( ), resource.getResourceType( ),
-                    config.getIdFormResourceType( ), appointment ) )
-            {
-                refListResources.addItem( resource.getIdResource( ), resource.getResourceName( ) );
-            }
+	        for ( IResource resource : listResources )
+	        {
+	            if ( appointmentResourceService.isResourceAvailableForAppointment( resource.getIdResource( ), resource.getResourceType( ),
+	                    config.getIdFormResourceType( ), appointment, slot ) )
+	            {
+	                refListResources.addItem( resource.getIdResource( ), resource.getResourceName( ) );
+	            }
+	        }
         }
 
         model.put( MARK_REF_LIST_RESOURCES, refListResources );
@@ -331,7 +336,6 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     /**
      * {@inheritDoc}
      */
-    @Override
     public String getTaskInformationXml( int nIdHistory, HttpServletRequest request, Locale locale, ITask task )
     {
         return null;

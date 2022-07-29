@@ -38,6 +38,7 @@ import fr.paris.lutece.plugins.appointment.modules.resource.business.Appointment
 import fr.paris.lutece.plugins.appointment.service.listeners.IAppointmentListener;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -59,7 +60,6 @@ public class AppointmentResourceListener implements IAppointmentListener
     /**
      * {@inheritDoc}
      */
-    @Override
     public String appointmentDateChanged( int nIdAppointment, int nIdSlot, Locale locale )
     {
 
@@ -78,5 +78,11 @@ public class AppointmentResourceListener implements IAppointmentListener
 	public void notifyAppointmentUpdated(int nIdAppointment) {
 		
 		 // Do nothing
+	}
+
+	@Override
+	public String appointmentDateChanged(int nIdAppointment, List<Integer> listIdSlot, Locale locale) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
