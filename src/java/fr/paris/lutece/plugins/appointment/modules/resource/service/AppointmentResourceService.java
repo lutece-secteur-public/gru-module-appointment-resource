@@ -40,7 +40,7 @@ import fr.paris.lutece.plugins.appointment.modules.resource.business.Appointment
 import fr.paris.lutece.plugins.appointment.service.SlotService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Service to manage appointment resources
