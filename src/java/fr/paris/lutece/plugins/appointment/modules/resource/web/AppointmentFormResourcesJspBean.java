@@ -55,7 +55,7 @@ import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -158,7 +158,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         AppointmentFormDTO appointmentForm = (AppointmentFormDTO) request.getSession( ).getAttribute( SESSION_ATTRIBUTE_APPOINTMENT_FORM );
         if ( ( appointmentForm == null ) || ( nIdForm != appointmentForm.getIdForm( ) ) )
         {
-            appointmentForm = FormService.buildAppointmentForm( nIdForm, 0, 0 );
+            appointmentForm = FormService.buildAppointmentForm( nIdForm, 0 );
         }
 
         if ( appointmentForm == null )
@@ -175,7 +175,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         model.put( MARK_ADMIN_USER_RESOURCE_TYPE, AdminUser.RESOURCE_TYPE );
         model.put( MARK_LOCALE, getLocale( ) );
 
-        AppointmentFormJspBean.addElementsToModel( request, appointmentForm, getUser( ), getLocale( ), model );
+        AppointmentFormJspBean.addElementsToModel( appointmentForm, getUser( ), getLocale( ), model );
 
         return getPage( MESSAGE_MANAGE_FORM_RESOURCES_PAGE_TITLE, TEMPLATE_MANAGE_FORM_RESOURCES, model );
     }

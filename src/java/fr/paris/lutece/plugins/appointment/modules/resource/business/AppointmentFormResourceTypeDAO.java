@@ -66,19 +66,18 @@ public class AppointmentFormResourceTypeDAO implements IAppointmentFormResourceT
      */
     private int newPrimaryKey( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PRIMARY_KEY, plugin );
-        daoUtil.executeQuery( );
-
-        int nRes = 1;
-
-        if ( daoUtil.next( ) )
+    	int nRes = 1;
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PRIMARY_KEY, plugin ) )
         {
-            nRes = daoUtil.getInt( 1 ) + 1;
+	        daoUtil.executeQuery( );
+	
+	        if ( daoUtil.next( ) )
+	        {
+	            nRes = daoUtil.getInt( 1 ) + 1;
+	        }
         }
-
-        daoUtil.free( );
-
-        return nRes;
+	
+	        return nRes;
     }
 
     /**
@@ -87,17 +86,18 @@ public class AppointmentFormResourceTypeDAO implements IAppointmentFormResourceT
     @Override
     public synchronized void insert( AppointmentFormResourceType formResourceType, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        int nIndex = 1;
-        formResourceType.setId( newPrimaryKey( plugin ) );
-        daoUtil.setInt( nIndex++, formResourceType.getId( ) );
-        daoUtil.setInt( nIndex++, formResourceType.getIdAppointmentForm( ) );
-        daoUtil.setString( nIndex++, formResourceType.getResourceTypeName( ) );
-        daoUtil.setString( nIndex++, formResourceType.getDescription( ) );
-        daoUtil.setBoolean( nIndex++, formResourceType.getIsAppointmentAdminUser( ) );
-        daoUtil.setBoolean( nIndex, formResourceType.getIsLocation( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        {
+	        int nIndex = 1;
+	        formResourceType.setId( newPrimaryKey( plugin ) );
+	        daoUtil.setInt( nIndex++, formResourceType.getId( ) );
+	        daoUtil.setInt( nIndex++, formResourceType.getIdAppointmentForm( ) );
+	        daoUtil.setString( nIndex++, formResourceType.getResourceTypeName( ) );
+	        daoUtil.setString( nIndex++, formResourceType.getDescription( ) );
+	        daoUtil.setBoolean( nIndex++, formResourceType.getIsAppointmentAdminUser( ) );
+	        daoUtil.setBoolean( nIndex, formResourceType.getIsLocation( ) );
+	        daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -106,14 +106,15 @@ public class AppointmentFormResourceTypeDAO implements IAppointmentFormResourceT
     @Override
     public void update( AppointmentFormResourceType formResourceType, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        int nIndex = 1;
-        daoUtil.setString( nIndex++, formResourceType.getDescription( ) );
-        daoUtil.setBoolean( nIndex++, formResourceType.getIsAppointmentAdminUser( ) );
-        daoUtil.setBoolean( nIndex++, formResourceType.getIsLocation( ) );
-        daoUtil.setInt( nIndex, formResourceType.getId( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
+	        int nIndex = 1;
+	        daoUtil.setString( nIndex++, formResourceType.getDescription( ) );
+	        daoUtil.setBoolean( nIndex++, formResourceType.getIsAppointmentAdminUser( ) );
+	        daoUtil.setBoolean( nIndex++, formResourceType.getIsLocation( ) );
+	        daoUtil.setInt( nIndex, formResourceType.getId( ) );
+	        daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -122,11 +123,12 @@ public class AppointmentFormResourceTypeDAO implements IAppointmentFormResourceT
     @Override
     public void remove( int nId, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        int nIndex = 1;
-        daoUtil.setInt( nIndex, nId );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+	        int nIndex = 1;
+	        daoUtil.setInt( nIndex, nId );
+	        daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -135,11 +137,12 @@ public class AppointmentFormResourceTypeDAO implements IAppointmentFormResourceT
     @Override
     public void removeFromIdAppointmentForm( int nIdAppointmentForm, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_FROM_ID_FORM, plugin );
-        int nIndex = 1;
-        daoUtil.setInt( nIndex, nIdAppointmentForm );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_FROM_ID_FORM, plugin ) )
+        {
+	        int nIndex = 1;
+	        daoUtil.setInt( nIndex, nIdAppointmentForm );
+	        daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -148,18 +151,18 @@ public class AppointmentFormResourceTypeDAO implements IAppointmentFormResourceT
     @Override
     public AppointmentFormResourceType findByPrimaryKey( int nId, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_PRIMARY_KEY, plugin );
-        daoUtil.setInt( 1, nId );
-        daoUtil.executeQuery( );
-
-        AppointmentFormResourceType formResourceType = null;
-
-        if ( daoUtil.next( ) )
+    	AppointmentFormResourceType formResourceType = null;
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_PRIMARY_KEY, plugin ) )
         {
-            formResourceType = getFormResourceTypeFromDAO( daoUtil );
-        }
+	        daoUtil.setInt( 1, nId );
+	        daoUtil.executeQuery( );
+	
+	        if ( daoUtil.next( ) )
+	        {
+	            formResourceType = getFormResourceTypeFromDAO( daoUtil );
+	        }
 
-        daoUtil.free( );
+        }
 
         return formResourceType;
     }
@@ -170,18 +173,18 @@ public class AppointmentFormResourceTypeDAO implements IAppointmentFormResourceT
     @Override
     public List<AppointmentFormResourceType> findResourceTypesListFromIdForm( int nIdAppointmentForm, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_ID_APPOINTMENT_FORM, plugin );
-        daoUtil.setInt( 1, nIdAppointmentForm );
-        daoUtil.executeQuery( );
-
-        List<AppointmentFormResourceType> listFormResourceTypes = new ArrayList<AppointmentFormResourceType>( );
-
-        while ( daoUtil.next( ) )
+    	List<AppointmentFormResourceType> listFormResourceTypes = new ArrayList<>( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_ID_APPOINTMENT_FORM, plugin ) )
         {
-            listFormResourceTypes.add( getFormResourceTypeFromDAO( daoUtil ) );
-        }
+	        daoUtil.setInt( 1, nIdAppointmentForm );
+	        daoUtil.executeQuery( );
+	
+	        while ( daoUtil.next( ) )
+	        {
+	            listFormResourceTypes.add( getFormResourceTypeFromDAO( daoUtil ) );
+	        }
 
-        daoUtil.free( );
+        }
 
         return listFormResourceTypes;
     }
@@ -192,10 +195,11 @@ public class AppointmentFormResourceTypeDAO implements IAppointmentFormResourceT
     @Override
     public void resetAppAdminUser( int nIdAppointmentForm, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_RESET_APP_ADMIN_USER, plugin );
-        daoUtil.setInt( 1, nIdAppointmentForm );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_RESET_APP_ADMIN_USER, plugin ) )
+        {
+	        daoUtil.setInt( 1, nIdAppointmentForm );
+	        daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -204,10 +208,11 @@ public class AppointmentFormResourceTypeDAO implements IAppointmentFormResourceT
     @Override
     public void resetLocalization( int nIdAppointmentForm, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_RESET_APP_LOCALIZATION, plugin );
-        daoUtil.setInt( 1, nIdAppointmentForm );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_RESET_APP_LOCALIZATION, plugin ) )
+        {
+	        daoUtil.setInt( 1, nIdAppointmentForm );
+	        daoUtil.executeUpdate( );
+        }
     }
 
     /**

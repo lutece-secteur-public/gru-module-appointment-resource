@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.appointment.modules.resource.web.workflow;
 
 import fr.paris.lutece.plugins.appointment.business.appointment.Appointment;
+import fr.paris.lutece.plugins.appointment.business.slot.Slot;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceType;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceTypeHome;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.workflow.SetAppointmentResourceHistory;
@@ -58,7 +59,7 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -109,7 +110,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     @Override
     public String getDisplayConfigForm( HttpServletRequest request, Locale locale, ITask task )
     {
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task.getId( ) );
 
@@ -146,7 +147,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
         }
         else
         {
-            model.put( PARAMETER_IS_MANDATORY, true );
+            model.put( PARAMETER_IS_MANDATORY, Boolean.TRUE );
         }
 
         ReferenceList refListFormTypes = new ReferenceList( );
@@ -239,7 +240,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
             return null;
         }
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task.getId( ) );
 
@@ -253,14 +254,18 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
         List<IResource> listResources = ResourceService.getInstance( ).getListResources( formResourceType.getResourceTypeName( ) );
         ReferenceList refListResources = new ReferenceList( );
         AppointmentResourceService appointmentResourceService = AppointmentResourceService.getInstance( );
+        List<Slot> slotsList = appointment.getSlot( );
 
-        for ( IResource resource : listResources )
+        for( Slot slot : slotsList )
         {
-            if ( appointmentResourceService.isResourceAvailableForAppointment( resource.getIdResource( ), resource.getResourceType( ),
-                    config.getIdFormResourceType( ), appointment ) )
-            {
-                refListResources.addItem( resource.getIdResource( ), resource.getResourceName( ) );
-            }
+	        for ( IResource resource : listResources )
+	        {
+	            if ( appointmentResourceService.isResourceAvailableForAppointment( resource.getIdResource( ), resource.getResourceType( ),
+	                    config.getIdFormResourceType( ), appointment, slot ) )
+	            {
+	                refListResources.addItem( resource.getIdResource( ), resource.getResourceName( ) );
+	            }
+	        }
         }
 
         model.put( MARK_REF_LIST_RESOURCES, refListResources );
@@ -331,7 +336,6 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     /**
      * {@inheritDoc}
      */
-    @Override
     public String getTaskInformationXml( int nIdHistory, HttpServletRequest request, Locale locale, ITask task )
     {
         return null;

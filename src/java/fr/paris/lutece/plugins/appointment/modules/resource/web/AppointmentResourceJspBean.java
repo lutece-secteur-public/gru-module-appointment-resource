@@ -47,7 +47,7 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.appointment.business.slot.Slot;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResourceHome;
@@ -55,7 +55,6 @@ import fr.paris.lutece.plugins.appointment.modules.resource.business.calendar.Ca
 import fr.paris.lutece.plugins.appointment.modules.resource.business.calendar.CalendarDayDTO;
 import fr.paris.lutece.plugins.appointment.service.AppointmentService;
 import fr.paris.lutece.plugins.appointment.service.FormService;
-import fr.paris.lutece.plugins.appointment.service.SlotService;
 import fr.paris.lutece.plugins.appointment.web.AppointmentFormJspBean;
 import fr.paris.lutece.plugins.appointment.web.dto.AppointmentDTO;
 import fr.paris.lutece.plugins.appointment.web.dto.AppointmentFormDTO;
@@ -298,40 +297,42 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
             AppointmentDTO appointment = AppointmentService.buildAppointmentDTOFromIdAppointment( nIdAppointment );
             listAppointment.add( appointment );
 
-            Slot slot = SlotService.findSlotById( appointment.getIdSlot( ) );
-            CalendarAppointmentResourceDTO calendarAppointmentResource = new CalendarAppointmentResourceDTO( appointment.getIdAppointment( ), slot
-                    .getStartingDateTime( ).getHour( ), slot.getStartingDateTime( ).getMinute( ), slot.getEndingDateTime( ).getHour( ), slot
-                    .getEndingDateTime( ).getMinute( ), getAppointmentRecap( appointment, locale ), appointment.getIdForm( ) );
-            long startThen = slot.getStartingDateTime( ).getHour( ) * 60 + slot.getStartingDateTime( ).getMinute( );
-            long endThen = slot.getEndingDateTime( ).getHour( ) * 60 + slot.getEndingDateTime( ).getMinute( );
-
-            int nStartingTimeSlot = (int) startThen;
-
-            if ( nStartingTimeSlot < nMinGlobalStartingTime )
+            List<Slot> slotsList = appointment.getSlot( );
+            for( Slot slot : slotsList)
             {
-                nMinGlobalStartingTime = nStartingTimeSlot;
-                nStartingHour = slot.getStartingDateTime( ).getHour( );
-                nStartingMinute = slot.getStartingDateTime( ).getMinute( );
+	            CalendarAppointmentResourceDTO calendarAppointmentResource = new CalendarAppointmentResourceDTO( appointment.getIdAppointment( ), slot
+	                    .getStartingDateTime( ).getHour( ), slot.getStartingDateTime( ).getMinute( ), slot.getEndingDateTime( ).getHour( ), slot
+	                    .getEndingDateTime( ).getMinute( ), getAppointmentRecap( appointment, locale ), appointment.getIdForm( ) );
+	            long startThen = slot.getStartingDateTime( ).getHour( ) * 60 + slot.getStartingDateTime( ).getMinute( );
+	            long endThen = slot.getEndingDateTime( ).getHour( ) * 60 + slot.getEndingDateTime( ).getMinute( );
+	
+	            int nStartingTimeSlot = (int) startThen;
+	
+	            if ( nStartingTimeSlot < nMinGlobalStartingTime )
+	            {
+	                nMinGlobalStartingTime = nStartingTimeSlot;
+	                nStartingHour = slot.getStartingDateTime( ).getHour( );
+	                nStartingMinute = slot.getStartingDateTime( ).getMinute( );
+	            }
+	
+	            int nEndingTimeSlot = (int) endThen;
+	
+	            if ( nEndingTimeSlot > nMaxGlobalEndingTime )
+	            {
+	                nMaxGlobalEndingTime = nEndingTimeSlot;
+	                nEndingHour = slot.getEndingDateTime( ).getHour( );
+	                nEndingMinute = slot.getEndingDateTime( ).getMinute( );
+	            }
+	
+	            if ( ( calendarAppointmentResource.getDuration( ) < nMinDuration ) || ( nMinDuration == -1 ) )
+	            {
+	                nMinDuration = calendarAppointmentResource.getDuration( );
+	            }
+	
+	            int nDayOfWeek = appointment.getStartingDateTime( ).getDayOfWeek( ).getValue( );
+	            List<CalendarAppointmentResourceDTO> listCalendar = mapCalendarAppointmentResourceByDayOfWeek.get( nDayOfWeek );
+	            listCalendar.add( calendarAppointmentResource );	            
             }
-
-            int nEndingTimeSlot = (int) endThen;
-
-            if ( nEndingTimeSlot > nMaxGlobalEndingTime )
-            {
-                nMaxGlobalEndingTime = nEndingTimeSlot;
-                nEndingHour = slot.getEndingDateTime( ).getHour( );
-                nEndingMinute = slot.getEndingDateTime( ).getMinute( );
-            }
-
-            if ( ( calendarAppointmentResource.getDuration( ) < nMinDuration ) || ( nMinDuration == -1 ) )
-            {
-                nMinDuration = calendarAppointmentResource.getDuration( );
-            }
-
-            int nDayOfWeek = appointment.getStartingDateTime( ).getDayOfWeek( ).getValue( );
-            List<CalendarAppointmentResourceDTO> listCalendar = mapCalendarAppointmentResourceByDayOfWeek.get( nDayOfWeek );
-            listCalendar.add( calendarAppointmentResource );
-
         }
 
         List<CalendarDayDTO> listDays = new ArrayList<CalendarDayDTO>( 7 );
