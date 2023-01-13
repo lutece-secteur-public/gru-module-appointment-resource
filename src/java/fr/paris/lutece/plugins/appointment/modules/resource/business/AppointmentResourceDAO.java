@@ -53,7 +53,7 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
     private static final String SQL_QUERY_IS_RESOURCE_AVAILABLE = " SELECT ar.id_resource FROM appointment_resource_app_res ar "
             + " INNER JOIN appointment_resource_form_rt frt ON ar.id_app_form_res_type = frt.id "
             + " INNER JOIN appointment_appointment a ON ar.id_appointment = a.id_appointment"
-            + " INNER JOIN appointment_appointment_slot aas ON aas.id_appointment = a.id_appointment
+            + " INNER JOIN appointment_appointment_slot aas ON aas.id_appointment = a.id_appointment"
             + " INNER JOIN appointment_slot s ON s.id_slot = aas.id_slot"
             + " WHERE ar.id_resource = ?" + " AND frt.resource_type_name = ?" + " AND a.is_cancelled != ?"
             + " AND ( ( ( s.starting_date_time ) < ? && ( s.ending_date_time ) > ? )"
