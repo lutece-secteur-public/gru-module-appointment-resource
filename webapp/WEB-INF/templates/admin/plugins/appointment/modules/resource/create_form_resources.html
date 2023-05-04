@@ -4,25 +4,20 @@
 			<@boxHeader title='#i18n{module.appointment.resource.createAppointmentFormResources.pageTitle}' />
 			<@boxBody>
 				<@messages errors=errors />
-				
 				<@tform action='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp'>
-					<fieldset>
-						<legend class="hidden">#i18n{module.appointment.resource.createAppointmentFormResources.pageTitle}</legend>
+					<@formGroup labelFor='description' labelKey='#i18n{module.appointment.resource.createAppointmentFormResources.labelDescription}' mandatory=true>
+						<@input type='text' name='description' id='description' value=(formResourceType.description)!'' maxlength=255 />
+					</@formGroup>
 						
-						<@formGroup labelFor='description' labelKey='#i18n{module.appointment.resource.createAppointmentFormResources.labelDescription}' mandatory=true>
-							<@input type='text' name='description' id='description' value=(formResourceType.description)!'' maxlength=255 />
-						</@formGroup>
-						
-						<@formGroup labelFor='resourceTypeName' labelKey='#i18n{module.appointment.resource.createAppointmentFormResources.labelResourceType}'>
-							<@select name='resourceTypeName' id='resourceTypeName' default_value=(formResourceType.resourceTypeName)!'' items=listResourceTypes />
-						</@formGroup>
+					<@formGroup labelFor='resourceTypeName' labelKey='#i18n{module.appointment.resource.createAppointmentFormResources.labelResourceType}'>
+						<@select name='resourceTypeName' id='resourceTypeName' default_value=(formResourceType.resourceTypeName)!'' items=listResourceTypes />
+					</@formGroup>
 
-						<@formGroup>
-							<input type='hidden' name='idAppointmentForm' value='${id_form}' />
-							<@button type='submit' name='action' id='action' value='doCreateFormResourceType' buttonIco='check' title='#i18n{portal.util.labelValidate}' />
-							<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=manageFormResources&id_form=${id_form}' buttonIcon='times' title='#i18n{portal.util.labelBack}' color='btn-default' />
-						</@formGroup>
-					</fieldset>
+					<@formGroup>
+						<input type='hidden' name='idAppointmentForm' value='${id_form}' />
+						<@button type='submit' name='action' id='action' value='doCreateFormResourceType' buttonIco='check' title='#i18n{portal.util.labelValidate}' />
+						<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=manageFormResources&id_form=${id_form}' buttonIcon='times' title='#i18n{portal.util.labelBack}' color='default' />
+					</@formGroup>
 				</@tform>
 			</@boxBody>
 		</@box>

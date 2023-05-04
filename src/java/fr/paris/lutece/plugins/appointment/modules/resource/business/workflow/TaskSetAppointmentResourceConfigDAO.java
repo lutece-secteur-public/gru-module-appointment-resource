@@ -58,16 +58,16 @@ public class TaskSetAppointmentResourceConfigDAO implements ITaskConfigDAO<TaskS
     @Override
     public synchronized void insert( TaskSetAppointmentResourceConfig config )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, WorkflowAppointmentPlugin.getPlugin( ) );
+        try (DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, WorkflowAppointmentPlugin.getPlugin( ) )) {
+			int nIndex = 1;
 
-        int nIndex = 1;
+			daoUtil.setInt( nIndex++, config.getIdTask( ) );
+			daoUtil.setInt( nIndex++, config.getIdFormResourceType( ) );
+			daoUtil.setBoolean( nIndex, config.getIsMandatory( ) );
 
-        daoUtil.setInt( nIndex++, config.getIdTask( ) );
-        daoUtil.setInt( nIndex++, config.getIdFormResourceType( ) );
-        daoUtil.setBoolean( nIndex, config.getIsMandatory( ) );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+			daoUtil.executeUpdate( );
+			daoUtil.free( );
+		}
     }
 
     /**
@@ -76,16 +76,16 @@ public class TaskSetAppointmentResourceConfigDAO implements ITaskConfigDAO<TaskS
     @Override
     public void store( TaskSetAppointmentResourceConfig config )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, WorkflowAppointmentPlugin.getPlugin( ) );
+        try (DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, WorkflowAppointmentPlugin.getPlugin( ) )) {
+			int nIndex = 1;
 
-        int nIndex = 1;
+			daoUtil.setInt( nIndex++, config.getIdFormResourceType( ) );
+			daoUtil.setBoolean( nIndex++, config.getIsMandatory( ) );
 
-        daoUtil.setInt( nIndex++, config.getIdFormResourceType( ) );
-        daoUtil.setBoolean( nIndex++, config.getIsMandatory( ) );
-
-        daoUtil.setInt( nIndex, config.getIdTask( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+			daoUtil.setInt( nIndex, config.getIdTask( ) );
+			daoUtil.executeUpdate( );
+			daoUtil.free( );
+		}
     }
 
     /**
@@ -95,23 +95,23 @@ public class TaskSetAppointmentResourceConfigDAO implements ITaskConfigDAO<TaskS
     public TaskSetAppointmentResourceConfig load( int nIdTask )
     {
         TaskSetAppointmentResourceConfig config = null;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, WorkflowAppointmentPlugin.getPlugin( ) );
+        try (DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, WorkflowAppointmentPlugin.getPlugin( ) )) {
+			daoUtil.setInt( 1, nIdTask );
 
-        daoUtil.setInt( 1, nIdTask );
+			daoUtil.executeQuery( );
 
-        daoUtil.executeQuery( );
+			int nIndex = 1;
 
-        int nIndex = 1;
+			if ( daoUtil.next( ) )
+			{
+			    config = new TaskSetAppointmentResourceConfig( );
+			    config.setIdTask( daoUtil.getInt( nIndex++ ) );
+			    config.setIdFormResourceType( daoUtil.getInt( nIndex++ ) );
+			    config.setIsMandatory( daoUtil.getBoolean( nIndex ) );
+			}
 
-        if ( daoUtil.next( ) )
-        {
-            config = new TaskSetAppointmentResourceConfig( );
-            config.setIdTask( daoUtil.getInt( nIndex++ ) );
-            config.setIdFormResourceType( daoUtil.getInt( nIndex++ ) );
-            config.setIsMandatory( daoUtil.getBoolean( nIndex ) );
-        }
-
-        daoUtil.free( );
+			daoUtil.free( );
+		}
 
         return config;
     }
@@ -122,10 +122,10 @@ public class TaskSetAppointmentResourceConfigDAO implements ITaskConfigDAO<TaskS
     @Override
     public void delete( int nIdTask )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, WorkflowAppointmentPlugin.getPlugin( ) );
-
-        daoUtil.setInt( 1, nIdTask );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try (DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, WorkflowAppointmentPlugin.getPlugin( ) )) {
+			daoUtil.setInt( 1, nIdTask );
+			daoUtil.executeUpdate( );
+			daoUtil.free( );
+		}
     }
 }

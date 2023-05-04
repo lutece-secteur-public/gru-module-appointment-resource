@@ -1,9 +1,9 @@
 <fieldset>
 	<legend>#i18n{module.appointment.resource.task_set_appointment_resource_config.title}</legend>
-	
 	<@formGroup labelKey='#i18n{module.appointment.resource.task_set_appointment_resource_config.labelAppointmentForm}'>
-		<@select name='idAppointmentForm' items=refListAppointmentForm default_value=idAppointmentForm!''  />
-		<@button type='submit' name='refreshAppointmentForm' value='true' buttonIcon='sync' buttonIcon='#i18n{portal.util.labelRefresh}' />
+		<@select name='idAppointmentForm' items=refListAppointmentForm default_value=idAppointmentForm!'' />
+		<div style='margin-bottom:5px;'></div>
+		<@button type='submit' name='refreshAppointmentForm' value='true' buttonIcon='sync' title='#i18n{portal.util.labelRefresh}' />
 	</@formGroup>
 	
 	<@formGroup labelFor='idFormResourceType' labelKey='#i18n{module.appointment.resource.task_set_appointment_resource_config.labelFormResourceType}'>
