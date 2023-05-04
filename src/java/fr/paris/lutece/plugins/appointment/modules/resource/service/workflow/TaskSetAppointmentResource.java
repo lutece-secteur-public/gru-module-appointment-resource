@@ -33,6 +33,15 @@
  */
 package fr.paris.lutece.plugins.appointment.modules.resource.service.workflow;
 
+import java.util.Locale;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.appointment.business.appointment.Appointment;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceType;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceTypeHome;
@@ -47,14 +56,6 @@ import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
 import fr.paris.lutece.plugins.workflowcore.service.task.SimpleTask;
 import fr.paris.lutece.portal.service.i18n.I18nService;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.Locale;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Workflow task to update a resource associated with an appointment
@@ -83,7 +84,7 @@ public class TaskSetAppointmentResource extends SimpleTask
      * {@inheritDoc}
      */
     @Override
-    public void processTask( int nIdResourceHistory, HttpServletRequest request, Locale locale )
+    public void processTask( int nIdResourceHistory, HttpServletRequest request, Locale locale, User user )
     {
         ResourceHistory resourceHistory = _resourceHistoryService.findByPrimaryKey( nIdResourceHistory );
         TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( this.getId( ) );
@@ -94,7 +95,7 @@ public class TaskSetAppointmentResource extends SimpleTask
         }
 
         String strIdResource = request.getParameter( PARAMETER_ID_RESOURCE + config.getIdFormResourceType( ) );
-
+        
         if ( StringUtils.isNotEmpty( strIdResource ) )
         {
             Appointment appointment = AppointmentService.findAppointmentById( resourceHistory.getIdResource( ) );
