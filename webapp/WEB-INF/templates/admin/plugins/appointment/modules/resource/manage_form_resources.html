@@ -1,12 +1,10 @@
 <#include "/admin/plugins/appointment/appointmentform/modify_appointmentform_tabs.html" />
-<@row>
-	<@columns>
-    	<@appointmentTabs tab="resources" appointmentform=appointmentform />
-		<@tabContent>
+
+ <@appointmentTabs tab="resources" appointmentform=appointmentform>
+	<@tabContent>
     	<fieldset>
-			<@messages infos=infos errors=errors />
     		<legend>
-    			<div class="pull-right">
+    			<div class="float-right">
 	    			<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=createFormResourceType&id_form=${appointmentform.idForm}' buttonIcon='plus' title='#i18n{module.appointment.resource.manageAppointmentFormResources.labelAddResourceType}' />
 	    		</div>
     			#i18n{module.appointment.resource.manageAppointmentFormResources.pageTitle}
@@ -73,7 +71,7 @@
 									<#if formResourceType.resourceTypeName != adminUserResourceType && !formResourceType.isLocation>
 										<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?action=doSetLocationDefaultResourceType&idFormResourceType=${formResourceType.id}' title='#i18n{module.appointment.resource.manageAppointmentFormResources.labelSetResourceAsLocation}' buttonIcon='home' size='sm' />
 									</#if>
-									<@aButton href='href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=confirmRemoveFormResourceType&idFormResourceType=${formResourceType.id}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' size='sm' color='btn-danger' />
+									<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=confirmRemoveFormResourceType&idFormResourceType=${formResourceType.id}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' size='sm' color='danger' />
 								</td>
 							</tr>
 						</#list>
@@ -81,6 +79,5 @@
 				</@table>
 			</#if>
     	</fieldset>
-		</@tabContent>
-    </@columns>
-</@row>
+	</@tabContent>
+</@appointmentTabs>

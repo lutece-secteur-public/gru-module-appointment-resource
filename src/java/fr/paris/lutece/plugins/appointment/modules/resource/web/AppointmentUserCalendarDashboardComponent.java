@@ -71,8 +71,8 @@ public class AppointmentUserCalendarDashboardComponent extends DashboardComponen
 
         Plugin plugin = PluginService.getPlugin( AppointmentPlugin.PLUGIN_NAME );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
-        model.put( MARK_CALENDAR, AppointmentResourceJspBean.getResourceCalendar( request, resource, 0, user.getLocale( ) ) );
+        Map<String, Object> model = new HashMap<>( );
+        model.put( MARK_CALENDAR, AppointmentResourceJspBean.getWeekResourceCalendar( resource, 0, user.getLocale( ) ) );
 
         model.put( MARK_ICON, plugin.getIconUrl( ) );
 

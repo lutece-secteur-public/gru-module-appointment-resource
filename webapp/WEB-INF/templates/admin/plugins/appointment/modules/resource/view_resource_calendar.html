@@ -1,28 +1,46 @@
 <@row>
 	<@columns>
-		<legend>
-			#i18n{module.appointment.resource.resource_calendar.pageTitle} ${resource.resourceName}
-			<div class="pull-right">
-				<#if offsetWeek != 0>
-					<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=0<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("&","%26")}</#if>" title="#i18n{appointment.manage_appointment_calendar.labelCurrentWeek}">
-						<i class="fa fa-calendar">&nbsp;</i>#i18n{appointment.manage_appointment_calendar.labelCurrentWeek}
-					</a>
-				</#if>
-				<#if fromUrl?? && fromUrl != ''>
-					<@aButton href='${fromUrl}' buttonIcon='times' title='#i18n{portal.util.labelBack}' color='btn-default' />
-				</#if>
-			</div>
-		</legend>
-		<div class="pull-left">
-			<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=${offsetWeek - 1}<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("&","%26")}</#if>" title="#i18n{appointment.appointmentApp.previousWeek}">
-				<i class="glyphicon glyphicon-arrow-left">&nbsp;</i>&nbsp;#i18n{appointment.appointmentApp.previousWeek}
-			</a>
-		</div>
-		<div class="pull-right">
-			<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=${offsetWeek + 1}<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("&","%26")}</#if>" title="#i18n{appointment.appointmentApp.nextWeek}">
-				#i18n{appointment.appointmentApp.nextWeek}&nbsp;<i class="glyphicon glyphicon-arrow-right">&nbsp;</i>
-			</a>
-		</div>
-		${calendar}
+		<@box>
+			<@boxBody>
+				<legend>
+					<div class="d-flex justify-content-between">
+						<div>#i18n{module.appointment.resource.resource_calendar.pageTitle} <b>${resource.resourceName}</b>
+						</div>
+						<div>
+							<#if fromUrl?? && fromUrl !=''>
+								<@aButton href='${fromUrl}' buttonIcon='times' title='#i18n{portal.util.labelBack}' color='default' />
+							</#if>
+						</div>
+					</div>
+					<p/>
+					<div class="d-flex justify-content-between">
+						<div>
+							<a class="btn btn-primary btn-md"
+								href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=${offsetWeek - 1}<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("
+								&","%26")}</#if>" title="#i18n{appointment.appointmentApp.previousWeek}">
+								<i class="fa fa-angle-left">&nbsp;</i>&nbsp;#i18n{appointment.appointmentApp.previousWeek}
+							</a>
+						</div>
+						<#if offsetWeek !=0>
+						<div>
+							<a class="btn btn-primary btn-md"
+								href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=0<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("
+								&","%26")}</#if>" title="#i18n{module.appointment.resource.resource_calendar.labelCurrentWeek}">
+								<i class="fa fa-calendar">&nbsp;</i>&nbsp;#i18n{module.appointment.resource.resource_calendar.labelCurrentWeek}
+							</a>
+						</div>
+						</#if>
+						<div>
+							<a class="btn btn-primary btn-md"
+								href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=${offsetWeek + 1}<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("
+								&","%26")}</#if>" title="#i18n{appointment.appointmentApp.nextWeek}">
+								#i18n{appointment.appointmentApp.nextWeek}&nbsp;&nbsp;<i class="fa fa-angle-right"></i>
+							</a>
+						</div>
+					</div>
+				</legend>
+				${calendar}
+			</@boxBody>
+		</@box>
 	</@columns>
 </@row>
