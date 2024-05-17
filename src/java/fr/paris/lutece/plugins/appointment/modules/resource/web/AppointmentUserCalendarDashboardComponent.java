@@ -33,16 +33,16 @@
  */
 package fr.paris.lutece.plugins.appointment.modules.resource.web;
 
-import fr.paris.lutece.plugins.appointment.service.AppointmentPlugin;
 import fr.paris.lutece.plugins.resource.business.IResource;
 import fr.paris.lutece.plugins.resource.service.ResourceService;
+import fr.paris.lutece.portal.business.right.Right;
+import fr.paris.lutece.portal.business.right.RightHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.dashboard.DashboardComponent;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.html.HtmlTemplate;
+import fr.paris.lutece.util.url.UrlItem;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +56,10 @@ public class AppointmentUserCalendarDashboardComponent extends DashboardComponen
 {
     // MARKS
     private static final String MARK_CALENDAR = "calendar";
-    private static final String MARK_ICON = "icone";
+    private static final String MARK_URL = "url";
+
+    // PARAMETERS
+    private static final String PARAMETER_PLUGIN_NAME = "plugin_name";
 
     // TEMPALTES
     private static final String TEMPLATE_DASHBOARD = "/admin/plugins/appointment/modules/resource/user_calendar_dashboard.html";
@@ -69,12 +72,14 @@ public class AppointmentUserCalendarDashboardComponent extends DashboardComponen
     {
         IResource resource = ResourceService.getInstance( ).getResource( Integer.toString( user.getUserId( ) ), AdminUser.RESOURCE_TYPE );
 
-        Plugin plugin = PluginService.getPlugin( AppointmentPlugin.PLUGIN_NAME );
+        Right right = RightHome.findByPrimaryKey( getRight( ) );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
-        model.put( MARK_CALENDAR, AppointmentResourceJspBean.getResourceCalendar( request, resource, 0, user.getLocale( ) ) );
+        UrlItem url = new UrlItem( right.getUrl( ) );
+        url.addParameter( PARAMETER_PLUGIN_NAME, right.getPluginName( ) );
 
-        model.put( MARK_ICON, plugin.getIconUrl( ) );
+        Map<String, Object> model = new HashMap<>( );
+        model.put( MARK_CALENDAR, AppointmentResourceJspBean.getWeekResourceCalendar( resource, 0, user.getLocale( ) ) );
+        model.put( MARK_URL, url.getUrl( ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_DASHBOARD, AdminUserService.getLocale( request ), model );
 

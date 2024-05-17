@@ -38,24 +38,28 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 
-import fr.paris.lutece.plugins.appointment.business.slot.Slot;
+import fr.paris.lutece.plugins.appointment.business.rule.ReservationRule;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResourceHome;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.calendar.CalendarAppointmentResourceDTO;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.calendar.CalendarDayDTO;
+import fr.paris.lutece.plugins.appointment.modules.resource.business.form.FormResourceCalendar;
 import fr.paris.lutece.plugins.appointment.service.AppointmentService;
 import fr.paris.lutece.plugins.appointment.service.FormService;
-import fr.paris.lutece.plugins.appointment.service.SlotService;
+import fr.paris.lutece.plugins.appointment.service.ReservationRuleService;
+import fr.paris.lutece.plugins.appointment.service.WeekDefinitionService;
 import fr.paris.lutece.plugins.appointment.web.AppointmentFormJspBean;
 import fr.paris.lutece.plugins.appointment.web.dto.AppointmentDTO;
 import fr.paris.lutece.plugins.appointment.web.dto.AppointmentFormDTO;
@@ -126,6 +130,9 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
     private static final String MESSAGE_RESOURCE_CALENDAR_PAGE_TITLE = "module.appointment.resource.resource_calendar.pageTitle";
     private static final String MESSAGE_USER_CALENDAR_PAGE_TITLE = "module.appointment.resource.user_calendar.pageTitle";
 
+    // Default values for calendar time stamps
+    private static final int DEFAULT_APPOINTMENT_DURATION = 30;
+
     /**
      * List of i18n keys of days of week
      */
@@ -172,7 +179,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
         IResource resource = ResourceService.getInstance( ).getResource( Integer.toString( adminUser.getUserId( ) ), AdminUser.RESOURCE_TYPE );
 
         Map<String, Object> model = getModel( );
-        model.put( MARK_CALENDAR, getResourceCalendar( request, resource, nOffsetWeek, getLocale( ) ) );
+        model.put( MARK_CALENDAR, getWeekResourceCalendar( resource, nOffsetWeek, getLocale( ) ) );
         model.put( MARK_RESOURCE, resource );
         model.put( PARAMETER_OFFSET_WEEK, nOffsetWeek );
         model.put( PARAMETER_FROM_URL, strFromUrl );
@@ -228,7 +235,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
             if ( resource != null )
             {
                 Map<String, Object> model = getModel( );
-                model.put( MARK_CALENDAR, getResourceCalendar( request, resource, nOffsetWeek, getLocale( ) ) );
+                model.put( MARK_CALENDAR, getWeekResourceCalendar( resource, nOffsetWeek, getLocale( ) ) );
                 model.put( MARK_RESOURCE, resource );
                 model.put( PARAMETER_OFFSET_WEEK, nOffsetWeek );
                 model.put( PARAMETER_FROM_URL, strFromUrl );
@@ -248,23 +255,22 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
     /**
      * Get the resource calendar for a week
      * 
-     * @param request
-     *            The request
      * @param resource
-     *            The resource
+     *            The resource to display in the calendar
      * @param nOffsetWeek
-     *            The week offset
+     *            The week to display in the calendar ( -1 == previous, 0 == current, 1 == next, etc. )
      * @param locale
-     *            The locale ...)
-     * @return The HTML content to display
+     *            Locale for localization
+     * @return an HTML template to display the calendar
      */
-    public static String getResourceCalendar( HttpServletRequest request, IResource resource, int nOffsetWeek, Locale locale )
+    public static String getWeekResourceCalendar( IResource resource, int nOffsetWeek, Locale locale )
     {
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         model.put( MARK_RESOURCE, resource );
 
+        // Set the standard week type (nb of days, first day of the week, etc.)
         Date dateMonday = getDateMonday( nOffsetWeek );
         Calendar calendar = new GregorianCalendar( );
         calendar.setTime( dateMonday );
@@ -273,12 +279,13 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
 
         Date dateMax = new Date( calendar.getTimeInMillis( ) );
 
+        // Retrieve the IDs of the appointments tied to a resource, for a specific period
         List<Integer> listIdAppointments = AppointmentResourceHome.findIdAppointmentsByResourceAndDate( resource.getIdResource( ), resource.getResourceType( ),
                 dateMonday, dateMax );
 
-        List<AppointmentDTO> listAppointment = new ArrayList<AppointmentDTO>( listIdAppointments.size( ) );
+        List<AppointmentDTO> listAppointment = new ArrayList<>( listIdAppointments.size( ) );
 
-        Map<Integer, List<CalendarAppointmentResourceDTO>> mapCalendarAppointmentResourceByDayOfWeek = new HashMap<Integer, List<CalendarAppointmentResourceDTO>>( );
+        Map<Integer, List<CalendarAppointmentResourceDTO>> mapCalendarAppointmentResourceByDayOfWeek = new HashMap<>( );
 
         int nStartingHour = 0;
         int nStartingMinute = 0;
@@ -290,17 +297,20 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
 
         for ( int i = 1; i < 8; i++ )
         {
-            mapCalendarAppointmentResourceByDayOfWeek.put( i, new ArrayList<CalendarAppointmentResourceDTO>( ) );
+            mapCalendarAppointmentResourceByDayOfWeek.put( i, new ArrayList<>( ) );
         }
 
+        /*
+         * Get the minimum starting time, maximum ending time, and minimum duration of all possible Resources
+         */
         for ( int nIdAppointment : listIdAppointments )
         {
             AppointmentDTO appointment = AppointmentService.buildAppointmentDTOFromIdAppointment( nIdAppointment );
             listAppointment.add( appointment );
 
-            CalendarAppointmentResourceDTO calendarAppointmentResource = new CalendarAppointmentResourceDTO( appointment.getIdAppointment( ), appointment
-                    .getStartingDateTime( ).getHour( ), appointment.getStartingDateTime( ).getMinute( ), appointment.getEndingDateTime( ).getHour( ), appointment
-                    .getEndingDateTime( ).getMinute( ), getAppointmentRecap( appointment, locale ), appointment.getIdForm( ) );
+            CalendarAppointmentResourceDTO calendarAppointmentResource = new CalendarAppointmentResourceDTO( appointment.getIdAppointment( ),
+                    appointment.getStartingDateTime( ).getHour( ), appointment.getStartingDateTime( ).getMinute( ), appointment.getEndingDateTime( ).getHour( ),
+                    appointment.getEndingDateTime( ).getMinute( ), getAppointmentRecap( appointment, locale ), appointment.getIdForm( ) );
             long startThen = appointment.getStartingDateTime( ).getHour( ) * 60 + appointment.getStartingDateTime( ).getMinute( );
             long endThen = appointment.getEndingDateTime( ).getHour( ) * 60 + appointment.getEndingDateTime( ).getMinute( );
 
@@ -330,10 +340,9 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
             int nDayOfWeek = appointment.getStartingDateTime( ).getDayOfWeek( ).getValue( );
             List<CalendarAppointmentResourceDTO> listCalendar = mapCalendarAppointmentResourceByDayOfWeek.get( nDayOfWeek );
             listCalendar.add( calendarAppointmentResource );
-
         }
 
-        List<CalendarDayDTO> listDays = new ArrayList<CalendarDayDTO>( 7 );
+        List<CalendarDayDTO> listDays = new ArrayList<>( 7 );
 
         for ( Entry<Integer, List<CalendarAppointmentResourceDTO>> entry : mapCalendarAppointmentResourceByDayOfWeek.entrySet( ) )
         {
@@ -352,32 +361,36 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
         Collections.sort( listDays );
 
         List<AppointmentFormDTO> listForm = FormService.buildAllActiveAppointmentForm( );
-        ;
 
+        /*
+         * Set the calendar of the resource, and make sure the range of the time / date periods contains all the possible Forms
+         */
         for ( AppointmentFormDTO form : listForm )
         {
+            FormResourceCalendar resourceTimeRange = getResourceCalendarTimeRange( form.getIdForm( ) );
 
-            int nOpeningTime = ( LocalTime.parse( form.getTimeStart( ) ).getHour( ) * 60 ) + LocalTime.parse( form.getTimeStart( ) ).getMinute( );
+            int nOpeningTime = ( resourceTimeRange.getStartingTime( ).getHour( ) * 60 ) + resourceTimeRange.getStartingTime( ).getMinute( );
 
             if ( nOpeningTime < nMinGlobalStartingTime )
             {
                 nMinGlobalStartingTime = nOpeningTime;
-                nStartingHour = LocalTime.parse( form.getTimeStart( ) ).getHour( );
-                nStartingMinute = LocalTime.parse( form.getTimeStart( ) ).getMinute( );
+                nStartingHour = resourceTimeRange.getStartingTime( ).getHour( );
+                nStartingMinute = resourceTimeRange.getStartingTime( ).getMinute( );
             }
 
-            int nClosingTime = ( LocalTime.parse( form.getTimeEnd( ) ).getHour( ) * 60 ) + LocalTime.parse( form.getTimeEnd( ) ).getMinute( );
+            int nClosingTime = ( resourceTimeRange.getEndingTime( ).getHour( ) * 60 ) + resourceTimeRange.getEndingTime( ).getMinute( );
 
             if ( nClosingTime > nMaxGlobalEndingTime )
             {
                 nMaxGlobalEndingTime = nClosingTime;
-                nEndingHour = LocalTime.parse( form.getTimeEnd( ) ).getHour( );
-                nEndingMinute = LocalTime.parse( form.getTimeEnd( ) ).getMinute( );
+                nEndingHour = resourceTimeRange.getEndingTime( ).getHour( );
+                nEndingMinute = resourceTimeRange.getEndingTime( ).getMinute( );
             }
 
-            if ( ( form.getDurationAppointments( ) < nMinDuration ) || ( nMinDuration < 0 ) )
+            // Set the minimum duration for an appointment
+            if ( ( resourceTimeRange.getDuration( ) < nMinDuration ) || ( nMinDuration < 0 ) )
             {
-                nMinDuration = form.getDurationAppointments( );
+                nMinDuration = resourceTimeRange.getDuration( );
             }
         }
 
@@ -398,6 +411,32 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
     }
 
     /**
+     * Get the time range and duration during which a resource is used / can be used for an appointment
+     * 
+     * @param idForm
+     *            ID of the form used to retrieve the specific time range, appointment duration, etc.
+     * @return a FormResourceCalendar object which contains the time range and duration for a used resource
+     */
+    private static FormResourceCalendar getResourceCalendarTimeRange( int idForm )
+    {
+        List<ReservationRule> listReservationRules = ReservationRuleService.findListReservationRule( idForm );
+
+        LocalTime maxEndingTime = WeekDefinitionService.getMaxEndingTimeOfAListOfWeekDefinition( listReservationRules );
+        LocalTime minStartingTime = WeekDefinitionService.getMinStartingTimeOfAListOfWeekDefinition( listReservationRules );
+
+        int maxAppointmentDuration = DEFAULT_APPOINTMENT_DURATION;
+
+        Optional<ReservationRule> reservationRuleWithMaxDuration = listReservationRules.stream( )
+                .max( Comparator.comparingInt( ReservationRule::getDurationAppointments ) );
+
+        if ( reservationRuleWithMaxDuration.isPresent( ) )
+        {
+            maxAppointmentDuration = reservationRuleWithMaxDuration.get( ).getDurationAppointments( );
+        }
+        return new FormResourceCalendar( idForm, minStartingTime, maxEndingTime, maxAppointmentDuration );
+    }
+
+    /**
      * Get the description of an appointment
      * 
      * @param appointment
@@ -408,7 +447,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
      */
     private static String getAppointmentRecap( AppointmentDTO appointment, Locale locale )
     {
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         model.put( MARK_APPOINTMENT, appointment );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_APPOINTMENT_DESCRIPTION, locale, model );
@@ -445,7 +484,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
     private static Date getDateMonday( int nOffsetWeek )
     {
         Date date = new Date( System.currentTimeMillis( ) );
-        Calendar calendar = GregorianCalendar.getInstance( Locale.FRANCE );
+        Calendar calendar = Calendar.getInstance( Locale.FRANCE );
         calendar.setTime( date );
         // We set the week to the requested one
         calendar.add( Calendar.DAY_OF_MONTH, 7 * nOffsetWeek );
@@ -491,5 +530,4 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
 
         return nNumber;
     }
-
 }

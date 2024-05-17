@@ -93,18 +93,17 @@ public class SetAppointmentResourceHistoryDAO implements ISetAppointmentResource
      */
     private int newPrimaryKey( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUEERY_NEW_PRIMARY_KEY, plugin );
-        daoUtil.executeQuery( );
-
         int nRes = 1;
 
-        if ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUEERY_NEW_PRIMARY_KEY, plugin ) )
         {
-            nRes = daoUtil.getInt( 1 ) + 1;
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) )
+            {
+                nRes = daoUtil.getInt( 1 ) + 1;
+            }
         }
-
-        daoUtil.free( );
-
         return nRes;
     }
 
@@ -116,15 +115,16 @@ public class SetAppointmentResourceHistoryDAO implements ISetAppointmentResource
     {
         history.setId( newPrimaryKey( plugin ) );
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        int nIndex = 1;
-        daoUtil.setInt( nIndex++, history.getId( ) );
-        daoUtil.setInt( nIndex++, history.getIdHistory( ) );
-        daoUtil.setInt( nIndex++, history.getIdAppointment( ) );
-        daoUtil.setString( nIndex++, history.getIdResource( ) );
-        daoUtil.setInt( nIndex, history.getIdFormResourceType( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        {
+            int nIndex = 1;
+            daoUtil.setInt( nIndex++, history.getId( ) );
+            daoUtil.setInt( nIndex++, history.getIdHistory( ) );
+            daoUtil.setInt( nIndex++, history.getIdAppointment( ) );
+            daoUtil.setString( nIndex++, history.getIdResource( ) );
+            daoUtil.setInt( nIndex, history.getIdFormResourceType( ) );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -133,29 +133,24 @@ public class SetAppointmentResourceHistoryDAO implements ISetAppointmentResource
     @Override
     public SetAppointmentResourceHistory findByPrimaryKey( int nId, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
-        daoUtil.setInt( 1, nId );
-        daoUtil.executeQuery( );
+        SetAppointmentResourceHistory history = null;
 
-        SetAppointmentResourceHistory history;
-
-        if ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
-            int nIndex = 1;
-            history = new SetAppointmentResourceHistory( );
-            history.setId( nId );
-            history.setIdHistory( daoUtil.getInt( nIndex++ ) );
-            history.setIdAppointment( daoUtil.getInt( nIndex++ ) );
-            history.setIdResource( daoUtil.getString( nIndex++ ) );
-            history.setIdFormResourceType( daoUtil.getInt( nIndex ) );
-        }
-        else
-        {
-            history = null;
-        }
+            daoUtil.setInt( 1, nId );
+            daoUtil.executeQuery( );
 
-        daoUtil.free( );
-
+            if ( daoUtil.next( ) )
+            {
+                int nIndex = 1;
+                history = new SetAppointmentResourceHistory( );
+                history.setId( nId );
+                history.setIdHistory( daoUtil.getInt( nIndex++ ) );
+                history.setIdAppointment( daoUtil.getInt( nIndex++ ) );
+                history.setIdResource( daoUtil.getString( nIndex++ ) );
+                history.setIdFormResourceType( daoUtil.getInt( nIndex ) );
+            }
+        }
         return history;
     }
 
@@ -165,10 +160,11 @@ public class SetAppointmentResourceHistoryDAO implements ISetAppointmentResource
     @Override
     public void delete( int nIdNotif, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1, nIdNotif );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdNotif );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -177,26 +173,25 @@ public class SetAppointmentResourceHistoryDAO implements ISetAppointmentResource
     @Override
     public List<SetAppointmentResourceHistory> findByIdHistory( int nIdHistory, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_HISTORY, plugin );
-        daoUtil.setInt( 1, nIdHistory );
-        daoUtil.executeQuery( );
+        List<SetAppointmentResourceHistory> listHistory = new ArrayList<>( );
 
-        List<SetAppointmentResourceHistory> listHistory = new ArrayList<SetAppointmentResourceHistory>( );
-
-        while ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_HISTORY, plugin ) )
         {
-            int nIndex = 1;
-            SetAppointmentResourceHistory history = new SetAppointmentResourceHistory( );
-            history.setId( daoUtil.getInt( nIndex++ ) );
-            history.setIdHistory( daoUtil.getInt( nIndex++ ) );
-            history.setIdAppointment( daoUtil.getInt( nIndex++ ) );
-            history.setIdResource( daoUtil.getString( nIndex++ ) );
-            history.setIdFormResourceType( daoUtil.getInt( nIndex ) );
-            listHistory.add( history );
+            daoUtil.setInt( 1, nIdHistory );
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                int nIndex = 1;
+                SetAppointmentResourceHistory history = new SetAppointmentResourceHistory( );
+                history.setId( daoUtil.getInt( nIndex++ ) );
+                history.setIdHistory( daoUtil.getInt( nIndex++ ) );
+                history.setIdAppointment( daoUtil.getInt( nIndex++ ) );
+                history.setIdResource( daoUtil.getString( nIndex++ ) );
+                history.setIdFormResourceType( daoUtil.getInt( nIndex ) );
+                listHistory.add( history );
+            }
         }
-
-        daoUtil.free( );
-
         return listHistory;
     }
 
@@ -206,9 +201,10 @@ public class SetAppointmentResourceHistoryDAO implements ISetAppointmentResource
     @Override
     public void deleteByIdAppointment( int nIdAppointment, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_APPOINTMENT, plugin );
-        daoUtil.setInt( 1, nIdAppointment );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_APPOINTMENT, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdAppointment );
+            daoUtil.executeUpdate( );
+        }
     }
 }

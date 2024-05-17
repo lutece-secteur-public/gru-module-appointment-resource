@@ -1,5 +1,7 @@
-<fieldset>
-	<@formGroup labelKey='${formResourceType.description}' mandatory=isMandatory>
-		<@select items=refListResources default_value='' name='idResource_'+formResourceType.id />
-	</@formGroup>
-</fieldset>
+<@box>
+	<@boxBody>
+		<@formGroup labelKey='${formResourceType.description}' mandatory=isMandatory>
+			<@select items=refListResources default_value='' name='idResource_'+formResourceType.id />
+		</@formGroup>
+	</@boxBody>
+</@box>

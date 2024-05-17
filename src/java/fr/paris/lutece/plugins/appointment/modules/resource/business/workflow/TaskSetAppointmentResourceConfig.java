@@ -36,7 +36,7 @@ package fr.paris.lutece.plugins.appointment.modules.resource.business.workflow;
 import fr.paris.lutece.plugins.workflowcore.business.config.TaskConfig;
 
 /**
- * TaskSetAppointmentResourceConfig
+ * TaskSetAppointmentResourceConfig - Configuration of the workflow task associated with Resources
  */
 public class TaskSetAppointmentResourceConfig extends TaskConfig
 {

@@ -1,28 +1,41 @@
 <@row>
 	<@columns>
-		<legend>
-			#i18n{module.appointment.resource.resource_calendar.pageTitle} ${resource.resourceName}
-			<div class="pull-right">
-				<#if offsetWeek != 0>
-					<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=0<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("&","%26")}</#if>" title="#i18n{appointment.manage_appointment_calendar.labelCurrentWeek}">
-						<i class="fa fa-calendar">&nbsp;</i>#i18n{appointment.manage_appointment_calendar.labelCurrentWeek}
-					</a>
-				</#if>
-				<#if fromUrl?? && fromUrl != ''>
-					<@aButton href='${fromUrl}' buttonIcon='times' title='#i18n{portal.util.labelBack}' color='btn-default' />
-				</#if>
-			</div>
-		</legend>
-		<div class="pull-left">
-			<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=${offsetWeek - 1}<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("&","%26")}</#if>" title="#i18n{appointment.appointmentApp.previousWeek}">
-				<i class="glyphicon glyphicon-arrow-left">&nbsp;</i>&nbsp;#i18n{appointment.appointmentApp.previousWeek}
-			</a>
-		</div>
-		<div class="pull-right">
-			<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=${offsetWeek + 1}<#if fromUrl?? && fromUrl != ''>&fromUrl=${fromUrl?replace("&","%26")}</#if>" title="#i18n{appointment.appointmentApp.nextWeek}">
-				#i18n{appointment.appointmentApp.nextWeek}&nbsp;<i class="glyphicon glyphicon-arrow-right">&nbsp;</i>
-			</a>
-		</div>
-		${calendar}
+		<@box>
+			<@boxBody>
+				<legend>
+					<@div class="d-flex justify-content-between" params='style="margin-bottom:25px;"'>
+						<@div>
+							#i18n{module.appointment.resource.resource_calendar.pageTitle} <@span class="fw-bold">${resource.resourceName}</@span>
+						</@div>
+						<@div>
+							<#if fromUrl?? && fromUrl !=''>
+								<@aButton href='${fromUrl}' buttonIcon='times' title='#i18n{portal.util.labelBack}' color='default' />
+							</#if>
+						</@div>
+					</@div>
+					<@div class="d-flex justify-content-between">
+						<#assign originUrl><#if fromUrl?? && fromUrl !=''>&fromUrl=${fromUrl?replace("&","%26")}<#else></#if></#assign>
+						<@div>
+							<@aButton
+								href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=${offsetWeek - 1}${originUrl}"
+								title="#i18n{appointment.appointmentApp.previousWeek}" buttonIcon='chevron-left' />
+						</@div>
+						<#if offsetWeek !=0>
+							<@div>
+								<@aButton
+									href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=0${originUrl}"
+									title="#i18n{module.appointment.resource.resource_calendar.labelCurrentWeek}" buttonIcon='calendar' />
+							</@div>
+						</#if>
+						<@div>
+							<@aButton
+								href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=${offsetWeek + 1}${originUrl}"
+								title="#i18n{appointment.appointmentApp.nextWeek}" buttonIcon='chevron-right' iconPosition='right' />
+						</@div>
+					</@div>
+				</legend>
+				${calendar}
+			</@boxBody>
+		</@box>
 	</@columns>
 </@row>

@@ -1,24 +1,7 @@
-<@row>
-	<@columns>
-		<div class="lutece-dashboard-application">
-			<legend>
-				<img src="${icone!}" alt="logo" />
-				#i18n{module.appointment.resource.user_calendar.pageTitle}
-				<div class="pull-right">
-					<a href="jsp/admin/AdminMenu.jsp#top" title="#i18n{appointment.dashboard.top}">
-						<@icon style='arrow-up' />
-					</a>
-				</div>
-			</legend>
-			<div class="panel-content-small">
-				<div class="pull-left">
-					<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewUserCalendar&offsetWeek=-1' title='#i18n{appointment.appointmentApp.previousWeek}' buttonIcon='arrow-left' />
-				</div>
-				<div class="pull-right">
-					<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewUserCalendar&offsetWeek=1' title='#i18n{appointment.appointmentApp.nextWeek}' buttonIcon='arrow-right' />
-				</div>
-			</div>
-			${calendar}
-		</div>
-	</@columns>
-</@row>
+<@adminDashboardWidget title='#i18n{module.appointment.resource.user_calendar.pageTitle}' id='resource_dashboard' url=url >
+	<@div class="d-flex justify-content-between" >
+		<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewUserCalendar&offsetWeek=-1' title='#i18n{appointment.appointmentApp.previousWeek}' buttonIcon='chevron-left' />
+		<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewUserCalendar&offsetWeek=1' title='#i18n{appointment.appointmentApp.nextWeek}' iconPosition="right" buttonIcon='chevron-right' />
+	</@div>
+	${calendar}
+</@adminDashboardWidget>

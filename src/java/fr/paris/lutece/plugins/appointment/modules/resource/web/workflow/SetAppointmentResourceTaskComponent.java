@@ -71,7 +71,7 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * UpdateAdminAppointmentTaskComponent
+ * View of the task where the user can set a resource for an appointment
  */
 public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
 {
@@ -110,7 +110,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     @Override
     public String getDisplayConfigForm( HttpServletRequest request, Locale locale, ITask task )
     {
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task.getId( ) );
 
@@ -328,15 +328,6 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
         }
 
         return sbHistory.toString( );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getTaskInformationXml( int nIdHistory, HttpServletRequest request, Locale locale, ITask task )
-    {
-        return null;
     }
 
     /**

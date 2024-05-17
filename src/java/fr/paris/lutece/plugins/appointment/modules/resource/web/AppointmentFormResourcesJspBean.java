@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.appointment.modules.resource.web;
 
+import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceType;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceTypeHome;
 import fr.paris.lutece.plugins.appointment.service.AppointmentResourceIdService;
@@ -150,7 +151,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
 
         int nIdForm = Integer.parseInt( strIdForm );
 
-        if ( !RBACService.isAuthorized( AppointmentFormDTO.RESOURCE_TYPE, strIdForm, AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser( ) ) )
+        if ( !RBACService.isAuthorized( AppointmentFormDTO.RESOURCE_TYPE, strIdForm, AppointmentResourceIdService.PERMISSION_MODIFY_FORM, (User) getUser( ) ) )
         {
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
@@ -158,7 +159,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         AppointmentFormDTO appointmentForm = (AppointmentFormDTO) request.getSession( ).getAttribute( SESSION_ATTRIBUTE_APPOINTMENT_FORM );
         if ( ( appointmentForm == null ) || ( nIdForm != appointmentForm.getIdForm( ) ) )
         {
-            appointmentForm = FormService.buildAppointmentForm( nIdForm, 0, 0 );
+            appointmentForm = FormService.buildAppointmentForm( nIdForm, 0 );
         }
 
         if ( appointmentForm == null )
@@ -175,7 +176,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         model.put( MARK_ADMIN_USER_RESOURCE_TYPE, AdminUser.RESOURCE_TYPE );
         model.put( MARK_LOCALE, getLocale( ) );
 
-        AppointmentFormJspBean.addElementsToModel( request, appointmentForm, getUser( ), getLocale( ), model );
+        AppointmentFormJspBean.addElementsToModel( appointmentForm, getUser( ), getLocale( ), model );
 
         return getPage( MESSAGE_MANAGE_FORM_RESOURCES_PAGE_TITLE, TEMPLATE_MANAGE_FORM_RESOURCES, model );
     }
@@ -215,7 +216,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         }
 
         if ( !RBACService.isAuthorized( AppointmentFormDTO.RESOURCE_TYPE, Integer.toString( nIdForm ), AppointmentResourceIdService.PERMISSION_MODIFY_FORM,
-                getUser( ) ) )
+                (User) getUser( ) ) )
         {
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
@@ -253,7 +254,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         populate( formResourceType, request );
 
         if ( !RBACService.isAuthorized( AppointmentFormDTO.RESOURCE_TYPE, Integer.toString( formResourceType.getIdAppointmentForm( ) ),
-                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser( ) ) )
+                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, (User) getUser( ) ) )
         {
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
@@ -305,7 +306,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         }
 
         if ( !RBACService.isAuthorized( AppointmentFormDTO.RESOURCE_TYPE, Integer.toString( formResourceType.getIdAppointmentForm( ) ),
-                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser( ) ) )
+                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, (User) getUser( ) ) )
         {
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
@@ -349,7 +350,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         }
 
         if ( !RBACService.isAuthorized( AppointmentFormDTO.RESOURCE_TYPE, Integer.toString( formResourceType.getIdAppointmentForm( ) ),
-                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser( ) ) )
+                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, (User) getUser( ) ) )
         {
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
@@ -401,7 +402,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         }
 
         if ( !RBACService.isAuthorized( AppointmentFormDTO.RESOURCE_TYPE, Integer.toString( formResourceType.getIdAppointmentForm( ) ),
-                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser( ) ) )
+                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, (User) getUser( ) ) )
         {
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
@@ -442,7 +443,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         }
 
         if ( !RBACService.isAuthorized( AppointmentFormDTO.RESOURCE_TYPE, Integer.toString( formResourceType.getIdAppointmentForm( ) ),
-                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, getUser( ) ) )
+                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, (User) getUser( ) ) )
         {
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
