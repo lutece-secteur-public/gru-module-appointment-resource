@@ -69,12 +69,15 @@ package fr.paris.lutece.plugins.appointment.modules.resource.business.workflow;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * DAO to manage history of set appointment resource tasks
  */
+@ApplicationScoped
 public class SetAppointmentResourceHistoryDAO implements ISetAppointmentResourceHistoryDAO
 {
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_history,id_appointment,id_resource,id_form_resource_type FROM workflow_task_set_appointment_resource_history WHERE id=?";

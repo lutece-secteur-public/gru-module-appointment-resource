@@ -34,19 +34,26 @@
 package fr.paris.lutece.plugins.appointment.modules.resource.service.listeners;
 
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceTypeHome;
-import fr.paris.lutece.plugins.appointment.service.listeners.IAppointmentFormRemovalListener;
+import fr.paris.lutece.plugins.appointment.service.event.AppointmentFormRemovalEvent;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.ObservesAsync;
 
 /**
- * Appointment form resource type removal listener
+ * CDI event listener for appointment form removal.
+ * Cleans up resource type associations when an appointment form is removed.
  */
-public class AppointmentFormResourceTypeRemovalListener implements IAppointmentFormRemovalListener
+@ApplicationScoped
+public class AppointmentFormResourceTypeRemovalListener
 {
     /**
-     * {@inheritDoc}
+     * Handle appointment form removal by deleting associated resource types.
+     *
+     * @param event
+     *            The appointment form removal event
      */
-    @Override
-    public void notifyAppointmentFormRemoval( int nIdAppointmentForm )
+    public void onAppointmentFormRemoved( @ObservesAsync AppointmentFormRemovalEvent event )
     {
-        AppointmentFormResourceTypeHome.removeFromIdAppointmentForm( nIdAppointmentForm );
+        AppointmentFormResourceTypeHome.removeFromIdAppointmentForm( event.getIdAppointmentForm( ) );
     }
 }

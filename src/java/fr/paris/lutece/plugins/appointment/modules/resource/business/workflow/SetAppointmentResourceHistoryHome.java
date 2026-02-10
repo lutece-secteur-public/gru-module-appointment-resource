@@ -36,7 +36,7 @@ package fr.paris.lutece.plugins.appointment.modules.resource.business.workflow;
 import fr.paris.lutece.plugins.workflow.modules.appointment.service.WorkflowAppointmentPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ import java.util.List;
  */
 public final class SetAppointmentResourceHistoryHome
 {
-    private static ISetAppointmentResourceHistoryDAO _dao = SpringContextService.getBean( ISetAppointmentResourceHistoryDAO.BEAN_NAME );
+    private static ISetAppointmentResourceHistoryDAO _dao = CDI.current( ).select( ISetAppointmentResourceHistoryDAO.class ).get( );
     private static Plugin _plugin = PluginService.getPlugin( WorkflowAppointmentPlugin.PLUGIN_NAME );
 
     /**

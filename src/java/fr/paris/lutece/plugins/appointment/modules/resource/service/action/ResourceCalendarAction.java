@@ -37,11 +37,14 @@ import fr.paris.lutece.plugins.appointment.modules.resource.web.AppointmentResou
 import fr.paris.lutece.plugins.resource.service.action.IResourceAction;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import java.util.Locale;
 
 /**
  * Action to display the calendar of resources
  */
+@ApplicationScoped
 public class ResourceCalendarAction implements IResourceAction
 {
     private static final String MESSAGE_RESOURCE_CALENDAR_ACTION_TITLE = "module.appointment.resource.resourceCalendarAction.title";

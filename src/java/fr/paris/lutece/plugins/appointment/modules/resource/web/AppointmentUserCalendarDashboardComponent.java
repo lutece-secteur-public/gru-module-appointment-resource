@@ -44,10 +44,11 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Calendar Dashboard Component This component displays directories
@@ -70,7 +71,8 @@ public class AppointmentUserCalendarDashboardComponent extends DashboardComponen
     @Override
     public String getDashboardData( AdminUser user, HttpServletRequest request )
     {
-        IResource resource = ResourceService.getInstance( ).getResource( Integer.toString( user.getUserId( ) ), AdminUser.RESOURCE_TYPE );
+        ResourceService resourceService = CDI.current( ).select( ResourceService.class ).get( );
+        IResource resource = resourceService.getResource( Integer.toString( user.getUserId( ) ), AdminUser.RESOURCE_TYPE );
 
         Right right = RightHome.findByPrimaryKey( getRight( ) );
 

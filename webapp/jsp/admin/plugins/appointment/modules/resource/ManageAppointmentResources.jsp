@@ -1,9 +1,9 @@
-<jsp:useBean id="manageappointmentResources" scope="session" class="fr.paris.lutece.plugins.appointment.modules.resource.web.AppointmentResourceJspBean" />
-<% String strContent = manageappointmentResources.processController ( request , response ); %>
-
 <%@ page errorPage="../../../../ErrorPage.jsp" %>
+
+${ pageContext.setAttribute( 'strContent', appointmentResourceJspBean.processController( pageContext.request , pageContext.response ) ) }
+
 <jsp:include page="../../../../AdminHeader.jsp" />
 
-<%= strContent %>
+${ pageContext.getAttribute( 'strContent' ) }
 
 <%@ include file="../../../../AdminFooter.jsp" %>

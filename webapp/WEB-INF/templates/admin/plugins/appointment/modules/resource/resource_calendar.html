@@ -1,10 +1,74 @@
 <link href="css/plugins/appointment/appointment.css" rel="stylesheet" >
-<@row class='hidden-desktop'>
-	<@columns>
-		<#list listDays as day>
-			<@row>
-				<@columns>
-					<@table>
+<div class="d-lg-none">
+	<#list listDays as day>
+		<@table>
+			<@tableHead>
+				<@tr>
+					<@th>
+						#i18n{${list_days_of_week[day_index]}}<br />
+						${day.date?date}
+					</@th>
+				</@tr>
+			</@tableHead>
+			<@tableBody>
+				<#assign currentTime = startingTime />
+				<#assign currentMinute = startingMinute />
+				<#assign currentHour = startingHour />
+				<#if day.listAppointmentResourceDTO?has_content>
+					<#list day.listAppointmentResourceDTO as appointment>
+						<#assign nbOccur = ( ( ( appointment.startingHour * 60 + appointment.startingMinute ) - currentTime ) / duration)?round />
+						<#if nbOccur &gt; 0>
+							<#list 1..nbOccur as i>
+								<@updateCurrentTimeHourAndMinute durationApp=duration />
+							</#list>
+						</#if>
+						<@tr>
+							<@updateCurrentTimeHourAndMinute durationApp=appointment.duration />
+							<@td class="appointment-slot-avaiable" title="">
+								<div>
+									<a href="jsp/admin/plugins/appointment/ManageAppointments.jsp?view=viewAppointment&id_appointment=${appointment.idApppointment}&id_form=${appointment.idForm!}" title="#i18n{module.appointment.resource.resource_calendar.viewAppointment}">
+										<#if appointment.startingHour &lt; 10>0</#if>${appointment.startingHour}h<#if appointment.startingMinute &lt; 10>0</#if>${appointment.startingMinute} - <#if appointment.endingHour &lt; 10>0</#if>${appointment.endingHour}h<#if appointment.endingMinute &lt; 10>0</#if>${appointment.endingMinute}
+									</a>
+								</div>
+							</@td>
+						</@tr>
+					</#list>
+				<#else>
+					<@tr>
+						<@td class="appointment-slot-closed appointment-row1">
+							#i18n{module.appointment.resource.labelNoAppointment}
+						</@td>
+					</@tr>
+				</#if>
+			</@tableBody>
+		</@table>
+	</#list>
+</div>
+<div class="d-none d-lg-block">
+	<@table>
+		<@tr>
+			<@td>
+				<@table>
+					<@tr>
+						<@td class="appointment-row1">&nbsp;</@td>
+					</@tr>
+					<#assign nbOccur = ( ( endingTime - startingTime ) / duration)?round />
+					<#assign currentTime = startingTime />
+					<#assign currentMinute = startingMinute />
+					<#assign currentHour = startingHour />
+					<#list 1..nbOccur as i>
+						<@tr>
+							<@td class="appointment-row1">
+								<#if currentHour &lt; 10>0</#if>${currentHour}h<#if currentMinute &lt; 10>0</#if>${currentMinute}
+								<@updateCurrentTimeHourAndMinute durationApp=duration />
+							</@td>
+						</@tr>
+					</#list>
+				</@table>
+			</@td>
+			<#list listDays as day>
+				<@td>
+					<@table class="table appointment-inner-table">
 						<@tableHead>
 							<@tr>
 								<@th>
@@ -17,114 +81,42 @@
 							<#assign currentTime = startingTime />
 							<#assign currentMinute = startingMinute />
 							<#assign currentHour = startingHour />
-							<#if day.listAppointmentResourceDTO?has_content>
-								<#list day.listAppointmentResourceDTO as appointment>
-									<#assign nbOccur = ( ( ( appointment.startingHour * 60 + appointment.startingMinute ) - currentTime ) / duration)?round />
-									<#if nbOccur &gt; 0>
-										<#list 1..nbOccur as i>
-											<@updateCurrentTimeHourAndMinute durationApp=duration />
-										</#list>
-									</#if>
-									<@tr>
-										<@updateCurrentTimeHourAndMinute durationApp=appointment.duration />
-										<@td class="appointment-slot-avaiable" title="">
-											<@div>
-												<@link href="jsp/admin/plugins/appointment/ManageAppointments.jsp?view=viewAppointment&id_appointment=${appointment.idApppointment}&id_form=${appointment.idForm!}" title="#i18n{module.appointment.resource.resource_calendar.viewAppointment}">
-													<#if appointment.startingHour &lt; 10>0</#if>${appointment.startingHour}h<#if appointment.startingMinute &lt; 10>0</#if>${appointment.startingMinute} - <#if appointment.endingHour &lt; 10>0</#if>${appointment.endingHour}h<#if appointment.endingMinute &lt; 10>0</#if>${appointment.endingMinute}
-												</@link>
-											</@div>
-										</@td>
-									</@tr>
-								</#list>
-							<#else>
+							<#list day.listAppointmentResourceDTO as appointment>
+								<#assign nbOccur = ( ( ( appointment.startingHour * 60 + appointment.startingMinute ) - currentTime ) / duration)?round />
+								<#if nbOccur &gt; 0>
+									<#list 1..nbOccur as i>
+										<@addEmptyLine durationApp=duration />
+									</#list>
+								</#if>
 								<@tr>
-									<@td class="appointment-slot-closed appointment-row1">
-										#i18n{module.appointment.resource.labelNoAppointment}
+									<#assign rowspan=((appointment.duration)/duration)?round>
+									<@updateCurrentTimeHourAndMinute durationApp=appointment.duration />
+									<@td class="appointment-slot-avaiable appointment-row${rowspan} appointment-tooltip" title="">
+										<div>
+											<a href="jsp/admin/plugins/appointment/ManageAppointments.jsp?view=viewAppointment&id_appointment=${appointment.idApppointment}&id_form=${appointment.idForm!}" title="#i18n{module.appointment.resource.resource_calendar.viewAppointment}">
+												<#if appointment.startingHour &lt; 10>0</#if>${appointment.startingHour}h<#if appointment.startingMinute &lt; 10>0</#if>${appointment.startingMinute}
+											</a>
+										</div>
+										<span class="appointment-tooltip-title">
+											<@getCellTitle startingHour=appointment.startingHour startingMinute=appointment.startingMinute endingHour=appointment.endingHour endingMinute=appointment.endingMinute appointmentDescription=appointment.appointmentDescription />
+										</span>
 									</@td>
 								</@tr>
+							</#list>
+							<#assign maxTime = endingTime />
+							<#assign nbOccur = ( ( maxTime - currentTime ) / duration )?round />
+							<#if nbOccur &gt; 0>
+								<#list 1..nbOccur as i>
+									<@addEmptyLine durationApp=duration/>
+								</#list>
 							</#if>
 						</@tableBody>
 					</@table>
-				</@columns>
-			</@row>
-		</#list>
-	</@columns>
-</@row>
-<@row class='visible-desktop'>
-	<@columns>
-		<@table>
-			<@tr>
-				<@td>
-					<@table>
-						<@tr>
-							<@td class="appointment-row1">&nbsp;</@td>
-						</@tr>
-						<#assign nbOccur = ( ( endingTime - startingTime ) / duration)?round />
-						<#assign currentTime = startingTime />
-						<#assign currentMinute = startingMinute />
-						<#assign currentHour = startingHour />
-						<#list 1..nbOccur as i>
-							<@tr>
-								<@td class="appointment-row1">
-									<#if currentHour &lt; 10>0</#if>${currentHour}h<#if currentMinute &lt; 10>0</#if>${currentMinute}
-									<@updateCurrentTimeHourAndMinute durationApp=duration />
-								</@td>
-							</@tr>
-						</#list>
-					</@table>
 				</@td>
-				<#list listDays as day>
-					<@td>
-						<@table class="table appointment-inner-table">
-							<@tableHead>
-								<@tr>
-									<@th>
-										#i18n{${list_days_of_week[day_index]}}<br />
-										${day.date?date}
-									</@th>
-								</@tr>
-							</@tableHead>
-							<@tableBody>
-								<#assign currentTime = startingTime />
-								<#assign currentMinute = startingMinute />
-								<#assign currentHour = startingHour />
-								<#list day.listAppointmentResourceDTO as appointment>
-									<#assign nbOccur = ( ( ( appointment.startingHour * 60 + appointment.startingMinute ) - currentTime ) / duration)?round />
-									<#if nbOccur &gt; 0>
-										<#list 1..nbOccur as i>
-											<@addEmptyLine durationApp=duration />
-										</#list>
-									</#if>
-									<@tr>
-										<#assign rowspan=((appointment.duration)/duration)?round>
-										<@updateCurrentTimeHourAndMinute durationApp=appointment.duration />
-										<@td class="appointment-slot-avaiable appointment-row${rowspan} appointment-tooltip" title="">
-											<@div>
-												<@link href="jsp/admin/plugins/appointment/ManageAppointments.jsp?view=viewAppointment&id_appointment=${appointment.idApppointment}&id_form=${appointment.idForm!}" title="#i18n{module.appointment.resource.resource_calendar.viewAppointment}">
-													<#if appointment.startingHour &lt; 10>0</#if>${appointment.startingHour}h<#if appointment.startingMinute &lt; 10>0</#if>${appointment.startingMinute}
-												</@link>
-											</@div>
-											<@span class="appointment-tooltip-title">
-												<@getCellTitle startingHour=appointment.startingHour startingMinute=appointment.startingMinute endingHour=appointment.endingHour endingMinute=appointment.endingMinute appointmentDescription=appointment.appointmentDescription />
-											</@span>
-										</@td>
-									</@tr>
-								</#list>
-								<#assign maxTime = endingTime />
-								<#assign nbOccur = ( ( maxTime - currentTime ) / duration )?round />
-								<#if nbOccur &gt; 0>
-									<#list 1..nbOccur as i>
-										<@addEmptyLine durationApp=duration/>
-									</#list>
-								</#if>
-							</@tableBody>
-						</@table>
-					</@td>
-				</#list>
-			</@tr>
-		</@table>
-	</@columns>
-</@row>
+			</#list>
+		</@tr>
+	</@table>
+</div>
 <#macro addEmptyLine durationApp>
 	<#assign saveCurrentHour = currentHour />
 	<#assign saveCurrentMinute = currentMinute />
@@ -132,9 +124,9 @@
 	<@tr>
 		<@td class="appointment-slot-closed appointment-row1 appointment-tooltip" title="">
 			&nbsp;
-			<@span class="appointment-tooltip-title">
-				<@getCellTitle startingHour=saveCurrentHour startingMinute=saveCurrentMinute endingHour=currentHour endingMinute=currentMinute appointmentDescription='' />					
-			</@span>
+			<span class="appointment-tooltip-title">
+				<@getCellTitle startingHour=saveCurrentHour startingMinute=saveCurrentMinute endingHour=currentHour endingMinute=currentMinute appointmentDescription='' />
+			</span>
 		</@td>
 	</@tr>
 </#macro>

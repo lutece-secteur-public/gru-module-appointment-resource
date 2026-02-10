@@ -2,13 +2,13 @@
     <parent>
         <artifactId>lutece-global-pom</artifactId>
         <groupId>fr.paris.lutece.tools</groupId>
-        <version>7.0.2</version>
+        <version>8.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.paris.lutece.plugins</groupId>
     <artifactId>module-appointment-resource</artifactId>
     <packaging>lutece-plugin</packaging>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>4.0.0-SNAPSHOT</version>
     <name>Lutece Appointment Resource module</name>
     <repositories>
         <repository>
@@ -22,26 +22,32 @@
         <dependency>
             <groupId>fr.paris.lutece.plugins</groupId>
             <artifactId>plugin-appointment</artifactId>
-            <version>[3.0.0-SNAPSHOT,3.9.9)</version>
+            <version>[4.0.0-SNAPSHOT,)</version>
             <type>lutece-plugin</type>
         </dependency>
         <dependency>
             <groupId>fr.paris.lutece.plugins</groupId>
             <artifactId>plugin-resource</artifactId>
-            <version>[1.0.0,2.9.9)</version>
+            <version>[3.0.0-SNAPSHOT,)</version>
             <type>lutece-plugin</type>
         </dependency>
         <dependency>
-        	<groupId>fr.paris.lutece.plugins</groupId>
-        	<artifactId>module-resource-adminuser</artifactId>
-        	<version>[1.0.0,1.9.9)</version>
-        	<type>lutece-plugin</type>
+            <groupId>fr.paris.lutece.plugins</groupId>
+            <artifactId>module-resource-adminuser</artifactId>
+            <version>[2.0.0-SNAPSHOT,)</version>
+            <type>lutece-plugin</type>
         </dependency>
         <dependency>
-        	<groupId>fr.paris.lutece.plugins</groupId>
-        	<artifactId>module-workflow-appointment</artifactId>
-        	<version>[3.0.0-SNAPSHOT,3.9.9)</version>
-        	<type>lutece-plugin</type>
+            <groupId>fr.paris.lutece.plugins</groupId>
+            <artifactId>module-workflow-appointment</artifactId>
+            <version>[4.0.0-SNAPSHOT,)</version>
+            <type>lutece-plugin</type>
+        </dependency>
+        <dependency>
+            <groupId>fr.paris.lutece.plugins</groupId>
+            <artifactId>library-lutece-unit-testing</artifactId>
+            <type>jar</type>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <properties>

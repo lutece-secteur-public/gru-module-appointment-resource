@@ -42,7 +42,10 @@ import fr.paris.lutece.plugins.resource.service.ResourceService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
-import org.apache.commons.lang.StringUtils;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,10 +56,14 @@ import java.util.Map;
 /**
  * Add service for resources of appointments
  */
+@ApplicationScoped
 public class AppointmentResourceAddonService implements IAppointmentAddonService
 {
     private static final String MARK_LIST_APP_RESOURCES = "listAppResources";
     private static final String TEMPLATE_APPOINTMENT_RESOURCE_ADDON = "admin/plugins/appointment/modules/resource/appointment_resource_addon.html";
+
+    @Inject
+    private ResourceService _resourceService;
 
     /**
      * {@inheritDoc}
@@ -75,7 +82,7 @@ public class AppointmentResourceAddonService implements IAppointmentAddonService
 
             if ( StringUtils.isNotEmpty( appResDTO.getIdResource( ) ) && StringUtils.isNotEmpty( appResDTO.getFormResourceType( ).getResourceTypeName( ) ) )
             {
-                appResDTO.setResource( ResourceService.getInstance( ).getResource( appResDTO.getIdResource( ),
+                appResDTO.setResource( _resourceService.getResource( appResDTO.getIdResource( ),
                         appResDTO.getFormResourceType( ).getResourceTypeName( ) ) );
             }
 

@@ -48,6 +48,7 @@ import fr.paris.lutece.plugins.appointment.web.dto.AppointmentFormDTO;
 import fr.paris.lutece.plugins.resource.business.IResource;
 import fr.paris.lutece.plugins.resource.service.ResourceService;
 import fr.paris.lutece.plugins.workflow.web.task.AbstractTaskComponent;
+import fr.paris.lutece.plugins.workflowcore.business.task.ITaskType;
 import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 import fr.paris.lutece.plugins.workflowcore.service.task.ITask;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -59,20 +60,23 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * View of the task where the user can set a resource for an appointment
  */
+@ApplicationScoped
+@Named( "appointment-resource.setAppointmentResourceTaskComponent" )
 public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
 {
     // TEMPLATES
@@ -100,9 +104,30 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     private static final String MESSAGE_ERROR_MANDATORY_FIELDS = "module.appointment.resource.task_set_appointment_resource_config.mandatoryFields";
     private static final String MESSAGE_NO_RESOURCE_TYPE = "module.appointment.resource.task_set_appointment_resource_config.noResourceType";
     private static final String MESSAGE_APPOINTMENT_RESOURCE_SET = "module.appointment.resource.task_set_appointment_resource_config.history.appointmentResourceSet";
-    @Inject
-    @Named( TaskSetAppointmentResource.CONFIG_SERVICE_BEAN_NAME )
+
+    // SERVICES
     private ITaskConfigService _taskSetAppointmentResourceConfigService;
+    @Inject
+    private AppointmentResourceService _appointmentResourceService;
+    @Inject
+    private ResourceService _resourceService;
+
+    /**
+     * Constructor
+     *
+     * @param taskType the task type
+     * @param taskConfigService the task config service
+     */
+    @Inject
+    public SetAppointmentResourceTaskComponent(
+            @Named( "appointment-resource.taskTypeSetAppointmentResource" ) ITaskType taskType,
+            @Named( TaskSetAppointmentResource.CONFIG_SERVICE_BEAN_NAME ) ITaskConfigService taskConfigService )
+    {
+        super( );
+        setTaskType( taskType );
+        setTaskConfigService( taskConfigService );
+        _taskSetAppointmentResourceConfigService = taskConfigService;
+    }
 
     /**
      * {@inheritDoc}
@@ -228,7 +253,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     @Override
     public String getDisplayTaskForm( int nIdResource, String strResourceType, HttpServletRequest request, Locale locale, ITask task )
     {
-        if ( !StringUtils.equals( Appointment.APPOINTMENT_RESOURCE_TYPE, strResourceType ) )
+        if ( !Appointment.APPOINTMENT_RESOURCE_TYPE.equals( strResourceType ) )
         {
             return null;
         }
@@ -252,13 +277,12 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
 
         AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config.getIdFormResourceType( ) );
 
-        List<IResource> listResources = ResourceService.getInstance( ).getListResources( formResourceType.getResourceTypeName( ) );
+        List<IResource> listResources = _resourceService.getListResources( formResourceType.getResourceTypeName( ) );
         ReferenceList refListResources = new ReferenceList( );
-        AppointmentResourceService appointmentResourceService = AppointmentResourceService.getInstance( );
 
         for ( IResource resource : listResources )
         {
-            if ( appointmentResourceService.isResourceAvailableForAppointment( resource.getIdResource( ), resource.getResourceType( ),
+            if ( _appointmentResourceService.isResourceAvailableForAppointment( resource.getIdResource( ), resource.getResourceType( ),
                     config.getIdFormResourceType( ), appointment ) )
             {
                 refListResources.addItem( resource.getIdResource( ), resource.getResourceName( ) );
@@ -296,7 +320,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
 
         AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config.getIdFormResourceType( ) );
 
-        IResource resource = ResourceService.getInstance( ).getResource( strIdResource, formResourceType.getResourceTypeName( ) );
+        IResource resource = _resourceService.getResource( strIdResource, formResourceType.getResourceTypeName( ) );
 
         if ( resource == null )
         {
@@ -318,7 +342,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
         for ( SetAppointmentResourceHistory history : listHistory )
         {
             AppointmentFormResourceType resourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( history.getIdFormResourceType( ) );
-            IResource resource = ResourceService.getInstance( ).getResource( history.getIdResource( ), resourceType.getResourceTypeName( ) );
+            IResource resource = _resourceService.getResource( history.getIdResource( ), resourceType.getResourceTypeName( ) );
 
             Object [ ] args = {
                     resource.getResourceName( ), resourceType.getDescription( )

@@ -36,12 +36,15 @@ package fr.paris.lutece.plugins.appointment.modules.resource.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Appointment form resource type DAO
  */
+@ApplicationScoped
 public class AppointmentFormResourceTypeDAO implements IAppointmentFormResourceTypeDAO
 {
     private static final String SQL_QUERY_NEW_PRIMARY_KEY = " SELECT MAX(id) FROM appointment_resource_form_rt ";

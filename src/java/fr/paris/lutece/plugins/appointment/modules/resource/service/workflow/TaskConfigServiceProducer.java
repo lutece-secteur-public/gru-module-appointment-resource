@@ -31,62 +31,27 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.appointment.modules.resource.business.workflow;
+package fr.paris.lutece.plugins.appointment.modules.resource.service.workflow;
 
-import fr.paris.lutece.plugins.workflowcore.business.config.TaskConfig;
-
-import jakarta.enterprise.context.Dependent;
+import fr.paris.lutece.plugins.appointment.modules.resource.business.workflow.TaskSetAppointmentResourceConfig;
+import fr.paris.lutece.plugins.workflow.modules.appointment.service.AppointmentConfigService;
+import fr.paris.lutece.plugins.workflowcore.business.config.ITaskConfigDAO;
+import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Named;
 
-/**
- * TaskSetAppointmentResourceConfig - Configuration of the workflow task associated with Resources
- */
-@Dependent
-@Named( "appointment-resource.taskSetAppointmentResourceConfig" )
-public class TaskSetAppointmentResourceConfig extends TaskConfig
+@ApplicationScoped
+public class TaskConfigServiceProducer
 {
-    private int _nIdFormResourceType;
-    private boolean _bIsMandatory;
-
-    /**
-     * Get the id of the type of the resource to set
-     * 
-     * @return The id of the type of the resource to set
-     */
-    public int getIdFormResourceType( )
+    @Produces
+    @ApplicationScoped
+    @Named( TaskSetAppointmentResource.CONFIG_SERVICE_BEAN_NAME )
+    public ITaskConfigService produceTaskSetAppointmentResourceConfigService(
+            @Named( "appointment-resource.taskSetAppointmentResourceConfigDAO" ) ITaskConfigDAO<TaskSetAppointmentResourceConfig> dao )
     {
-        return _nIdFormResourceType;
-    }
-
-    /**
-     * Set the id of the type of the resource to set
-     * 
-     * @param nIdFormResourceType
-     *            The id of the type of the resource to set
-     */
-    public void setIdFormResourceType( int nIdFormResourceType )
-    {
-        this._nIdFormResourceType = nIdFormResourceType;
-    }
-
-    /**
-     * Check whether the field is mandatory
-     * 
-     * @return True if the field is mandatory
-     */
-    public boolean getIsMandatory( )
-    {
-        return _bIsMandatory;
-    }
-
-    /**
-     * Set the field as mandatory or not
-     * 
-     * @param bIsMandatory
-     *            True if the field is mandatory, false otherwise
-     */
-    public void setIsMandatory( boolean bIsMandatory )
-    {
-        this._bIsMandatory = bIsMandatory;
+        AppointmentConfigService service = new AppointmentConfigService( );
+        service.setTaskConfigDAO( (ITaskConfigDAO) dao );
+        return service;
     }
 }
