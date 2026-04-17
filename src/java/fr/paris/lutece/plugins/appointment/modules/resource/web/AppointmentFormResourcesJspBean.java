@@ -56,16 +56,23 @@ import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
 
-import org.apache.commons.lang.StringUtils;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import fr.paris.lutece.portal.web.cdi.mvc.Models;
 
 /**
  * Jsp Bean to manage appointment form resources
  */
+@SessionScoped
+@Named
 @Controller( controllerJsp = AppointmentFormResourcesJspBean.JSP_MANAGE_APPOINTMENT_FORM_RESOURCE_TYPE, controllerPath = AppointmentFormResourcesJspBean.PATH_MANAGE_APPOINTMENT_FORM_RESOURCE_TYPE, right = AppointmentFormJspBean.RIGHT_MANAGEAPPOINTMENTFORM )
 public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
 {
@@ -123,6 +130,11 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
     private static final String TEMPLATE_MANAGE_FORM_RESOURCES = "admin/plugins/appointment/modules/resource/manage_form_resources.html";
     private static final String TEMPLATE_CREATE_FORM_RESOURCES = "admin/plugins/appointment/modules/resource/create_form_resources.html";
     private static final String TEMPLATE_MODIFY_FORM_RESOURCES = "admin/plugins/appointment/modules/resource/modify_form_resources.html";
+    @Inject
+    private Models _models;
+    @Inject
+    private ResourceService _resourceService;
+
     private AppointmentFormResourceType _formResourceType;
 
     // Session variable to store working values
@@ -167,18 +179,16 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
             return redirect( request, AppointmentFormJspBean.getURLManageAppointmentForms( request ) );
         }
 
-        Map<String, Object> model = getModel( );
+        List<IResourceType> listResourceTypes = _resourceService.getResourceTypesList( );
 
-        List<IResourceType> listResourceTypes = ResourceService.getInstance( ).getResourceTypesList( );
+        _models.put( MARK_LIST_RESOURCE_TYPES, listResourceTypes );
+        _models.put( MARK_LIST_FORM_RESOURCE_TYPES, AppointmentFormResourceTypeHome.findResourceTypesListFromIdForm( nIdForm ) );
+        _models.put( MARK_ADMIN_USER_RESOURCE_TYPE, AdminUser.RESOURCE_TYPE );
+        _models.put( MARK_LOCALE, getLocale( ) );
 
-        model.put( MARK_LIST_RESOURCE_TYPES, listResourceTypes );
-        model.put( MARK_LIST_FORM_RESOURCE_TYPES, AppointmentFormResourceTypeHome.findResourceTypesListFromIdForm( nIdForm ) );
-        model.put( MARK_ADMIN_USER_RESOURCE_TYPE, AdminUser.RESOURCE_TYPE );
-        model.put( MARK_LOCALE, getLocale( ) );
+        CDI.current( ).select( AppointmentFormJspBean.class ).get( ).addElementsToModel( appointmentForm, getUser( ), getLocale( ), _models );
 
-        AppointmentFormJspBean.addElementsToModel( appointmentForm, getUser( ), getLocale( ), model );
-
-        return getPage( MESSAGE_MANAGE_FORM_RESOURCES_PAGE_TITLE, TEMPLATE_MANAGE_FORM_RESOURCES, model );
+        return getPage( MESSAGE_MANAGE_FORM_RESOURCES_PAGE_TITLE, TEMPLATE_MANAGE_FORM_RESOURCES );
     }
 
     /**
@@ -223,18 +233,17 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
 
         ReferenceList refListResourceTypes = new ReferenceList( );
 
-        for ( IResourceType resourceType : ResourceService.getInstance( ).getResourceTypesList( ) )
+        for ( IResourceType resourceType : _resourceService.getResourceTypesList( ) )
         {
             refListResourceTypes.addItem( resourceType.getResourceTypeName( ), resourceType.getResourceTypeDescription( ) );
         }
 
-        Map<String, Object> model = getModel( );
-        model.put( MARK_FORM_RESOURCE_TYPE, formResourceType );
-        model.put( MARK_LIST_RESOURCE_TYPES, refListResourceTypes );
-        model.put( PARAMETER_ID_FORM, nIdForm );
-        model.put( MARK_LOCALE, getLocale( ) );
+        _models.put( MARK_FORM_RESOURCE_TYPE, formResourceType );
+        _models.put( MARK_LIST_RESOURCE_TYPES, refListResourceTypes );
+        _models.put( PARAMETER_ID_FORM, nIdForm );
+        _models.put( MARK_LOCALE, getLocale( ) );
 
-        return getPage( MESSAGE_CREATE_FORM_RESOURCES_PAGE_TITLE, TEMPLATE_CREATE_FORM_RESOURCES, model );
+        return getPage( MESSAGE_CREATE_FORM_RESOURCES_PAGE_TITLE, TEMPLATE_CREATE_FORM_RESOURCES );
     }
 
     /**
@@ -311,14 +320,13 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
 
-        List<IResourceType> listResourceTypes = ResourceService.getInstance( ).getResourceTypesList( );
+        List<IResourceType> listResourceTypes = _resourceService.getResourceTypesList( );
 
-        Map<String, Object> model = getModel( );
-        model.put( MARK_FORM_RESOURCE_TYPE, formResourceType );
-        model.put( MARK_LIST_RESOURCE_TYPES, listResourceTypes );
-        model.put( MARK_LOCALE, getLocale( ) );
+        _models.put( MARK_FORM_RESOURCE_TYPE, formResourceType );
+        _models.put( MARK_LIST_RESOURCE_TYPES, listResourceTypes );
+        _models.put( MARK_LOCALE, getLocale( ) );
 
-        return getPage( MESSAGE_MODIFY_FORM_RESOURCES_PAGE_TITLE, TEMPLATE_MODIFY_FORM_RESOURCES, model );
+        return getPage( MESSAGE_MODIFY_FORM_RESOURCES_PAGE_TITLE, TEMPLATE_MODIFY_FORM_RESOURCES );
     }
 
     /**

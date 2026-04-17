@@ -47,9 +47,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.appointment.business.rule.ReservationRule;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResourceHome;
@@ -72,12 +75,15 @@ import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
+import fr.paris.lutece.portal.web.cdi.mvc.Models;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
 /**
  * Appointment resource JSP Bean
  */
+@RequestScoped
+@Named
 @Controller( controllerJsp = AppointmentResourceJspBean.CONTROLLER_JSP, controllerPath = AppointmentResourceJspBean.CONTROLLER_PATH, right = AppointmentFormJspBean.RIGHT_MANAGEAPPOINTMENTFORM )
 public class AppointmentResourceJspBean extends MVCAdminJspBean
 {
@@ -91,6 +97,11 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
      */
     public static final String CONTROLLER_JSP = "ManageAppointmentResources.jsp";
     private static final long serialVersionUID = 3684357156472596848L;
+
+    @Inject
+    private Models _models;
+    @Inject
+    private ResourceService _resourceService;
 
     // Views
     private static final String VIEW_USER_CALENDAR = "VIEW_USER_CALENDAR";
@@ -176,15 +187,14 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
 
         AdminUser adminUser = getUser( );
 
-        IResource resource = ResourceService.getInstance( ).getResource( Integer.toString( adminUser.getUserId( ) ), AdminUser.RESOURCE_TYPE );
+        IResource resource = _resourceService.getResource( Integer.toString( adminUser.getUserId( ) ), AdminUser.RESOURCE_TYPE );
 
-        Map<String, Object> model = getModel( );
-        model.put( MARK_CALENDAR, getWeekResourceCalendar( resource, nOffsetWeek, getLocale( ) ) );
-        model.put( MARK_RESOURCE, resource );
-        model.put( PARAMETER_OFFSET_WEEK, nOffsetWeek );
-        model.put( PARAMETER_FROM_URL, strFromUrl );
+        _models.put( MARK_CALENDAR, getWeekResourceCalendar( resource, nOffsetWeek, getLocale( ) ) );
+        _models.put( MARK_RESOURCE, resource );
+        _models.put( PARAMETER_OFFSET_WEEK, nOffsetWeek );
+        _models.put( PARAMETER_FROM_URL, strFromUrl );
 
-        return getPage( MESSAGE_USER_CALENDAR_PAGE_TITLE, TEMPLATE_VIEW_USER_CALENDAR, model );
+        return getPage( MESSAGE_USER_CALENDAR_PAGE_TITLE, TEMPLATE_VIEW_USER_CALENDAR );
     }
 
     /**
@@ -226,7 +236,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
             nOffsetWeek = parseInt( strOffsetWeek );
         }
 
-        IResourceProvider provider = ResourceService.getInstance( ).getResourceProvider( strResourceType );
+        IResourceProvider provider = _resourceService.getResourceProvider( strResourceType );
 
         if ( provider != null )
         {
@@ -234,13 +244,12 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
 
             if ( resource != null )
             {
-                Map<String, Object> model = getModel( );
-                model.put( MARK_CALENDAR, getWeekResourceCalendar( resource, nOffsetWeek, getLocale( ) ) );
-                model.put( MARK_RESOURCE, resource );
-                model.put( PARAMETER_OFFSET_WEEK, nOffsetWeek );
-                model.put( PARAMETER_FROM_URL, strFromUrl );
+                _models.put( MARK_CALENDAR, getWeekResourceCalendar( resource, nOffsetWeek, getLocale( ) ) );
+                _models.put( MARK_RESOURCE, resource );
+                _models.put( PARAMETER_OFFSET_WEEK, nOffsetWeek );
+                _models.put( PARAMETER_FROM_URL, strFromUrl );
 
-                return getPage( MESSAGE_RESOURCE_CALENDAR_PAGE_TITLE, TEMPLATE_VIEW_RESOURCE_CALENDAR, model );
+                return getPage( MESSAGE_RESOURCE_CALENDAR_PAGE_TITLE, TEMPLATE_VIEW_RESOURCE_CALENDAR );
             }
         }
 

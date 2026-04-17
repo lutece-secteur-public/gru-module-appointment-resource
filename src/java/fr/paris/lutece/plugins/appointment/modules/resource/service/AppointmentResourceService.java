@@ -33,39 +33,33 @@
  */
 package fr.paris.lutece.plugins.appointment.modules.resource.service;
 
-import fr.paris.lutece.plugins.appointment.business.appointment.Appointment;
-import fr.paris.lutece.plugins.appointment.business.slot.Slot;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResource;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResourceHome;
-import fr.paris.lutece.plugins.appointment.service.SlotService;
 import fr.paris.lutece.plugins.appointment.web.dto.AppointmentDTO;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.sql.Timestamp;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.Objects;
 
 /**
  * Service to manage appointment resources
  */
+@ApplicationScoped
 public class AppointmentResourceService
 {
-    private static final String BEAN_NAME = "appointment-resource.appointmentResourceService";
-    private static volatile AppointmentResourceService _instance;
-
     /**
      * Get the instance of the service
-     * 
+     *
      * @return The instance of the service
+     * @deprecated Use @Inject or CDI.current().select() instead
      */
+    @Deprecated( since = "8.0", forRemoval = true )
     public static AppointmentResourceService getInstance( )
     {
-        if ( _instance == null )
-        {
-            _instance = SpringContextService.getBean( BEAN_NAME );
-        }
-
-        return _instance;
+        return CDI.current( ).select( AppointmentResourceService.class ).get( );
     }
 
     /**
@@ -86,7 +80,7 @@ public class AppointmentResourceService
     {
         AppointmentResource appResource = AppointmentResourceHome.findByPrimaryKey( appointment.getIdAppointment( ), nIdFormResourceType );
 
-        if ( ( appResource != null ) && ( !appointment.getIsCancelled( ) ) && StringUtils.equals( appResource.getIdResource( ), strIdResource ) )
+        if ( ( appResource != null ) && ( !appointment.getIsCancelled( ) ) && Objects.equals( appResource.getIdResource( ), strIdResource ) )
         {
             // The resource is already associated with this appointment for this form RT, so we allow it to be re-associated
             return true;

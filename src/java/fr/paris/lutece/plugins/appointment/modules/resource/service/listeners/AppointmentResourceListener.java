@@ -34,46 +34,40 @@
 package fr.paris.lutece.plugins.appointment.modules.resource.service.listeners;
 
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResourceHome;
+import fr.paris.lutece.plugins.appointment.service.event.AppointmentDateChangedEvent;
+import fr.paris.lutece.plugins.appointment.service.event.AppointmentEvent;
+import fr.paris.lutece.portal.service.event.EventAction;
+import fr.paris.lutece.portal.service.event.Type;
 
-import fr.paris.lutece.plugins.appointment.service.listeners.IAppointmentListener;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-
-import java.util.List;
-import java.util.Locale;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.ObservesAsync;
 
 /**
- * Listener implementation for appointment resources
+ * CDI event listener for appointment resources.
+ * Cleans up resource associations when appointments are removed or rescheduled.
  */
-public class AppointmentResourceListener implements IAppointmentListener
+@ApplicationScoped
+public class AppointmentResourceListener
 {
-    private static final String MESSAGE_APPOINTMENT_RESOURCE_REMOVED = "module.appointment.resource.messageAppointmentResourceRemoved";
-
     /**
-     * {@inheritDoc}
+     * Handle appointment removal by deleting associated resources.
+     *
+     * @param event
+     *            The appointment removal event
      */
-    @Override
-    public void notifyAppointmentRemoval( int nIdAppointment )
+    public void onAppointmentRemoved( @ObservesAsync @Type( EventAction.REMOVE ) AppointmentEvent event )
     {
-        AppointmentResourceHome.deleteByIdAppointment( nIdAppointment );
+        AppointmentResourceHome.deleteByIdAppointment( event.getIdAppointment( ) );
     }
 
-
-	@Override
-	public void notifyAppointmentCreated(int nIdAppointment) {
-		 // Do nothing
-		
-	}
-
-	@Override
-	public void notifyAppointmentUpdated(int nIdAppointment) {
-		
-		 // Do nothing
-	}
-
-	@Override
-	public String appointmentDateChanged(int nIdAppointment, List<Integer> listIdSlot, Locale locale) {
-		 AppointmentResourceHome.deleteByIdAppointment( nIdAppointment );
-
-	        return I18nService.getLocalizedString( MESSAGE_APPOINTMENT_RESOURCE_REMOVED, locale );
-	}
+    /**
+     * Handle appointment date change by deleting associated resources.
+     *
+     * @param event
+     *            The appointment date changed event
+     */
+    public void onAppointmentDateChanged( @ObservesAsync AppointmentDateChangedEvent event )
+    {
+        AppointmentResourceHome.deleteByIdAppointment( event.getIdAppointment( ) );
+    }
 }

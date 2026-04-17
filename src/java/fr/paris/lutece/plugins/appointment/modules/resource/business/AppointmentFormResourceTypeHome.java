@@ -36,7 +36,7 @@ package fr.paris.lutece.plugins.appointment.modules.resource.business;
 import fr.paris.lutece.plugins.appointment.modules.resource.service.AppointmentResourcePlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ import java.util.List;
 public final class AppointmentFormResourceTypeHome
 {
     private static Plugin _plugin = PluginService.getPlugin( AppointmentResourcePlugin.PLUGIN_NAME );
-    private static final IAppointmentFormResourceTypeDAO _dao = SpringContextService.getBean( IAppointmentFormResourceTypeDAO.BEAN_NAME );
+    private static final IAppointmentFormResourceTypeDAO _dao = CDI.current( ).select( IAppointmentFormResourceTypeDAO.class ).get( );
 
     /**
      * Default constructor

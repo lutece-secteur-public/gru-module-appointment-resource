@@ -36,6 +36,8 @@ package fr.paris.lutece.plugins.appointment.modules.resource.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -44,6 +46,7 @@ import java.util.List;
 /**
  * Appointment resource DAO
  */
+@ApplicationScoped
 public class AppointmentResourceDAO implements IAppointmentResourceDAO
 {
     // Selects

@@ -36,7 +36,7 @@ package fr.paris.lutece.plugins.appointment.modules.resource.business;
 import fr.paris.lutece.plugins.appointment.modules.resource.service.AppointmentResourcePlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -47,7 +47,7 @@ import java.util.List;
  */
 public final class AppointmentResourceHome
 {
-    private static IAppointmentResourceDAO _dao = SpringContextService.getBean( IAppointmentResourceDAO.BEAN_NAME );
+    private static IAppointmentResourceDAO _dao = CDI.current( ).select( IAppointmentResourceDAO.class ).get( );
     private static Plugin _plugin = PluginService.getPlugin( AppointmentResourcePlugin.PLUGIN_NAME );
 
     /**
