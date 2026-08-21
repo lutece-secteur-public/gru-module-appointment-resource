@@ -1,3 +1,6 @@
+-- liquibase formatted sql
+-- changeset appointment-resource:create_db_appointment-resource.sql
+-- preconditions onFail:MARK_RAN onError:WARN
 DROP TABLE IF EXISTS appointment_resource_form_rt;
 CREATE TABLE appointment_resource_form_rt (
 	id int NOT NULL default '0',

@@ -43,7 +43,7 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.sql.Timestamp;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Service to manage appointment resources
