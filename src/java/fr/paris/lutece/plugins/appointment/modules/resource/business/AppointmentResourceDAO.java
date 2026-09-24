@@ -59,17 +59,14 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
             + " INNER JOIN appointment_appointment_slot aas ON aas.id_appointment = a.id_appointment"
             + " INNER JOIN appointment_slot s ON s.id_slot = aas.id_slot"
             + " WHERE ar.id_resource = ?" + " AND frt.resource_type_name = ?" + " AND a.is_cancelled != ?"
-            + " AND ( ( ( s.starting_date_time ) < ? && ( s.ending_date_time ) > ? )"
-            + "     || ( ( s.starting_date_time ) < ? && ( s.ending_date_time ) > ? )"
-            + "     || ( ( s.starting_date_time ) > ? && ( s.ending_date_time ) < ? )"
-            + "     || ( ( s.starting_date_time ) = ? && ( s.ending_date_time ) = ? )" + "     )";
-    private static final String SQL_QUERY_FIND_ID_APPOINTMENT_BY_RESAOURCE_AND_DATE = "SELECT ar.id_appointment FROM appointment_resource_app_res ar "
+            + " AND s.starting_date_time < ? AND s.ending_date_time > ? ";
+    private static final String SQL_QUERY_FIND_ID_APPOINTMENT_BY_RESAOURCE_AND_DATE = "SELECT DISTINCT ar.id_appointment FROM appointment_resource_app_res ar "
             + " INNER JOIN appointment_appointment a ON ar.id_appointment = a.id_appointment "
             + " INNER JOIN appointment_resource_form_rt frt ON ar.id_app_form_res_type = frt.id "
             + " INNER JOIN appointment_appointment_slot aas ON aas.id_appointment = a.id_appointment "
             + " INNER JOIN appointment_slot s ON s.id_slot = aas.id_slot "
             + " WHERE ar.id_resource = ? AND frt.resource_type_name = ? "
-            + " AND s.starting_date_time > ? AND s.ending_date_time < ? "
+            + " AND s.starting_date_time >= ? AND s.starting_date_time < ? "
             + " AND a.is_cancelled != ? ";
 
     // Insert, update
@@ -209,16 +206,9 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
             int nIndex = 1;
             daoUtil.setString( nIndex++, strIdResource );
             daoUtil.setString( nIndex++, strResourceTypeName );
-            // daoUtil.setDate( nIndex++, dateDay );
             daoUtil.setBoolean( nIndex++, true );
-            daoUtil.setTimestamp( nIndex++, nStartingTime );
-            daoUtil.setTimestamp( nIndex++, nStartingTime );
             daoUtil.setTimestamp( nIndex++, nEndingTime );
-            daoUtil.setTimestamp( nIndex++, nEndingTime );
-            daoUtil.setTimestamp( nIndex++, nStartingTime );
-            daoUtil.setTimestamp( nIndex++, nEndingTime );
-            daoUtil.setTimestamp( nIndex++, nStartingTime );
-            daoUtil.setTimestamp( nIndex, nEndingTime );
+            daoUtil.setTimestamp( nIndex, nStartingTime );
 
             daoUtil.executeQuery( );
 
