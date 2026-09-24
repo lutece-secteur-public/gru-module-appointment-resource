@@ -468,13 +468,18 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
      * @param request
      *            The request
      * @return The next URL to redirect to
+     * @throws AccessDeniedException
+     *             If the user is not authorized to modify the form
      */
     @Action( ACTION_DO_SET_ADMIN_DEFAULT_RESOURCE_TYPE )
-    public String doSetAdminDefaultResourceType( HttpServletRequest request )
+    public String doSetAdminDefaultResourceType( HttpServletRequest request ) throws AccessDeniedException
     {
-        String strIdFormResourceType = request.getParameter( PARAMETER_ID_FORM_RESOURCE_TYPE );
-        int nIdFormResourceType = Integer.parseInt( strIdFormResourceType );
-        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( nIdFormResourceType );
+        AppointmentFormResourceType formResourceType = findAuthorizedFormResourceType( request );
+
+        if ( formResourceType == null )
+        {
+            return redirect( request, AppointmentFormJspBean.getURLManageAppointmentForms( request ) );
+        }
 
         AppointmentFormResourceTypeHome.resetAppAdminUser( formResourceType.getIdAppointmentForm( ) );
         formResourceType.setIsAppointmentAdminUser( true );
@@ -489,19 +494,53 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
      * @param request
      *            The request
      * @return The next URL to redirect to
+     * @throws AccessDeniedException
+     *             If the user is not authorized to modify the form
      */
     @Action( ACTION_DO_SET_LOCATION_DEFAULT_RESOURCE_TYPE )
-    public String doSetLocalizationDefaultResourceType( HttpServletRequest request )
+    public String doSetLocalizationDefaultResourceType( HttpServletRequest request ) throws AccessDeniedException
     {
-        String strIdFormResourceType = request.getParameter( PARAMETER_ID_FORM_RESOURCE_TYPE );
-        int nIdFormResourceType = Integer.parseInt( strIdFormResourceType );
-        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( nIdFormResourceType );
+        AppointmentFormResourceType formResourceType = findAuthorizedFormResourceType( request );
+
+        if ( formResourceType == null )
+        {
+            return redirect( request, AppointmentFormJspBean.getURLManageAppointmentForms( request ) );
+        }
 
         AppointmentFormResourceTypeHome.resetLocalization( formResourceType.getIdAppointmentForm( ) );
         formResourceType.setIsLocation( true );
         AppointmentFormResourceTypeHome.update( formResourceType );
 
         return redirect( request, VIEW_MANAGE_FORM_RESOURCES, PARAMETER_ID_FORM, formResourceType.getIdAppointmentForm( ) );
+    }
+
+    /**
+     * Find the form resource type named by the request, checking that the user may modify its form
+     * 
+     * @param request
+     *            The request
+     * @return The form resource type, or null if the request names none
+     * @throws AccessDeniedException
+     *             If the user is not authorized to modify the form
+     */
+    private AppointmentFormResourceType findAuthorizedFormResourceType( HttpServletRequest request ) throws AccessDeniedException
+    {
+        String strIdFormResourceType = request.getParameter( PARAMETER_ID_FORM_RESOURCE_TYPE );
+
+        if ( !StringUtils.isNumeric( strIdFormResourceType ) )
+        {
+            return null;
+        }
+
+        AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( Integer.parseInt( strIdFormResourceType ) );
+
+        if ( formResourceType != null && !RBACService.isAuthorized( AppointmentFormDTO.RESOURCE_TYPE, Integer.toString( formResourceType.getIdAppointmentForm( ) ),
+                AppointmentResourceIdService.PERMISSION_MODIFY_FORM, (User) getUser( ) ) )
+        {
+            throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
+        }
+
+        return formResourceType;
     }
 
     /**
