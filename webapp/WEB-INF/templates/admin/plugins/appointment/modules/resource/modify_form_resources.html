@@ -1,7 +1,7 @@
 <@pageContainer>
 	<@pageColumn>
 		<@pageHeader title='#i18n{module.appointment.resource.modifyAppointmentFormResources.pageTitle}'>
-			<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=manageFormResources&id_form=${formResourceType.idAppointmentForm}' buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='default' />
+			<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=manageFormResources&id_form=${formResourceType.idAppointmentForm}' buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' />
 		</@pageHeader>
 		<@messages errors=errors />
 		<@tform action='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp' boxed=true>
@@ -31,7 +31,7 @@
 			</@formGroup>
 			<@formGroup>
 				<@button type='submit' buttonIcon='check' title='#i18n{portal.util.labelValidate}' color='primary' />
-				<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=manageFormResources&id_form=${formResourceType.idAppointmentForm}' buttonIcon='times' title='#i18n{portal.util.labelCancel}' color='default' />
+				<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=manageFormResources&id_form=${formResourceType.idAppointmentForm}' buttonIcon='times' title='#i18n{portal.util.labelCancel}' color='light' />
 			</@formGroup>
 		</@tform>
 	</@pageColumn>

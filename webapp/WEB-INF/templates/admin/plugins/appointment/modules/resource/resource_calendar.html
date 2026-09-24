@@ -1,4 +1,3 @@
-<link href="themes/shared/plugins/appointment/css/appointment.css" rel="stylesheet" >
 <div class="d-lg-none">
 	<#list listDays as day>
 		<@table>
@@ -24,7 +23,7 @@
 						</#if>
 						<@tr>
 							<@updateCurrentTimeHourAndMinute durationApp=appointment.duration />
-							<@td class="appointment-slot-avaiable" title="">
+							<@td class="bg-primary-subtle">
 								<div>
 									<a href="jsp/admin/plugins/appointment/ManageAppointments.jsp?view=viewAppointment&id_appointment=${appointment.idApppointment}&id_form=${appointment.idForm!}" title="#i18n{module.appointment.resource.resource_calendar.viewAppointment}">
 										<#if appointment.startingHour &lt; 10>0</#if>${appointment.startingHour}h<#if appointment.startingMinute &lt; 10>0</#if>${appointment.startingMinute} - <#if appointment.endingHour &lt; 10>0</#if>${appointment.endingHour}h<#if appointment.endingMinute &lt; 10>0</#if>${appointment.endingMinute}
@@ -35,7 +34,7 @@
 					</#list>
 				<#else>
 					<@tr>
-						<@td class="appointment-slot-closed appointment-row1">
+						<@td class="text-muted">
 							#i18n{module.appointment.resource.labelNoAppointment}
 						</@td>
 					</@tr>
@@ -50,7 +49,7 @@
 			<@td>
 				<@table>
 					<@tr>
-						<@td class="appointment-row1">&nbsp;</@td>
+						<@td>&nbsp;</@td>
 					</@tr>
 					<#assign nbOccur = ( ( endingTime - startingTime ) / duration)?round />
 					<#assign currentTime = startingTime />
@@ -58,7 +57,7 @@
 					<#assign currentHour = startingHour />
 					<#list 1..nbOccur as i>
 						<@tr>
-							<@td class="appointment-row1">
+							<@td>
 								<#if currentHour &lt; 10>0</#if>${currentHour}h<#if currentMinute &lt; 10>0</#if>${currentMinute}
 								<@updateCurrentTimeHourAndMinute durationApp=duration />
 							</@td>
@@ -68,7 +67,7 @@
 			</@td>
 			<#list listDays as day>
 				<@td>
-					<@table class="table appointment-inner-table">
+					<@table class="mb-0">
 						<@tableHead>
 							<@tr>
 								<@th>
@@ -91,15 +90,11 @@
 								<@tr>
 									<#assign rowspan=((appointment.duration)/duration)?round>
 									<@updateCurrentTimeHourAndMinute durationApp=appointment.duration />
-									<@td class="appointment-slot-avaiable appointment-row${rowspan} appointment-tooltip" title="">
-										<div>
-											<a href="jsp/admin/plugins/appointment/ManageAppointments.jsp?view=viewAppointment&id_appointment=${appointment.idApppointment}&id_form=${appointment.idForm!}" title="#i18n{module.appointment.resource.resource_calendar.viewAppointment}">
-												<#if appointment.startingHour &lt; 10>0</#if>${appointment.startingHour}h<#if appointment.startingMinute &lt; 10>0</#if>${appointment.startingMinute}
-											</a>
-										</div>
-										<span class="appointment-tooltip-title">
-											<@getCellTitle startingHour=appointment.startingHour startingMinute=appointment.startingMinute endingHour=appointment.endingHour endingMinute=appointment.endingMinute appointmentDescription=appointment.appointmentDescription />
-										</span>
+									<@td class="bg-primary-subtle">
+										<a href="jsp/admin/plugins/appointment/ManageAppointments.jsp?view=viewAppointment&id_appointment=${appointment.idApppointment}&id_form=${appointment.idForm!}" title="#i18n{module.appointment.resource.resource_calendar.viewAppointment}">
+											<@getCellTitle startingHour=appointment.startingHour startingMinute=appointment.startingMinute endingHour=appointment.endingHour endingMinute=appointment.endingMinute />
+										</a>
+										<div>${appointment.appointmentDescription}</div>
 									</@td>
 								</@tr>
 							</#list>
@@ -122,12 +117,8 @@
 	<#assign saveCurrentMinute = currentMinute />
 	<@updateCurrentTimeHourAndMinute durationApp=durationApp />
 	<@tr>
-		<@td class="appointment-slot-closed appointment-row1 appointment-tooltip" title="">
-			&nbsp;
-			<span class="appointment-tooltip-title">
-				<@getCellTitle startingHour=saveCurrentHour startingMinute=saveCurrentMinute endingHour=currentHour endingMinute=currentMinute appointmentDescription='' />
-			</span>
-		</@td>
+		<#assign cellTitle><@getCellTitle startingHour=saveCurrentHour startingMinute=saveCurrentMinute endingHour=currentHour endingMinute=currentMinute /></#assign>
+		<@td params='title="${cellTitle}"'>&nbsp;</@td>
 	</@tr>
 </#macro>
 
@@ -143,10 +134,4 @@
 	</#if>
 </#macro>
 
-<#macro getCellTitle startingHour startingMinute endingHour endingMinute appointmentDescription>
-	<#if startingHour &lt; 10>0</#if>${startingHour}h<#if startingMinute &lt; 10>0</#if>${startingMinute} - <#if endingHour &lt; 10>0</#if>${endingHour}h<#if endingMinute &lt; 10>0</#if>${endingMinute}
-	<#if appointmentDescription != ''>
-		<br />
-		${appointmentDescription}
-	</#if>
-</#macro>
+<#macro getCellTitle startingHour startingMinute endingHour endingMinute><#if startingHour &lt; 10>0</#if>${startingHour}h<#if startingMinute &lt; 10>0</#if>${startingMinute} - <#if endingHour &lt; 10>0</#if>${endingHour}h<#if endingMinute &lt; 10>0</#if>${endingMinute}</#macro>

@@ -9,7 +9,7 @@
 		<@select name='idFormResourceType' default_value=(idFormResourceType)!'' items=refListFormResourceTypes />
 	</@formGroup>
 	
-	<@formGroup labelKey='#i18n{module.appointment.resource.task_set_appointment_resource_config.labelMandatory}'>
-		<@checkBox labelFor='isMandatory' labelKey='#i18n{module.appointment.resource.task_set_appointment_resource_config.labelMandatory}' name='isMandatory' id='isMandatory' value='true' checked=isMandatory />
+	<@formGroup>
+		<@checkBox orientation='switch' labelKey='#i18n{module.appointment.resource.task_set_appointment_resource_config.labelMandatory}' name='isMandatory' id='isMandatory' value='true' checked=isMandatory />
 	</@formGroup>
 </@fieldSet>
