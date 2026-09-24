@@ -36,7 +36,7 @@ package fr.paris.lutece.plugins.appointment.modules.resource.business;
 import java.io.Serializable;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 /**
@@ -48,8 +48,8 @@ public class AppointmentFormResourceType implements Serializable
     private int _nId;
     @Min( value = 1, message = "#i18n{module.appointment.resource.model.entity.appointmentFormResourceType.attribute.idAppointmentForm.min}" )
     private int _nIdAppointmentForm;
-    @Size( min = 1, max = 255, message = "#i18n{module.appointment.resource.model.entity.appointmentFormResourceType.attribute.description.size}" )
-    @NotNull( message = "#i18n{module.appointment.resource.model.entity.appointmentFormResourceType.attribute.description.notNull}" )
+    @Size( max = 255, message = "#i18n{module.appointment.resource.model.entity.appointmentFormResourceType.attribute.description.size}" )
+    @NotBlank( message = "#i18n{module.appointment.resource.model.entity.appointmentFormResourceType.attribute.description.notNull}" )
     private String _strDescription;
     @Size( min = 1, max = 255, message = "#i18n{module.appointment.resource.model.entity.appointmentFormResourceType.attribute.resourceTypeName.size}" )
     private String _strResourceTypeName;
