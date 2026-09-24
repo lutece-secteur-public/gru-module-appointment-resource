@@ -102,6 +102,8 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
 
     // MESSAGES
     private static final String MESSAGE_ERROR_MANDATORY_FIELDS = "module.appointment.resource.task_set_appointment_resource_config.mandatoryFields";
+    private static final String MESSAGE_CHOOSE_RESOURCE = "module.appointment.resource.task_set_appointment_resource_config.labelChooseResource";
+    private static final String MESSAGE_RESOURCE_UNAVAILABLE = "module.appointment.resource.task_set_appointment_resource_config.resourceUnavailable";
     private static final String MESSAGE_NO_RESOURCE_TYPE = "module.appointment.resource.task_set_appointment_resource_config.noResourceType";
     private static final String MESSAGE_APPOINTMENT_RESOURCE_SET = "module.appointment.resource.task_set_appointment_resource_config.history.appointmentResourceSet";
 
@@ -279,6 +281,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
 
         List<IResource> listResources = _resourceService.getListResources( formResourceType.getResourceTypeName( ) );
         ReferenceList refListResources = new ReferenceList( );
+        refListResources.addItem( StringUtils.EMPTY, I18nService.getLocalizedString( MESSAGE_CHOOSE_RESOURCE, locale ) );
 
         for ( IResource resource : listResources )
         {
@@ -306,7 +309,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     {
         TaskSetAppointmentResourceConfig config = _taskSetAppointmentResourceConfigService.findByPrimaryKey( task.getId( ) );
 
-        if ( ( config == null ) || !config.getIsMandatory( ) )
+        if ( config == null )
         {
             return null;
         }
@@ -315,16 +318,17 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
 
         if ( StringUtils.isEmpty( strIdResource ) )
         {
-            return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
+            return config.getIsMandatory( ) ? AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_MANDATORY_FIELDS, AdminMessage.TYPE_STOP ) : null;
         }
 
         AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config.getIdFormResourceType( ) );
+        IResource resource = ( formResourceType != null ) ? _resourceService.getResource( strIdResource, formResourceType.getResourceTypeName( ) ) : null;
+        AppointmentDTO appointment = AppointmentService.buildAppointmentDTOFromIdAppointment( nIdResource );
 
-        IResource resource = _resourceService.getResource( strIdResource, formResourceType.getResourceTypeName( ) );
-
-        if ( resource == null )
+        if ( ( resource == null ) || ( appointment == null ) || !_appointmentResourceService.isResourceAvailableForAppointment( resource.getIdResource( ),
+                resource.getResourceType( ), config.getIdFormResourceType( ), appointment ) )
         {
-            return AdminMessageService.getMessageUrl( request, MESSAGE_ERROR_MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_RESOURCE_UNAVAILABLE, AdminMessage.TYPE_STOP );
         }
 
         return null;
@@ -342,7 +346,12 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
         for ( SetAppointmentResourceHistory history : listHistory )
         {
             AppointmentFormResourceType resourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( history.getIdFormResourceType( ) );
-            IResource resource = _resourceService.getResource( history.getIdResource( ), resourceType.getResourceTypeName( ) );
+            IResource resource = ( resourceType != null ) ? _resourceService.getResource( history.getIdResource( ), resourceType.getResourceTypeName( ) ) : null;
+
+            if ( resource == null )
+            {
+                continue;
+            }
 
             Object [ ] args = {
                     resource.getResourceName( ), resourceType.getDescription( )
