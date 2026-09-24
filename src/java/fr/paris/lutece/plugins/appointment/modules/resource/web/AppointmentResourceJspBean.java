@@ -34,6 +34,8 @@
 package fr.paris.lutece.plugins.appointment.modules.resource.web;
 
 import java.sql.Date;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -77,6 +79,7 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
 import fr.paris.lutece.portal.web.cdi.mvc.Models;
 import fr.paris.lutece.util.html.HtmlTemplate;
+import fr.paris.lutece.util.http.SecurityUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
 /**
@@ -90,7 +93,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
     /**
      * The path of the JSP of the controller
      */
-    public static final String CONTROLLER_PATH = "jsp/admin/plugins/appointment/modules/resource";
+    public static final String CONTROLLER_PATH = "jsp/admin/plugins/appointment/modules/resource/";
 
     /**
      * The name of the JSP of the controller
@@ -104,7 +107,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
     private ResourceService _resourceService;
 
     // Views
-    private static final String VIEW_USER_CALENDAR = "VIEW_USER_CALENDAR";
+    private static final String VIEW_USER_CALENDAR = "viewUserCalendar";
     private static final String VIEW_RESOURCE_CALENDAR = "viewResourceCalendar";
 
     // Templates
@@ -114,7 +117,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
     private static final String TEMPLATE_APPOINTMENT_DESCRIPTION = "admin/plugins/appointment/modules/resource/appointment_description.html";
 
     // URL
-    private static final String CONTROLLER_JSP_URL = CONTROLLER_PATH + "/" + CONTROLLER_JSP;
+    private static final String CONTROLLER_JSP_URL = CONTROLLER_PATH + CONTROLLER_JSP;
 
     // Marks
     private static final String MARK_RESOURCE = "resource";
@@ -164,17 +167,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
     @View( value = VIEW_USER_CALENDAR, defaultView = true )
     public String getViewUserCalendar( HttpServletRequest request )
     {
-        String strFromUrl = request.getParameter( PARAMETER_FROM_URL );
-
-        if ( StringUtils.isEmpty( strFromUrl ) )
-        {
-            strFromUrl = request.getHeader( PARAMETER_REFERER );
-
-            if ( StringUtils.isEmpty( strFromUrl ) )
-            {
-                strFromUrl = AppointmentFormJspBean.getURLManageAppointmentForms( request );
-            }
-        }
+        String strFromUrl = getFromUrl( request );
 
         String strOffsetWeek = request.getParameter( PARAMETER_OFFSET_WEEK );
 
@@ -215,17 +208,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
             return redirect( request, AppointmentFormJspBean.getURLManageAppointmentForms( request ) );
         }
 
-        String strFromUrl = request.getParameter( PARAMETER_FROM_URL );
-
-        if ( StringUtils.isEmpty( strFromUrl ) )
-        {
-            strFromUrl = request.getHeader( PARAMETER_REFERER );
-
-            if ( StringUtils.isEmpty( strFromUrl ) )
-            {
-                strFromUrl = AppointmentFormJspBean.getURLManageAppointmentForms( request );
-            }
-        }
+        String strFromUrl = getFromUrl( request );
 
         String strOffsetWeek = request.getParameter( PARAMETER_OFFSET_WEEK );
 
@@ -253,12 +236,27 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
             }
         }
 
-        if ( StringUtils.isNotEmpty( strFromUrl ) )
+        return redirect( request, strFromUrl );
+    }
+
+    /**
+     * Get the page to go back to: the fromUrl parameter, else the referer, else the list of forms. An URL leaving the
+     * site is replaced by the list of forms.
+     * 
+     * @param request
+     *            The request
+     * @return The URL of the page to go back to
+     */
+    private static String getFromUrl( HttpServletRequest request )
+    {
+        String strFromUrl = StringUtils.defaultIfEmpty( request.getParameter( PARAMETER_FROM_URL ), request.getHeader( PARAMETER_REFERER ) );
+
+        if ( StringUtils.isBlank( strFromUrl ) || !SecurityUtil.isInternalRedirectUrlSafe( strFromUrl, request ) )
         {
-            return redirect( request, strFromUrl );
+            return AppointmentFormJspBean.getURLManageAppointmentForms( request );
         }
 
-        return redirect( request, AppointmentFormJspBean.getURLManageAppointmentForms( request ) );
+        return strFromUrl;
     }
 
     /**
@@ -492,18 +490,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
      */
     private static Date getDateMonday( int nOffsetWeek )
     {
-        Date date = new Date( System.currentTimeMillis( ) );
-        Calendar calendar = Calendar.getInstance( Locale.FRANCE );
-        calendar.setTime( date );
-        // We set the week to the requested one
-        calendar.add( Calendar.DAY_OF_MONTH, 7 * nOffsetWeek );
-
-        // We get the current day of the week
-        int nCurrentDayOfWeek = calendar.get( Calendar.DAY_OF_WEEK );
-        // We add the day of the week to Monday on the calendar
-        calendar.add( Calendar.DAY_OF_WEEK, Calendar.MONDAY - nCurrentDayOfWeek );
-
-        return new Date( calendar.getTimeInMillis( ) );
+        return Date.valueOf( LocalDate.now( ).plusWeeks( nOffsetWeek ).with( DayOfWeek.MONDAY ) );
     }
 
     /**
