@@ -52,8 +52,6 @@
     </dependencies>
     <properties>
         <componentName>appointment-resource</componentName>
-        <jiraProjectName>APRESOURCE</jiraProjectName>
-        <jiraComponentId>12352</jiraComponentId>
     </properties>
     <scm>
         <connection>scm:git:https://github.com/lutece-secteur-public/gru-module-appointment-resource.git</connection>
