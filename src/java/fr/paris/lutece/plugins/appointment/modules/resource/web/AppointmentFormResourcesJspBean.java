@@ -57,7 +57,6 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
 
 import jakarta.enterprise.context.SessionScoped;
-import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletRequest;
@@ -134,6 +133,8 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
     private Models _models;
     @Inject
     private ResourceService _resourceService;
+    @Inject
+    private AppointmentFormJspBean _appointmentFormJspBean;
 
     private AppointmentFormResourceType _formResourceType;
 
@@ -186,7 +187,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         _models.put( MARK_ADMIN_USER_RESOURCE_TYPE, AdminUser.RESOURCE_TYPE );
         _models.put( MARK_LOCALE, getLocale( ) );
 
-        CDI.current( ).select( AppointmentFormJspBean.class ).get( ).addElementsToModel( appointmentForm, getUser( ), getLocale( ), _models );
+        _appointmentFormJspBean.addElementsToModel( appointmentForm, getUser( ), getLocale( ), _models );
 
         return getPage( MESSAGE_MANAGE_FORM_RESOURCES_PAGE_TITLE, TEMPLATE_MANAGE_FORM_RESOURCES );
     }
