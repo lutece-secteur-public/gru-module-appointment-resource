@@ -1,5 +1,6 @@
 -- liquibase formatted sql
--- changeset appointment-resource:init_workflow_resource_foreign_keys.sql
+-- lutece runAfter:workflow
+-- changeset appointment-resource:init_workflow_resource_foreign_keys.sql logicalFilePath:sql/plugins/workflow/plugin/init_workflow_resource_foreign_keys.sql
 -- preconditions onFail:MARK_RAN onError:WARN
 
 ALTER TABLE workflow_task_set_appointment_resource_history ADD CONSTRAINT fk_wf_set_app_res_hist_id_hist FOREIGN KEY ( id_history )
