@@ -87,7 +87,7 @@ import fr.paris.lutece.util.url.UrlItem;
  */
 @RequestScoped
 @Named
-@Controller( controllerJsp = AppointmentResourceJspBean.CONTROLLER_JSP, controllerPath = AppointmentResourceJspBean.CONTROLLER_PATH, right = AppointmentFormJspBean.RIGHT_MANAGEAPPOINTMENTFORM )
+@Controller( controllerJsp = AppointmentResourceJspBean.CONTROLLER_JSP, controllerPath = AppointmentResourceJspBean.CONTROLLER_PATH, right = AppointmentFormJspBean.RIGHT_MANAGEAPPOINTMENTFORM, securityTokenEnabled = true )
 public class AppointmentResourceJspBean extends MVCAdminJspBean
 {
     /**

@@ -73,7 +73,7 @@ import fr.paris.lutece.portal.web.cdi.mvc.Models;
  */
 @SessionScoped
 @Named
-@Controller( controllerJsp = AppointmentFormResourcesJspBean.JSP_MANAGE_APPOINTMENT_FORM_RESOURCE_TYPE, controllerPath = AppointmentFormResourcesJspBean.PATH_MANAGE_APPOINTMENT_FORM_RESOURCE_TYPE, right = AppointmentFormJspBean.RIGHT_MANAGEAPPOINTMENTFORM )
+@Controller( controllerJsp = AppointmentFormResourcesJspBean.JSP_MANAGE_APPOINTMENT_FORM_RESOURCE_TYPE, controllerPath = AppointmentFormResourcesJspBean.PATH_MANAGE_APPOINTMENT_FORM_RESOURCE_TYPE, right = AppointmentFormJspBean.RIGHT_MANAGEAPPOINTMENTFORM, securityTokenEnabled = true )
 public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
 {
     /**
@@ -98,6 +98,8 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
     private static final String VIEW_CREATE_RESOURCE_TYPE = "createFormResourceType";
     private static final String VIEW_MODIFY_RESOURCE_TYPE = "modifyFormResourceType";
     private static final String VIEW_CONFIRM_REMOVE_RESOURCE_TYPE = "confirmRemoveFormResourceType";
+    private static final String VIEW_CONFIRM_SET_ADMIN_DEFAULT_RESOURCE_TYPE = "confirmSetAdminDefaultResourceType";
+    private static final String VIEW_CONFIRM_SET_LOCATION_DEFAULT_RESOURCE_TYPE = "confirmSetLocationDefaultResourceType";
 
     // Actions
     private static final String ACTION_DO_CREATE_FORM_RESOURCE_TYPE = "doCreateFormResourceType";
@@ -124,6 +126,8 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
     private static final String MESSAGE_APPOINTMENT_FORM_RESOURCE_TYPE_CREATED = "module.appointment.resource.createAppointmentFormResources.appointmentFormResourceTypeCreated";
     private static final String MESSAGE_APPOINTMENT_FORM_RESOURCE_TYPE_MODIFIED = "module.appointment.resource.modifyAppointmentFormResources.appointmentFormResourceTypeModified";
     private static final String MESSAGE_CONFIRM_REMOVE_FORM_RESOURCE_TYPE = "module.appointment.resource.removeAppointmentFormResource.confirmRemoveResourceType";
+    private static final String MESSAGE_CONFIRM_SET_ADMIN_DEFAULT_RESOURCE_TYPE = "module.appointment.resource.manageAppointmentFormResources.confirmSetResourceAsAdmin";
+    private static final String MESSAGE_CONFIRM_SET_LOCATION_DEFAULT_RESOURCE_TYPE = "module.appointment.resource.manageAppointmentFormResources.confirmSetResourceAsLocation";
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "module.appointment.resource.model.entity.appointmentFormResourceType.attribute.";
 
     // Templates
@@ -200,7 +204,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
      * @throws AccessDeniedException
      *             If the user is not authorized to access this feature
      */
-    @View( value = VIEW_CREATE_RESOURCE_TYPE )
+    @View( value = VIEW_CREATE_RESOURCE_TYPE, securityTokenAction = ACTION_DO_CREATE_FORM_RESOURCE_TYPE )
     public String getCreateFormResourceType( HttpServletRequest request ) throws AccessDeniedException
     {
         AppointmentFormResourceType formResourceType;
@@ -291,7 +295,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
      * @throws AccessDeniedException
      *             If the user is not authorized to access this feature
      */
-    @View( value = VIEW_MODIFY_RESOURCE_TYPE )
+    @View( value = VIEW_MODIFY_RESOURCE_TYPE, securityTokenAction = ACTION_DO_MODIFY_FORM_RESOURCE_TYPE )
     public String getModifyFormResourceType( HttpServletRequest request ) throws AccessDeniedException
     {
         AppointmentFormResourceType formResourceType;
@@ -391,7 +395,7 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
      * @throws AccessDeniedException
      *             If the user is not authorized to access this feature
      */
-    @View( value = VIEW_CONFIRM_REMOVE_RESOURCE_TYPE )
+    @View( value = VIEW_CONFIRM_REMOVE_RESOURCE_TYPE, securityTokenAction = ACTION_DO_REMOVE_FORM_RESOURCE_TYPE )
     public String getConfirmRemoveFormResourceType( HttpServletRequest request ) throws AccessDeniedException
     {
         String strIdFormResourceType = request.getParameter( PARAMETER_ID_FORM_RESOURCE_TYPE );
@@ -459,6 +463,65 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
         AppointmentFormResourceTypeHome.remove( nIdFormResourceType );
 
         return redirect( request, getUrlManageAppointmentFormResourceType( formResourceType.getIdAppointmentForm( ), request ) );
+    }
+
+    /**
+     * Ask the confirmation to set a form resource type as the attribute containing the admin user associated with an appointment
+     * 
+     * @param request
+     *            The request
+     * @return The URL of the confirmation message
+     * @throws AccessDeniedException
+     *             If the user is not authorized to modify the form
+     */
+    @View( value = VIEW_CONFIRM_SET_ADMIN_DEFAULT_RESOURCE_TYPE, securityTokenAction = ACTION_DO_SET_ADMIN_DEFAULT_RESOURCE_TYPE )
+    public String getConfirmSetAdminDefaultResourceType( HttpServletRequest request ) throws AccessDeniedException
+    {
+        return getConfirmation( request, MESSAGE_CONFIRM_SET_ADMIN_DEFAULT_RESOURCE_TYPE, ACTION_DO_SET_ADMIN_DEFAULT_RESOURCE_TYPE );
+    }
+
+    /**
+     * Ask the confirmation to set a form resource type as the attribute containing the localization of appointments
+     * 
+     * @param request
+     *            The request
+     * @return The URL of the confirmation message
+     * @throws AccessDeniedException
+     *             If the user is not authorized to modify the form
+     */
+    @View( value = VIEW_CONFIRM_SET_LOCATION_DEFAULT_RESOURCE_TYPE, securityTokenAction = ACTION_DO_SET_LOCATION_DEFAULT_RESOURCE_TYPE )
+    public String getConfirmSetLocationDefaultResourceType( HttpServletRequest request ) throws AccessDeniedException
+    {
+        return getConfirmation( request, MESSAGE_CONFIRM_SET_LOCATION_DEFAULT_RESOURCE_TYPE, ACTION_DO_SET_LOCATION_DEFAULT_RESOURCE_TYPE );
+    }
+
+    /**
+     * Redirect to a confirmation message whose button posts an action on the form resource type named by the request
+     * 
+     * @param request
+     *            The request
+     * @param strMessageKey
+     *            The key of the confirmation message
+     * @param strAction
+     *            The action to confirm
+     * @return The URL of the confirmation message
+     * @throws AccessDeniedException
+     *             If the user is not authorized to modify the form
+     */
+    private String getConfirmation( HttpServletRequest request, String strMessageKey, String strAction ) throws AccessDeniedException
+    {
+        AppointmentFormResourceType formResourceType = findAuthorizedFormResourceType( request );
+
+        if ( formResourceType == null )
+        {
+            return redirect( request, AppointmentFormJspBean.getURLManageAppointmentForms( request ) );
+        }
+
+        UrlItem urlItem = new UrlItem( JSP_URL_MANAGE_APPOINTMENT_FORM_RESOURCE_TYPE );
+        urlItem.addParameter( MVCUtils.PARAMETER_ACTION, strAction );
+        urlItem.addParameter( PARAMETER_ID_FORM_RESOURCE_TYPE, formResourceType.getId( ) );
+
+        return redirect( request, AdminMessageService.getMessageUrl( request, strMessageKey, urlItem.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
     }
 
     /**
