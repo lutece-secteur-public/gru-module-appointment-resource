@@ -32,10 +32,10 @@
 					<@manageFeatureItemColumn align='end'>
 						<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=modifyFormResourceType&idFormResourceType=${formResourceType.id}' title='#i18n{portal.util.labelModify}' hideTitle=['all'] buttonIcon='edit' size='' />
 						<#if formResourceType.resourceTypeName == adminUserResourceType && !formResourceType.isAppointmentAdminUser>
-							<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?action=doSetAdminDefaultResourceType&idFormResourceType=${formResourceType.id}' title='#i18n{module.appointment.resource.manageAppointmentFormResources.labelSetResourceAsAdmin}' hideTitle=['all'] buttonIcon='user' color='light' size='' />
+							<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=confirmSetAdminDefaultResourceType&idFormResourceType=${formResourceType.id}' title='#i18n{module.appointment.resource.manageAppointmentFormResources.labelSetResourceAsAdmin}' hideTitle=['all'] buttonIcon='user' color='light' size='' />
 						</#if>
 						<#if formResourceType.resourceTypeName != adminUserResourceType && !formResourceType.isLocation>
-							<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?action=doSetLocationDefaultResourceType&idFormResourceType=${formResourceType.id}' title='#i18n{module.appointment.resource.manageAppointmentFormResources.labelSetResourceAsLocation}' hideTitle=['all'] buttonIcon='home' color='light' size='' />
+							<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=confirmSetLocationDefaultResourceType&idFormResourceType=${formResourceType.id}' title='#i18n{module.appointment.resource.manageAppointmentFormResources.labelSetResourceAsLocation}' hideTitle=['all'] buttonIcon='home' color='light' size='' />
 						</#if>
 						<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=confirmRemoveFormResourceType&idFormResourceType=${formResourceType.id}' title='#i18n{portal.util.labelDelete}' hideTitle=['all'] buttonIcon='trash' color='danger' size='' />
 					</@manageFeatureItemColumn>
