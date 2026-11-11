@@ -92,9 +92,9 @@
 									<@updateCurrentTimeHourAndMinute durationApp=appointment.duration />
 									<@td class="bg-primary-subtle">
 										<a href="jsp/admin/plugins/appointment/ManageAppointments.jsp?view=viewAppointment&id_appointment=${appointment.idApppointment}&id_form=${appointment.idForm!}" title="#i18n{module.appointment.resource.resource_calendar.viewAppointment}">
-											<@getCellTitle startingHour=appointment.startingHour startingMinute=appointment.startingMinute endingHour=appointment.endingHour endingMinute=appointment.endingMinute />
+											${timeRange(appointment.startingHour, appointment.startingMinute, appointment.endingHour, appointment.endingMinute)}
 										</a>
-										<div>${appointment.appointmentDescription}</div>
+										<div>${(appointmentDescriptions[appointment.idApppointment?c])!}</div>
 									</@td>
 								</@tr>
 							</#list>
@@ -117,8 +117,7 @@
 	<#assign saveCurrentMinute = currentMinute />
 	<@updateCurrentTimeHourAndMinute durationApp=durationApp />
 	<@tr>
-		<#assign cellTitle><@getCellTitle startingHour=saveCurrentHour startingMinute=saveCurrentMinute endingHour=currentHour endingMinute=currentMinute /></#assign>
-		<@td params='title="${cellTitle}"'>&nbsp;</@td>
+		<@td params={"title": timeRange(saveCurrentHour, saveCurrentMinute, currentHour, currentMinute)}>&nbsp;</@td>
 	</@tr>
 </#macro>
 
@@ -134,4 +133,6 @@
 	</#if>
 </#macro>
 
-<#macro getCellTitle startingHour startingMinute endingHour endingMinute><#if startingHour &lt; 10>0</#if>${startingHour}h<#if startingMinute &lt; 10>0</#if>${startingMinute} - <#if endingHour &lt; 10>0</#if>${endingHour}h<#if endingMinute &lt; 10>0</#if>${endingMinute}</#macro>
+<#function timeRange startingHour startingMinute endingHour endingMinute>
+	<#return startingHour?string('00') + 'h' + startingMinute?string('00') + ' - ' + endingHour?string('00') + 'h' + endingMinute?string('00')>
+</#function>

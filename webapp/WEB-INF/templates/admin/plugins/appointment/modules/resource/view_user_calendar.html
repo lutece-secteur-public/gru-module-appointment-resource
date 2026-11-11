@@ -2,11 +2,11 @@
 	<@pageColumn>
 		<@pageHeader title='#i18n{module.appointment.resource.user_calendar.pageTitle}'>
 			<#if fromUrl?? && fromUrl !=''>
-				<@aButton href='${fromUrl}' buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' />
+				<@aButton href=safeUrl(fromUrl) buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' />
 			</#if>
 		</@pageHeader>
 		<div class="d-flex justify-content-between mb-3">
-			<#assign originUrl><#if fromUrl?? && fromUrl !=''>&fromUrl=${fromUrl?replace("&","%26")}<#else></#if></#assign>
+			<#assign originUrl = (fromUrl?? && fromUrl != '')?then('&fromUrl=' + fromUrl?url, '') />
 			<div>
 				<@aButton
 					href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewUserCalendar&offsetWeek=${offsetWeek - 1}${originUrl}"

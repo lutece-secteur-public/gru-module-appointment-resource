@@ -62,6 +62,7 @@ import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -82,12 +83,14 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     // TEMPLATES
     private static final String TEMPLATE_TASK_FORM_SET_APPOINTMENT_RESOURCE = "admin/plugins/appointment/modules/resource/task_set_appointment_resource_form.html";
     private static final String TEMPLATE_CONFIG_SET_APPOINTMENT_RESOURCE = "admin/plugins/appointment/modules/resource/task_set_appointment_resource_config.html";
+    private static final String TEMPLATE_TASK_INFORMATION_SET_APPOINTMENT_RESOURCE = "admin/plugins/appointment/modules/resource/task_set_appointment_resource_information.html";
 
     // MARKS
     private static final String MARK_REF_LIST_FORM_RESOURCE_TYPES = "refListFormResourceTypes";
     private static final String MARK_REF_LIST_APPOINTMENT_FORM = "refListAppointmentForm";
     private static final String MARK_REF_LIST_RESOURCES = "refListResources";
     private static final String MARK_FORM_RESOURCE_TYPE = "formResourceType";
+    private static final String MARK_LIST_RESOURCES_SET = "listResourcesSet";
 
     // PARAMETERS
     private static final String PARAMETER_ID_APPOINTMENT_FORM = "idAppointmentForm";
@@ -341,7 +344,7 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
     public String getDisplayTaskInformation( int nIdHistory, HttpServletRequest request, Locale locale, ITask task )
     {
         List<SetAppointmentResourceHistory> listHistory = SetAppointmentResourceHistoryHome.findByIdHistory( nIdHistory );
-        StringBuilder sbHistory = new StringBuilder( );
+        List<String> listResourcesSet = new ArrayList<>( );
 
         for ( SetAppointmentResourceHistory history : listHistory )
         {
@@ -356,11 +359,21 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
             Object [ ] args = {
                     resource.getResourceName( ), resourceType.getDescription( )
             };
-            sbHistory.append( I18nService.getLocalizedString( MESSAGE_APPOINTMENT_RESOURCE_SET, args, locale ) );
-            sbHistory.append( "<br />" );
+            listResourcesSet.add( I18nService.getLocalizedString( MESSAGE_APPOINTMENT_RESOURCE_SET, args, locale ) );
         }
 
-        return sbHistory.toString( );
+        if ( listResourcesSet.isEmpty( ) )
+        {
+            return StringUtils.EMPTY;
+        }
+
+        // The messages are plain text: the template escapes the names of the resources they hold
+        Map<String, Object> model = new HashMap<>( );
+        model.put( MARK_LIST_RESOURCES_SET, listResourcesSet );
+
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_INFORMATION_SET_APPOINTMENT_RESOURCE, locale, model );
+
+        return template.getHtml( );
     }
 
     /**

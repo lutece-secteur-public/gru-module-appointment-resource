@@ -73,6 +73,7 @@ import fr.paris.lutece.plugins.resource.service.ResourceService;
 import fr.paris.lutece.plugins.resource.service.provider.IResourceProvider;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.template.HtmlMarkup;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
@@ -132,6 +133,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
     private static final String MARK_DURATION = "duration";
     private static final String MARK_CALENDAR = "calendar";
     private static final String MARK_APPOINTMENT = "appointment";
+    private static final String MARK_APPOINTMENT_DESCRIPTIONS = "appointmentDescriptions";
 
     // Parameters
     private static final String PARAMETER_ID_RESOURCE = "id_resource";
@@ -182,7 +184,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
 
         IResource resource = _resourceService.getResource( Integer.toString( adminUser.getUserId( ) ), AdminUser.RESOURCE_TYPE );
 
-        _models.put( MARK_CALENDAR, getWeekResourceCalendar( resource, nOffsetWeek, getLocale( ) ) );
+        _models.put( MARK_CALENDAR, HtmlMarkup.of( getWeekResourceCalendar( resource, nOffsetWeek, getLocale( ) ) ) );
         _models.put( MARK_RESOURCE, resource );
         _models.put( PARAMETER_OFFSET_WEEK, nOffsetWeek );
         _models.put( PARAMETER_FROM_URL, strFromUrl );
@@ -227,7 +229,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
 
             if ( resource != null )
             {
-                _models.put( MARK_CALENDAR, getWeekResourceCalendar( resource, nOffsetWeek, getLocale( ) ) );
+                _models.put( MARK_CALENDAR, HtmlMarkup.of( getWeekResourceCalendar( resource, nOffsetWeek, getLocale( ) ) ) );
                 _models.put( MARK_RESOURCE, resource );
                 _models.put( PARAMETER_OFFSET_WEEK, nOffsetWeek );
                 _models.put( PARAMETER_FROM_URL, strFromUrl );
@@ -294,6 +296,9 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
 
         Map<Integer, List<CalendarAppointmentResourceDTO>> mapCalendarAppointmentResourceByDayOfWeek = new HashMap<>( );
 
+        // The descriptions are HTML rendered from appointment_description.html, keyed by the id of the appointment
+        Map<String, Object> mapAppointmentDescriptions = new HashMap<>( );
+
         int nStartingHour = 0;
         int nStartingMinute = 0;
         int nEndingHour = 0;
@@ -318,6 +323,8 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
             CalendarAppointmentResourceDTO calendarAppointmentResource = new CalendarAppointmentResourceDTO( appointment.getIdAppointment( ),
                     appointment.getStartingDateTime( ).getHour( ), appointment.getStartingDateTime( ).getMinute( ), appointment.getEndingDateTime( ).getHour( ),
                     appointment.getEndingDateTime( ).getMinute( ), getAppointmentRecap( appointment, locale ), appointment.getIdForm( ) );
+            mapAppointmentDescriptions.put( Integer.toString( appointment.getIdAppointment( ) ),
+                    HtmlMarkup.of( calendarAppointmentResource.getAppointmentDescription( ) ) );
             long startThen = appointment.getStartingDateTime( ).getHour( ) * 60 + appointment.getStartingDateTime( ).getMinute( );
             long endThen = appointment.getEndingDateTime( ).getHour( ) * 60 + appointment.getEndingDateTime( ).getMinute( );
 
@@ -402,6 +409,7 @@ public class AppointmentResourceJspBean extends MVCAdminJspBean
         }
 
         model.put( MARK_LIST_DAYS, listDays );
+        model.put( MARK_APPOINTMENT_DESCRIPTIONS, mapAppointmentDescriptions );
         model.put( PARAMETER_OFFSET_WEEK, nOffsetWeek );
         model.put( MARK_LIST_DAYS_OF_WEEK, MESSAGE_LIST_DAYS_OF_WEEK );
         model.put( MARK_STARTING_TIME, nMinGlobalStartingTime );
