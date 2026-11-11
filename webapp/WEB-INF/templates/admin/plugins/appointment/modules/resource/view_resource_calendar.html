@@ -2,26 +2,26 @@
 	<@pageColumn>
 		<@pageHeader title='#i18n{module.appointment.resource.resource_calendar.pageTitle} ${resource.resourceName!}'>
 			<#if fromUrl?? && fromUrl !=''>
-				<@aButton href='${fromUrl}' buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' />
+				<@aButton href=safeUrl(fromUrl) buttonIcon='arrow-left' title='#i18n{portal.util.labelBack}' color='light' />
 			</#if>
 		</@pageHeader>
 		<div class="d-flex justify-content-between mb-3">
-			<#assign originUrl><#if fromUrl?? && fromUrl !=''>&fromUrl=${fromUrl?replace("&","%26")}<#else></#if></#assign>
+			<#assign originUrl = (fromUrl?? && fromUrl != '')?then('&fromUrl=' + fromUrl?url, '') />
 			<div>
 				<@aButton
-					href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=${offsetWeek - 1}${originUrl}"
+					href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType?url}&offsetWeek=${offsetWeek - 1}${originUrl}"
 					title="#i18n{appointment.appointmentApp.previousWeek}" buttonIcon='chevron-left' />
 			</div>
 			<#if offsetWeek !=0>
 				<div>
 					<@aButton
-						href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=0${originUrl}"
+						href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType?url}&offsetWeek=0${originUrl}"
 						title="#i18n{module.appointment.resource.resource_calendar.labelCurrentWeek}" buttonIcon='calendar' />
 				</div>
 			</#if>
 			<div>
 				<@aButton
-					href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType}&offsetWeek=${offsetWeek + 1}${originUrl}"
+					href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${resource.idResource}&resource_type=${resource.resourceType?url}&offsetWeek=${offsetWeek + 1}${originUrl}"
 					title="#i18n{appointment.appointmentApp.nextWeek}" buttonIcon='chevron-right' />
 			</div>
 		</div>

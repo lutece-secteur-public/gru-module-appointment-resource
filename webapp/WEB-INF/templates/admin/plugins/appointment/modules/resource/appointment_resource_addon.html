@@ -1,7 +1,7 @@
 <#if listAppResources?? && listAppResources?size &gt; 0>
 	<#list listAppResources as appResource>
 		<@formGroup labelKey='${(appResource.formResourceType.description)!}'>
-			<a href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${appResource.resource.idResource}&resource_type=${appResource.formResourceType.resourceTypeName}" title="#i18n{module.appointment.resource.resource_calendar.viewResourceCalendar}" >
+			<a href="jsp/admin/plugins/appointment/modules/resource/ManageAppointmentResources.jsp?view=viewResourceCalendar&id_resource=${appResource.resource.idResource}&resource_type=${appResource.formResourceType.resourceTypeName?url}" title="#i18n{module.appointment.resource.resource_calendar.viewResourceCalendar}" >
 				${(appResource.resource.resourceName)!}
 			</a>
 		</@formGroup>

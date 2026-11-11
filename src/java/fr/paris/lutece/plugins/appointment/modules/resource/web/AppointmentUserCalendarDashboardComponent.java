@@ -41,6 +41,7 @@ import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.dashboard.DashboardComponent;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.template.HtmlMarkup;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
@@ -80,7 +81,7 @@ public class AppointmentUserCalendarDashboardComponent extends DashboardComponen
         url.addParameter( PARAMETER_PLUGIN_NAME, right.getPluginName( ) );
 
         Map<String, Object> model = new HashMap<>( );
-        model.put( MARK_CALENDAR, AppointmentResourceJspBean.getWeekResourceCalendar( resource, 0, user.getLocale( ) ) );
+        model.put( MARK_CALENDAR, HtmlMarkup.of( AppointmentResourceJspBean.getWeekResourceCalendar( resource, 0, user.getLocale( ) ) ) );
         model.put( MARK_URL, url.getUrl( ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_DASHBOARD, AdminUserService.getLocale( request ), model );
