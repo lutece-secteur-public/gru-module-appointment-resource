@@ -48,7 +48,7 @@ import java.util.Locale;
 public class ResourceCalendarAction implements IResourceAction
 {
     private static final String MESSAGE_RESOURCE_CALENDAR_ACTION_TITLE = "module.appointment.resource.resourceCalendarAction.title";
-    private static final String RESOURCE_CALENDAR_ACTION_ICON = "fa fa-calendar";
+    private static final String RESOURCE_CALENDAR_ACTION_ICON = "calendar";
 
     /**
      * {@inheritDoc}

@@ -49,6 +49,7 @@ import org.junit.jupiter.api.Test;
 
 import fr.paris.lutece.plugins.appointment.modules.resource.business.calendar.CalendarAppointmentResourceDTO;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.calendar.CalendarDayDTO;
+import fr.paris.lutece.plugins.appointment.modules.resource.service.action.ResourceCalendarAction;
 import fr.paris.lutece.portal.service.template.HtmlAttributesMethod;
 import fr.paris.lutece.portal.service.template.HtmlMarkup;
 import freemarker.cache.FileTemplateLoader;
@@ -56,6 +57,7 @@ import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
 import freemarker.core.HTMLOutputFormat;
 import freemarker.template.Configuration;
+import freemarker.template.Template;
 import freemarker.template.TemplateMethodModelEx;
 
 /**
@@ -100,6 +102,25 @@ public class AppointmentResourceTemplatesRenderTest
     {
         StringWriter writer = new StringWriter( );
         configuration( ).getTemplate( strTemplate ).process( model, writer );
+
+        return writer.toString( );
+    }
+
+    /**
+     * Renders a template source given by the test with the configuration of the core.
+     *
+     * @param strSource
+     *            the template source
+     * @param model
+     *            the model
+     * @return the HTML
+     * @throws Exception
+     *             if the rendering fails
+     */
+    private static String renderSource( String strSource, Map<String, Object> model ) throws Exception
+    {
+        StringWriter writer = new StringWriter( );
+        new Template( "source", strSource, configuration( ) ).process( model, writer );
 
         return writer.toString( );
     }
@@ -294,5 +315,21 @@ public class AppointmentResourceTemplatesRenderTest
         assertTrue( strHtml.contains( "<h1 class=\"page-title mb-1\">#i18n{module.appointment.resource.manageAppointmentFormResources.pageTitle} : "
                 + HOSTILE_ESCAPED + "</h1>" ), strHtml );
         assertFalse( strHtml.contains( HOSTILE ), strHtml );
+    }
+
+    /**
+     * The calendar action of the resources gives the name of a Tabler icon, which the buttons of the back office theme
+     * write as ti ti-calendar.
+     *
+     * @throws Exception
+     *             if the rendering fails
+     */
+    @Test
+    public void testResourceCalendarActionIconIsATablerIcon( ) throws Exception
+    {
+        String strHtml = renderSource( "<@aButton href='#' title='Calendar' buttonIcon=action.getIcon( '1', 'ADMIN_USER' ) />",
+                Map.of( "action", new ResourceCalendarAction( ) ) );
+
+        assertTrue( strHtml.contains( "<i class=\"ti ti-calendar\" aria-hidden=\"true\"></i>" ), strHtml );
     }
 }
