@@ -37,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.HashMap;
@@ -75,6 +76,7 @@ public class AppointmentResourceTemplatesRenderTest
     private static final String TEMPLATE_RESOURCE_CALENDAR = PATH + "resource_calendar.html";
     private static final String TEMPLATE_APPOINTMENT_DESCRIPTION = PATH + "appointment_description.html";
     private static final String TEMPLATE_TASK_INFORMATION = PATH + "task_set_appointment_resource_information.html";
+    private static final String TEMPLATE_MANAGE_FORM_RESOURCES = PATH + "manage_form_resources.html";
 
     private static final String CALENDAR = "<table class=\"calendar\"><tr><td>Lundi &lt;b&gt;</td></tr></table>";
     private static final String HOSTILE = "Name <b>x</b> \"q\"";
@@ -96,6 +98,22 @@ public class AppointmentResourceTemplatesRenderTest
      */
     private static String render( String strTemplate, Map<String, Object> model ) throws Exception
     {
+        StringWriter writer = new StringWriter( );
+        configuration( ).getTemplate( strTemplate ).process( model, writer );
+
+        return writer.toString( );
+    }
+
+    /**
+     * The configuration of the core: HTML output format, auto-escaping, the back office commons included, htmlAttributes
+     * strict.
+     *
+     * @return the configuration
+     * @throws IOException
+     *             if the template directories cannot be read
+     */
+    private static Configuration configuration( ) throws IOException
+    {
         File coreTemplates = new File( CORE_TEMPLATES_ROOT );
         assertTrue( new File( coreTemplates, COMMONS ).isFile( ), "core templates not found under " + CORE_TEMPLATES_ROOT + ": run lutece:exploded first" );
         Configuration cfg = new Configuration( Configuration.VERSION_2_3_0 );
@@ -111,10 +129,8 @@ public class AppointmentResourceTemplatesRenderTest
         cfg.setSharedVariable( "htmlAttributes", new HtmlAttributesMethod( true ) );
         cfg.setSharedVariable( "i18n", (TemplateMethodModelEx) arguments -> String.valueOf( arguments.get( 0 ) ) );
         cfg.setSharedVariable( "dskey", (TemplateMethodModelEx) arguments -> "DS" );
-        StringWriter writer = new StringWriter( );
-        cfg.getTemplate( strTemplate ).process( model, writer );
 
-        return writer.toString( );
+        return cfg;
     }
 
     /**
@@ -251,6 +267,32 @@ public class AppointmentResourceTemplatesRenderTest
 
         assertTrue( strHtml.contains( HOSTILE_ESCAPED + "<br />" ), strHtml );
         assertTrue( strHtml.contains( "Room<br />" ), strHtml );
+        assertFalse( strHtml.contains( HOSTILE ), strHtml );
+    }
+
+    /**
+     * The resources tab of an appointment form has a level-1 heading: the title of the page and the title of the form,
+     * escaped.
+     *
+     * @throws Exception
+     *             if the rendering fails
+     */
+    @Test
+    public void testManageFormResourcesHasAPageHeading( ) throws Exception
+    {
+        Map<String, Object> model = new HashMap<>( );
+        model.put( "appointmentform", Map.of( "idForm", 3, "title", HOSTILE ) );
+        model.put( "listFormResourceTypes", List.of( ) );
+        model.put( "listResourceTypes", List.of( ) );
+        model.put( "adminUserResourceType", "ADMIN_USER" );
+        model.put( "isResourceInstalled", true );
+        model.put( "infos", List.of( ) );
+        model.put( "errors", List.of( ) );
+
+        String strHtml = render( TEMPLATE_MANAGE_FORM_RESOURCES, model );
+
+        assertTrue( strHtml.contains( "<h1 class=\"page-title mb-1\">#i18n{module.appointment.resource.manageAppointmentFormResources.pageTitle} : "
+                + HOSTILE_ESCAPED + "</h1>" ), strHtml );
         assertFalse( strHtml.contains( HOSTILE ), strHtml );
     }
 }

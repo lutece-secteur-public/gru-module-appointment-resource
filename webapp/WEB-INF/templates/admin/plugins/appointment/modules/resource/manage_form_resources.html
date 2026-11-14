@@ -1,5 +1,6 @@
 <#include "/admin/plugins/appointment/appointmentform/modify_appointmentform_tabs.html" />
 
+<@pageHeader title='#i18n{module.appointment.resource.manageAppointmentFormResources.pageTitle} : ${appointmentform.title!}' />
 <@appointmentTabs tab="resources" appointmentform=appointmentform>
 	<@fieldSet legend='#i18n{module.appointment.resource.manageAppointmentFormResources.pageTitle}' class='d-flex justify-content-between'>
 		<@aButton href='jsp/admin/plugins/appointment/modules/resource/ManageAppointmentFormResources.jsp?view=createFormResourceType&id_form=${appointmentform.idForm}' buttonIcon='plus' title='#i18n{module.appointment.resource.manageAppointmentFormResources.labelAddResourceType}' />
