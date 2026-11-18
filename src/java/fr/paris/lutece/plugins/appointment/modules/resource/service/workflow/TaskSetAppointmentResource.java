@@ -125,6 +125,18 @@ public class TaskSetAppointmentResource extends SimpleTask
             history.setIdFormResourceType( appResource.getIdAppointmentFormResourceType( ) );
             history.setIdResource( appResource.getIdResource( ) );
             SetAppointmentResourceHistoryHome.create( history );
+
+            // A resource type flagged as the admin in charge sets the admin user of the appointment (the resource id is the id of the admin user)
+            AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config.getIdFormResourceType( ) );
+            if ( formResourceType.getIsAppointmentAdminUser( ) && StringUtils.isNumeric( strIdResource ) )
+            {
+                int nIdAdminUser = Integer.parseInt( strIdResource );
+                if ( appointment.getIdAdminUser( ) != nIdAdminUser )
+                {
+                    appointment.setIdAdminUser( nIdAdminUser );
+                    AppointmentService.updateAppointment( appointment );
+                }
+            }
         }
     }
 
