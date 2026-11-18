@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.appointment.modules.resource.service;
 
+import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceType;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceTypeHome;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResource;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResourceDTO;
@@ -77,8 +78,14 @@ public class AppointmentResourceAddonService implements IAppointmentAddonService
 
         for ( AppointmentResource appResource : listAppResources )
         {
+            AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( appResource.getIdAppointmentFormResourceType( ) );
+            if ( formResourceType == null )
+            {
+                // The resource type was removed from the form
+                continue;
+            }
             AppointmentResourceDTO appResDTO = new AppointmentResourceDTO( appResource );
-            appResDTO.setFormResourceType( AppointmentFormResourceTypeHome.findByPrimaryKey( appResource.getIdAppointmentFormResourceType( ) ) );
+            appResDTO.setFormResourceType( formResourceType );
 
             if ( StringUtils.isNotEmpty( appResDTO.getIdResource( ) ) && StringUtils.isNotEmpty( appResDTO.getFormResourceType( ).getResourceTypeName( ) ) )
             {

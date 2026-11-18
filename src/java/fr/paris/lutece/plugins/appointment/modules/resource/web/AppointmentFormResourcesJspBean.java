@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.appointment.modules.resource.web;
 import fr.paris.lutece.api.user.User;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceType;
 import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentFormResourceTypeHome;
+import fr.paris.lutece.plugins.appointment.modules.resource.business.AppointmentResourceHome;
 import fr.paris.lutece.plugins.appointment.service.AppointmentResourceIdService;
 import fr.paris.lutece.plugins.appointment.service.FormService;
 import fr.paris.lutece.plugins.appointment.web.AppointmentFormJspBean;
@@ -461,6 +462,8 @@ public class AppointmentFormResourcesJspBean extends MVCAdminJspBean
             throw new AccessDeniedException( AppointmentResourceIdService.PERMISSION_MODIFY_FORM );
         }
 
+        // The resources associated with the appointments through this type go with it
+        AppointmentResourceHome.deleteByIdAppointmentFormResourceType( nIdFormResourceType );
         AppointmentFormResourceTypeHome.remove( nIdFormResourceType );
 
         return redirect( request, getUrlManageAppointmentFormResourceType( formResourceType.getIdAppointmentForm( ), request ) );

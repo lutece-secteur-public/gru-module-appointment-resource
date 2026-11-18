@@ -166,7 +166,8 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
             if ( ( config != null ) && ( StringUtils.isEmpty( strIdAppointmentForm ) || !StringUtils.isNumeric( strIdAppointmentForm ) ) )
             {
                 AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config.getIdFormResourceType( ) );
-                strIdAppointmentForm = Integer.toString( formResourceType.getIdAppointmentForm( ) );
+                // The configured resource type may have been removed from its form: choose the form again
+                strIdAppointmentForm = ( formResourceType != null ) ? Integer.toString( formResourceType.getIdAppointmentForm( ) ) : null;
             }
         }
 
@@ -282,6 +283,12 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
 
         AppointmentFormResourceType formResourceType = AppointmentFormResourceTypeHome.findByPrimaryKey( config.getIdFormResourceType( ) );
 
+        if ( formResourceType == null )
+        {
+            // The configured resource type was removed from its form: nothing to choose
+            return null;
+        }
+
         List<IResource> listResources = _resourceService.getListResources( formResourceType.getResourceTypeName( ) );
         ReferenceList refListResources = new ReferenceList( );
         refListResources.addItem( StringUtils.EMPTY, I18nService.getLocalizedString( MESSAGE_CHOOSE_RESOURCE, locale ) );
@@ -314,6 +321,12 @@ public class SetAppointmentResourceTaskComponent extends AbstractTaskComponent
 
         if ( config == null )
         {
+            return null;
+        }
+
+        if ( AppointmentFormResourceTypeHome.findByPrimaryKey( config.getIdFormResourceType( ) ) == null )
+        {
+            // The configured resource type was removed from its form: the task has nothing to set
             return null;
         }
 

@@ -98,7 +98,8 @@ public class TaskSetAppointmentResource extends SimpleTask
 
         String strIdResource = request.getParameter( PARAMETER_ID_RESOURCE + config.getIdFormResourceType( ) );
 
-        if ( StringUtils.isNotEmpty( strIdResource ) )
+        // Nothing to set when the configured resource type was removed from its form
+        if ( StringUtils.isNotEmpty( strIdResource ) && AppointmentFormResourceTypeHome.findByPrimaryKey( config.getIdFormResourceType( ) ) != null )
         {
             Appointment appointment = AppointmentService.findAppointmentById( resourceHistory.getIdResource( ) );
 
