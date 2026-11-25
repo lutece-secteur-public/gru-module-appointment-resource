@@ -177,4 +177,18 @@ public final class AppointmentResourceHome
     {
         return _dao.findIdAppointmentsByResourceAndDate( strIdResource, strResourceType, dateMin, dateMax, _plugin );
     }
+
+    /**
+     * Tells whether a resource is assigned to at least one appointment, whatever its state
+     *
+     * @param strIdResource
+     *            The id of the resource
+     * @param strResourceTypeName
+     *            The resource type of the resource
+     * @return true if an appointment refers to the resource
+     */
+    public static boolean isResourceAssigned( String strIdResource, String strResourceTypeName )
+    {
+        return _dao.isResourceAssigned( strIdResource, strResourceTypeName, _plugin );
+    }
 }

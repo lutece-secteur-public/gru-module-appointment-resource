@@ -159,4 +159,17 @@ public interface IAppointmentResourceDAO
      * @return The list of ids of appointments
      */
     List<Integer> findIdAppointmentsByResourceAndDate( String strIdResource, String strResourceType, Date dateMin, Date dateMax, Plugin plugin );
+
+    /**
+     * Tells whether a resource is assigned to at least one appointment, whatever its state
+     *
+     * @param strIdResource
+     *            The id of the resource
+     * @param strResourceTypeName
+     *            The resource type of the resource
+     * @param plugin
+     *            The plugin
+     * @return true if an appointment refers to the resource
+     */
+    boolean isResourceAssigned( String strIdResource, String strResourceTypeName, Plugin plugin );
 }

@@ -69,6 +69,10 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
             + " AND s.starting_date_time >= ? AND s.starting_date_time < ? "
             + " AND a.is_cancelled != ? ";
 
+    private static final String SQL_QUERY_IS_RESOURCE_ASSIGNED = " SELECT ar.id_appointment FROM appointment_resource_app_res ar "
+            + " INNER JOIN appointment_resource_form_rt frt ON ar.id_app_form_res_type = frt.id "
+            + " WHERE ar.id_resource = ? AND frt.resource_type_name = ? ";
+
     // Insert, update
     private static final String SQL_QUERY_INSERT = " INSERT INTO appointment_resource_app_res (id_appointment,id_app_form_res_type,id_resource) VALUES (?,?,?) ";
     private static final String SQL_QUERY_UPDATE = " UPDATE appointment_resource_app_res SET id_resource=? WHERE id_appointment = ? AND id_app_form_res_type = ?";
@@ -262,5 +266,21 @@ public class AppointmentResourceDAO implements IAppointmentResourceDAO
         resource.setIdResource( daoUtil.getString( nIndex ) );
 
         return resource;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isResourceAssigned( String strIdResource, String strResourceTypeName, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_IS_RESOURCE_ASSIGNED, plugin ) )
+        {
+            daoUtil.setString( 1, strIdResource );
+            daoUtil.setString( 2, strResourceTypeName );
+            daoUtil.executeQuery( );
+
+            return daoUtil.next( );
+        }
     }
 }
